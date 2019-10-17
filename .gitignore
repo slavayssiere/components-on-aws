@@ -1,0 +1,7 @@
+terraform/layer-base/.terraform
+terraform/layer-bastion/.terraform
+terraform/layer-eks/.terraform
+terraform/connect-aws.sh
+
+tmp/.kubeconfig
+tmp/cm_auth.yaml
