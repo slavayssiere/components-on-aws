@@ -16,8 +16,8 @@ cd -
 cd terraform/layer-eks
 terraform workspace new $PLATEFORM_NAME
 terraform apply
-terraform output kubeconfig > ../../tmp/.kubeconfig
-terraform output config_map_aws_auth > ../../tmp/cm_auth.yaml
+terraform output kubeconfig > ../../tmp/.kubeconfig_$PLATEFORM_NAME
+terraform output config_map_aws_auth > ../../tmp/cm_auth_$PLATEFORM_NAME.yaml
 K8S_ENDPOINT=$(terraform output k8s_endpoint)
 cd -
 
@@ -29,7 +29,7 @@ ssh -M -S my-ctrl-socket -fnNT -L 8443:k8s-master.slavayssiere.wescale:443 ec2-u
 
 if [ "$NETWORK_TYPE" == "calico" ]; then
     echo "Installation de calico"
-    KUBECONFIG="./tmp/.kubeconfig" kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.5/calico.yaml
+    KUBECONFIG="./tmp/.kubeconfig_$PLATEFORM_NAME" kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.5/calico.yaml
 else
     echo "Installation de cilium"
     if [ ! -d "cilium-v1.6.3" ]; then
@@ -38,7 +38,7 @@ else
         rm -f cilium.tar.gz
     fi
 
-    KUBECONFIG="./tmp/.kubeconfig" helm3 install \
+    KUBECONFIG="./tmp/.kubeconfig_$PLATEFORM_NAME" helm3 install \
         --namespace kube-system \
         --set global.cni.chainingMode=aws-cni \
         --set global.masquerade=false \
@@ -47,12 +47,12 @@ else
         cilium cilium-v1.6.3/install/kubernetes/cilium
 fi
 
-KUBECONFIG="./tmp/.kubeconfig" kubectl apply -f ./tmp/cm_auth.yaml
-KUBECONFIG="./tmp/.kubeconfig" helm3 install \
+KUBECONFIG="./tmp/.kubeconfig_$PLATEFORM_NAME" kubectl apply -f ./tmp/cm_auth_$PLATEFORM_NAME.yaml
+KUBECONFIG="./tmp/.kubeconfig_$PLATEFORM_NAME" helm3 install \
     --set rbac.enabled=true,dashboard.enabled=true,metrics.prometheus.enabled=false,metrics.serviceMonitor.enabled=true,serviceType=NodePort,service.nodePorts.http=32001,kubernetes.ingressClass=public-ingress \
     --namespace kube-system \
     public-ingress stable/traefik
-KUBECONFIG="./tmp/.kubeconfig" helm3 install \
+KUBECONFIG="./tmp/.kubeconfig_$PLATEFORM_NAME" helm3 install \
     --set rbac.enabled=true,dashboard.enabled=true,metrics.prometheus.enabled=false,metrics.serviceMonitor.enabled=true,serviceType=NodePort,service.nodePorts.http=32002,kubernetes.ingressClass=private-ingress \
     --namespace kube-system \
     private-ingress stable/traefik
