@@ -34,17 +34,6 @@ resource "aws_iam_policy" "eks_full_access" {
 EOF
 }
 
-// # define a role trust policy that opens the role to users in your account (limited by IAM policy)
-// POLICY=$(echo -n '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":"arn:aws:iam::'; echo -n "$ACCOUNT_ID"; echo -n ':root"},"Action":"sts:AssumeRole","Condition":{}}]}')
-
-// # create a role named KubernetesAdmin (will print the new role's ARN)
-// aws iam create-role \
-//   --role-name KubernetesAdmin \
-//   --description "Kubernetes administrator role (for AWS IAM Authenticator for Kubernetes)." \
-//   --assume-role-policy-document "$POLICY" \
-//   --output text \
-//   --query 'Role.Arn'
-
 resource "aws_iam_role_policy_attachment" "EKS-attach" {
   role       = "${aws_iam_role.bastion_role.name}"
   policy_arn = "${aws_iam_policy.eks_full_access.arn}"

@@ -45,3 +45,11 @@ output "private_dns_zone" {
 output "private_dns_zone_id" {
   value = aws_route53_zone.demo_private_zone.zone_id
 }
+
+output "public_dns_zone" {
+  value = "${terraform.workspace}.${var.public_dns}"
+}
+
+output "public_dns_zone_id" {
+  value = aws_route53_zone.soa-public-dns.zone_id
+}

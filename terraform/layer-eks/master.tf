@@ -1,5 +1,5 @@
 resource "aws_eks_cluster" "demo" {
-  name     = "${var.cluster-name}"
+  name     = "${var.cluster-name}-${terraform.workspace}"
   role_arn = "${aws_iam_role.demo-cluster.arn}"
 
   enabled_cluster_log_types = ["authenticator", "api"]
@@ -29,7 +29,7 @@ resource "aws_eks_cluster" "demo" {
 }
 
 output "k8s_endpoint" {
-  value = aws_eks_cluster.demo.endpoint
+  value = replace(aws_eks_cluster.demo.endpoint, "https://", "")
 }
 
 resource "aws_route53_record" "master-internal-dns" {
@@ -37,5 +37,5 @@ resource "aws_route53_record" "master-internal-dns" {
   name    = "k8s-master.${data.terraform_remote_state.layer-base.outputs.private_dns_zone}"
   type    = "CNAME"
   ttl     = "300"
-  records = ["${aws_eks_cluster.demo.endpoint}"]
+  records = ["${replace(aws_eks_cluster.demo.endpoint, "https://", "")}"]
 }

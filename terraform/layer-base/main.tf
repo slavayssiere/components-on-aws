@@ -58,3 +58,7 @@ variable "private_subnet_c_cidr" {
   description = "CIDR for the Private Subnet in a AZ"
   default     = "10.0.6.0/24"
 }
+
+variable "public_dns" {
+  default = "aws-wescale.slavayssiere.fr."
+}

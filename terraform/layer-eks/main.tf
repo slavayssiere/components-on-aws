@@ -14,29 +14,23 @@ terraform {
 
 data "terraform_remote_state" "layer-base" {
   backend = "s3"
+  workspace = "${terraform.workspace}"
 
   config = {
     bucket = "${var.bucket_layer_base}"
     region = "eu-west-1"
     key    = "eks-test/layer-base"
-
-    workspaces = {
-      name = "${terraform.workspace}"
-    }
   }
 }
 
 data "terraform_remote_state" "layer-bastion" {
   backend = "s3"
+  workspace = "${terraform.workspace}"
 
   config = {
     bucket = "${var.bucket_layer_base}"
     region = "eu-west-1"
     key    = "eks-test/layer-bastion"
-
-    workspaces = {
-      name = "${terraform.workspace}"
-    }
   }
 }
 
@@ -44,11 +38,7 @@ variable "bucket_layer_base" {
   default = "wescale-slavayssiere-terraform"
 }
 
-variable "public_dns" {
-  default = "aws-wescale.slavayssiere.fr."
-}
-
 variable "cluster-name" {
-  default = "eks-test-${terraform.workspace}"
+  default = "eks-test"
 }
 

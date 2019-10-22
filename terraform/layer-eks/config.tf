@@ -12,7 +12,7 @@ data:
       groups:
         - system:bootstrappers
         - system:nodes
-    - rolearn: arn:aws:iam::549637939820:role/bastion_role
+    - rolearn: arn:aws:iam::549637939820:role/bastion_role_${terraform.workspace}
       username: bastionrole
       groups:
         - system:masters
@@ -49,7 +49,7 @@ users:
       args:
         - "token"
         - "-i"
-        - "${var.cluster-name}"
+        - "${var.cluster-name}-${terraform.workspace}"
 KUBECONFIG
 }
 
