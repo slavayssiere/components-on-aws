@@ -1,6 +1,5 @@
 resource "aws_iam_role" "bastion_role" {
   name               = "bastion_role_${terraform.workspace}"
-  path               = "/system/"
   assume_role_policy = "${data.aws_iam_policy_document.bastion-assume-role-policy.json}"
 }
 

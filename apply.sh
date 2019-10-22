@@ -51,4 +51,4 @@ terraform apply
 cd -
 
 # you can use aws eks --region eu-west-1 update-kubeconfig --name eks-test too
-ssh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr aws --region eu-west-1 eks update-kubeconfig --name eks-test-$PLATEFORM_NAME --role-arn arn:aws:iam::549637939820:role/system/bastion_role
+ssh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr aws --region eu-west-1 eks update-kubeconfig --name eks-test-$PLATEFORM_NAME --role-arn arn:aws:iam::549637939820:role/system/bastion_role_$PLATEFORM_NAME
