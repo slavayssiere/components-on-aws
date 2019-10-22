@@ -1,6 +1,7 @@
 terraform/layer-base/.terraform
 terraform/layer-bastion/.terraform
 terraform/layer-eks/.terraform
+terraform/layer-alb/.terraform
 terraform/connect-aws.sh
 
 tmp/.kubeconfig

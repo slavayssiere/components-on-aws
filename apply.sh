@@ -1,5 +1,7 @@
 #!/bin/bash
 
+NETWORK_TYPE="calico"
+
 cd terraform/layer-base
 terraform apply
 cd -
@@ -21,13 +23,21 @@ helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
 ssh -M -S my-ctrl-socket -fnNT -L 8443:${K8S_ENDPOINT:8}:443 ec2-user@bastion.aws-wescale.slavayssiere.fr
 KUBECONFIG="./tmp/.kubeconfig" kubectl apply -f ./tmp/cm_auth.yaml
 KUBECONFIG="./tmp/.kubeconfig" helm3 install \
-    --set rbac.enabled=true,dashboard.enabled=true,metrics.prometheus.enabled=false,metrics.serviceMonitor.enabled=true,serviceType=NodePort,service.nodePorts.http=32001 \
+    --set rbac.enabled=true,dashboard.enabled=true,metrics.prometheus.enabled=false,metrics.serviceMonitor.enabled=true,serviceType=NodePort,service.nodePorts.http=32001,kubernetes.ingressClass=public-ingress \
     --namespace kube-system \
     public-ingress stable/traefik
 KUBECONFIG="./tmp/.kubeconfig" helm3 install \
-    --set rbac.enabled=true,dashboard.enabled=true,metrics.prometheus.enabled=false,metrics.serviceMonitor.enabled=true,serviceType=NodePort,service.nodePorts.http=32002 \
+    --set rbac.enabled=true,dashboard.enabled=true,metrics.prometheus.enabled=false,metrics.serviceMonitor.enabled=true,serviceType=NodePort,service.nodePorts.http=32002,kubernetes.ingressClass=private-ingress \
     --namespace kube-system \
     private-ingress stable/traefik
+
+if [ "$NETWORK_TYPE" == "calico" ]; then
+    echo "Installation de calico"
+    KUBECONFIG="./tmp/.kubeconfig" kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.5/calico.yaml
+else
+    echo "Strings are not equal"
+fi
+
 ssh -S my-ctrl-socket -O exit ec2-user@bastion.aws-wescale.slavayssiere.fr
 #lsof -nP -i4TCP:8443 | grep LISTEN
 

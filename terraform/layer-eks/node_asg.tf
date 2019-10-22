@@ -36,18 +36,26 @@ resource "aws_launch_configuration" "demo" {
 }
 
 resource "aws_lb_target_group" "eks-nodes-public-ingress" {
-  name     = "tf-example-lb-tg"
+  name     = "eks-nodes-public-ingress"
   port     = 32001
   protocol = "HTTP"
   vpc_id   = "${data.terraform_remote_state.layer-base.outputs.vpc_id}"
+
+  health_check {
+    path = "/ping"
+  }
 }
 
 
 resource "aws_lb_target_group" "eks-nodes-private-ingress" {
-  name     = "tf-example-lb-tg"
+  name     = "eks-nodes-private-ingress"
   port     = 32002
   protocol = "HTTP"
   vpc_id   = "${data.terraform_remote_state.layer-base.outputs.vpc_id}"
+
+  health_check {
+    path = "/ping"
+  }
 }
 
 resource "aws_autoscaling_group" "demo" {

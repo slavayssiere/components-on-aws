@@ -207,7 +207,6 @@ kvprovider:
 
     ## only relevant for etcd
 
-
 acme:
   keyType: RSA4096
   enabled: false
