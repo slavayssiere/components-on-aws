@@ -19,6 +19,10 @@ data "terraform_remote_state" "layer-base" {
     bucket = "${var.bucket_layer_base}"
     region = "eu-west-1"
     key    = "eks-test/layer-base"
+
+    workspaces = {
+      name = "${terraform.workspace}"
+    }
   }
 }
 

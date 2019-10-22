@@ -1,5 +1,5 @@
 resource "aws_iam_role" "bastion_role" {
-  name               = "bastion_role"
+  name               = "bastion_role_${terraform.workspace}"
   path               = "/system/"
   assume_role_policy = "${data.aws_iam_policy_document.bastion-assume-role-policy.json}"
 }
@@ -15,7 +15,7 @@ resource "aws_iam_role_policy_attachment" "S3-attach" {
 }
 
 resource "aws_iam_policy" "eks_full_access" {
-  name        = "eks_full_access"
+  name        = "eks_full_access_${terraform.workspace}"
   description = "A EKSFullAccess policy"
 
   policy = <<EOF

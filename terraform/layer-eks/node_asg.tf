@@ -26,7 +26,7 @@ resource "aws_launch_configuration" "demo" {
   iam_instance_profile        = "${aws_iam_instance_profile.demo-node.name}"
   image_id                    = "${data.aws_ami.eks-worker.id}"
   instance_type               = "m4.large"
-  name_prefix                 = "terraform-eks-demo"
+  name_prefix                 = "terraform-eks-demo-${terraform.workspace}"
   security_groups             = ["${aws_security_group.demo-node.id}"]
   user_data_base64            = "${base64encode(local.demo-node-userdata)}"
 
@@ -36,7 +36,7 @@ resource "aws_launch_configuration" "demo" {
 }
 
 resource "aws_lb_target_group" "eks-nodes-public-ingress" {
-  name     = "eks-nodes-public-ingress"
+  name     = "eks-nodes-public-ingress-${terraform.workspace}"
   port     = 32001
   protocol = "HTTP"
   vpc_id   = "${data.terraform_remote_state.layer-base.outputs.vpc_id}"
@@ -48,7 +48,7 @@ resource "aws_lb_target_group" "eks-nodes-public-ingress" {
 
 
 resource "aws_lb_target_group" "eks-nodes-private-ingress" {
-  name     = "eks-nodes-private-ingress"
+  name     = "eks-nodes-private-ingress-${terraform.workspace}"
   port     = 32002
   protocol = "HTTP"
   vpc_id   = "${data.terraform_remote_state.layer-base.outputs.vpc_id}"
@@ -63,7 +63,7 @@ resource "aws_autoscaling_group" "demo" {
   launch_configuration = "${aws_launch_configuration.demo.id}"
   max_size             = 2
   min_size             = 1
-  name                 = "terraform-eks-demo"
+  name                 = "terraform-eks-demo-${terraform.workspace}"
   vpc_zone_identifier = [
     "${data.terraform_remote_state.layer-base.outputs.sn_private_a_id}",
     "${data.terraform_remote_state.layer-base.outputs.sn_private_b_id}",
@@ -75,9 +75,16 @@ resource "aws_autoscaling_group" "demo" {
     "${aws_lb_target_group.eks-nodes-private-ingress.arn}"
   ]
 
+
   tag {
     key                 = "Name"
-    value               = "terraform-eks-demo"
+    value               = "terraform-eks-demo-${terraform.workspace}"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Plateform"
+    value               = "${terraform.workspace}"
     propagate_at_launch = true
   }
 

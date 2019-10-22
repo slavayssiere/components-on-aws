@@ -1,5 +1,5 @@
 resource "aws_security_group" "allow_ssh" {
-  name        = "allow_ssh"
+  name        = "allow_ssh_${terraform.workspace}"
   description = "Allow SSH traffic"
   vpc_id      = "${data.terraform_remote_state.layer-base.outputs.vpc_id}"
 
@@ -42,7 +42,10 @@ resource "aws_security_group" "allow_ssh" {
     cidr_blocks = ["${data.terraform_remote_state.layer-base.outputs.vpc_cidr}"]
   }
 
-  tags = {
-    Name = "sg_for_bastion"
-  }
+  tags = "${
+    map(
+     "Name", "sg_for_bastion-${terraform.workspace}",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }

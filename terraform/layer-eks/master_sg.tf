@@ -1,5 +1,5 @@
 resource "aws_security_group" "demo-cluster" {
-  name        = "terraform-eks-demo-cluster"
+  name        = "terraform-eks-demo-cluster-${terraform.workspace}"
   description = "Cluster communication with worker nodes"
   vpc_id      = "${data.terraform_remote_state.layer-base.outputs.vpc_id}"
 
@@ -10,9 +10,12 @@ resource "aws_security_group" "demo-cluster" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "terraform-eks-demo"
-  }
+  tags = "${
+    map(
+     "Name", "terraform-eks-demo-${terraform.workspace}",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 #add IP from home to connect to master

@@ -19,6 +19,10 @@ data "terraform_remote_state" "layer-base" {
     bucket = "${var.bucket_layer_base}"
     region = "eu-west-1"
     key    = "eks-test/layer-base"
+
+    workspaces = {
+      name = "${terraform.workspace}"
+    }
   }
 }
 
@@ -29,6 +33,10 @@ data "terraform_remote_state" "layer-bastion" {
     bucket = "${var.bucket_layer_base}"
     region = "eu-west-1"
     key    = "eks-test/layer-bastion"
+
+    workspaces = {
+      name = "${terraform.workspace}"
+    }
   }
 }
 
@@ -41,6 +49,6 @@ variable "public_dns" {
 }
 
 variable "cluster-name" {
-  default = "eks-test"
+  default = "eks-test-${terraform.workspace}"
 }
 

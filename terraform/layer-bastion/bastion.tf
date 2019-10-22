@@ -10,12 +10,12 @@ data "aws_iam_policy_document" "bastion-assume-role-policy" {
 }
 
 resource "aws_iam_instance_profile" "bastion_profile" {
-  name = "bastion_profile"
+  name = "bastion_profile_${terraform.workspace}"
   role = "${aws_iam_role.bastion_role.name}"
 }
 
 resource "aws_key_pair" "sandbox-key" {
-  key_name   = "sandbox-key"
+  key_name   = "sandbox-key-${terraform.workspace}"
   public_key = "${file("~/.ssh/id_rsa.pub")}"
 }
 
@@ -27,9 +27,12 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
   user_data                   = "${file("install-bastion.sh")}"
   iam_instance_profile        = "${aws_iam_instance_profile.bastion_profile.name}"
-  key_name                    = "sandbox-key"
+  key_name                    = "sandbox-key-${terraform.workspace}"
 
-  tags = {
-    Name = "Bastion"
-  }
+  tags = "${
+    map(
+     "Name", "Bastion-${terraform.workspace}",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }

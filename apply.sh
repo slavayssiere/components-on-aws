@@ -1,16 +1,20 @@
 #!/bin/bash
 
 NETWORK_TYPE="calico"
+PLATEFORM_NAME="calico"
 
 cd terraform/layer-base
+terraform workspace new $PLATEFORM_NAME
 terraform apply
 cd -
 
 cd terraform/layer-bastion
+terraform workspace new $PLATEFORM_NAME
 terraform apply
 cd -
 
 cd terraform/layer-eks
+terraform workspace new $PLATEFORM_NAME
 terraform apply
 terraform output kubeconfig > ../../tmp/.kubeconfig
 terraform output config_map_aws_auth > ../../tmp/cm_auth.yaml
@@ -42,6 +46,7 @@ ssh -S my-ctrl-socket -O exit ec2-user@bastion.aws-wescale.slavayssiere.fr
 #lsof -nP -i4TCP:8443 | grep LISTEN
 
 cd terraform/layer-alb
+terraform workspace new $PLATEFORM_NAME
 terraform apply
 cd -
 

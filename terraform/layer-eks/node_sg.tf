@@ -2,7 +2,7 @@
 ### Worker Node Security Group
 ###
 resource "aws_security_group" "demo-node" {
-  name        = "terraform-eks-demo-node"
+  name        = "terraform-eks-demo-node-${terraform.workspace}"
   description = "Security group for all nodes in the cluster"
   vpc_id      = "${data.terraform_remote_state.layer-base.outputs.vpc_id}"
 
@@ -17,6 +17,7 @@ resource "aws_security_group" "demo-node" {
     map(
      "Name", "terraform-eks-demo-node",
      "kubernetes.io/cluster/${var.cluster-name}", "owned",
+     "Plateform", "${terraform.workspace}"
     )
   }"
 }

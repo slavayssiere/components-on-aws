@@ -19,6 +19,13 @@ resource "aws_eks_cluster" "demo" {
     "aws_iam_role_policy_attachment.demo-cluster-AmazonEKSClusterPolicy",
     "aws_iam_role_policy_attachment.demo-cluster-AmazonEKSServicePolicy",
   ]
+
+  tags = "${
+    map(
+     "Name", "terraform-eks-demo-${terraform.workspace}",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 output "k8s_endpoint" {

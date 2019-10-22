@@ -3,9 +3,12 @@ resource "aws_vpc" "demo_vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = {
-    Name = "demo_vpc"
-  }
+  tags = "${
+    map(
+     "Name", "terraform-eks-demo-node",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_internet_gateway" "demo_vpc_igtw" {
@@ -21,9 +24,12 @@ resource "aws_subnet" "demo_sn_public_a" {
   cidr_block        = "${var.public_subnet_a_cidr}"
   availability_zone = "${var.region}a"
 
-  tags = {
-    Name = "demo_sn_public_a"
-  }
+  tags = "${
+    map(
+     "Name", "demo_sn_public_a",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_subnet" "demo_sn_public_b" {
@@ -32,9 +38,12 @@ resource "aws_subnet" "demo_sn_public_b" {
   cidr_block        = "${var.public_subnet_b_cidr}"
   availability_zone = "${var.region}b"
 
-  tags = {
-    Name = "demo_sn_public_b"
-  }
+  tags = "${
+    map(
+     "Name", "demo_sn_public_b",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_subnet" "demo_sn_public_c" {
@@ -43,9 +52,12 @@ resource "aws_subnet" "demo_sn_public_c" {
   cidr_block        = "${var.public_subnet_c_cidr}"
   availability_zone = "${var.region}c"
 
-  tags = {
-    Name = "demo_sn_public_c"
-  }
+  tags = "${
+    map(
+     "Name", "demo_sn_public_c",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 /*
@@ -57,9 +69,12 @@ resource "aws_subnet" "demo_sn_private_a" {
   cidr_block        = "${var.private_subnet_a_cidr}"
   availability_zone = "${var.region}a"
 
-  tags = {
-    Name = "demo_sn_private_a"
-  }
+  tags = "${
+    map(
+     "Name", "demo_sn_private_a",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_subnet" "demo_sn_private_b" {
@@ -68,9 +83,12 @@ resource "aws_subnet" "demo_sn_private_b" {
   cidr_block        = "${var.private_subnet_b_cidr}"
   availability_zone = "${var.region}b"
 
-  tags = {
-    Name = "demo_sn_private_b"
-  }
+  tags = "${
+    map(
+     "Name", "demo_sn_private_b",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_subnet" "demo_sn_private_c" {
@@ -79,9 +97,12 @@ resource "aws_subnet" "demo_sn_private_c" {
   cidr_block        = "${var.private_subnet_c_cidr}"
   availability_zone = "${var.region}c"
 
-  tags = {
-    Name = "demo_sn_private_c"
-  }
+  tags = "${
+    map(
+     "Name", "demo_sn_private_c",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 /* add route to public subnet */
@@ -96,9 +117,12 @@ resource "aws_route_table" "demo_vpc_rt_public" {
     gateway_id = "${aws_internet_gateway.demo_vpc_igtw.id}"
   }
 
-  tags = {
-    Name = "demo_vpc_rt_public"
-  }
+  tags = "${
+    map(
+     "Name", "demo_vpc_rt_public",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_route_table_association" "demo_vpc_rta_public_a" {
@@ -135,9 +159,12 @@ resource "aws_security_group" "demo_sg_public" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "demo_sg_public"
-  }
+  tags = "${
+    map(
+     "Name", "demo_sg_public",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 
   vpc_id = "${aws_vpc.demo_vpc.id}"
 }
@@ -191,9 +218,12 @@ resource "aws_route_table" "demo_vpc_rt_a_private" {
     nat_gateway_id = "${aws_nat_gateway.demo_nat_a_gw.id}"
   }
 
-  tags = {
-    Name = "demo_vpc_rt_private"
-  }
+  tags = "${
+    map(
+     "Name", "demo_vpc_rt_private_a",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_route_table_association" "demo_vpc_rta_private_a" {
@@ -209,9 +239,12 @@ resource "aws_route_table" "demo_vpc_rt_b_private" {
     nat_gateway_id = "${aws_nat_gateway.demo_nat_b_gw.id}"
   }
 
-  tags = {
-    Name = "demo_vpc_rt_private"
-  }
+  tags = "${
+    map(
+     "Name", "demo_vpc_rt_private_b",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_route_table_association" "demo_vpc_rta_private_b" {
@@ -227,9 +260,12 @@ resource "aws_route_table" "demo_vpc_rt_c_private" {
     nat_gateway_id = "${aws_nat_gateway.demo_nat_c_gw.id}"
   }
 
-  tags = {
-    Name = "demo_vpc_rt_private"
-  }
+  tags = "${
+    map(
+     "Name", "demo_vpc_rt_private_c",
+     "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_route_table_association" "demo_vpc_rta_private_c" {

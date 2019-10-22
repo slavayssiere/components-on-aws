@@ -1,5 +1,5 @@
 resource "aws_lb" "public_alb" {
-  name               = "public-alb"
+  name               = "public-alb-${terraform.workspace}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.allow_https.id}"]
