@@ -5,7 +5,7 @@ resource "aws_vpc" "demo_vpc" {
 
   tags = "${
     map(
-      "Name", "terraform-eks-demo-node",
+      "Name", "demo-vpc-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -26,7 +26,7 @@ resource "aws_subnet" "demo_sn_public_a" {
 
   tags = "${
     map(
-      "Name", "demo_sn_public_a",
+      "Name", "demo_sn_public_a-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -40,7 +40,7 @@ resource "aws_subnet" "demo_sn_public_b" {
 
   tags = "${
     map(
-      "Name", "demo_sn_public_b",
+      "Name", "demo_sn_public_b-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -54,7 +54,7 @@ resource "aws_subnet" "demo_sn_public_c" {
 
   tags = "${
     map(
-      "Name", "demo_sn_public_c",
+      "Name", "demo_sn_public_c-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -71,7 +71,7 @@ resource "aws_subnet" "demo_sn_private_a" {
 
   tags = "${
     map(
-      "Name", "demo_sn_private_a",
+      "Name", "demo_sn_private_a-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -85,7 +85,7 @@ resource "aws_subnet" "demo_sn_private_b" {
 
   tags = "${
     map(
-      "Name", "demo_sn_private_b",
+      "Name", "demo_sn_private_b-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -99,7 +99,7 @@ resource "aws_subnet" "demo_sn_private_c" {
 
   tags = "${
     map(
-      "Name", "demo_sn_private_c",
+      "Name", "demo_sn_private_c-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -119,7 +119,7 @@ resource "aws_route_table" "demo_vpc_rt_public" {
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_public",
+      "Name", "demo_vpc_rt_public-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -220,7 +220,7 @@ resource "aws_route_table" "demo_vpc_rt_a_private" {
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_private_a",
+      "Name", "demo_vpc_rt_private_a-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -241,7 +241,7 @@ resource "aws_route_table" "demo_vpc_rt_b_private" {
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_private_b",
+      "Name", "demo_vpc_rt_private_b-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
@@ -262,7 +262,7 @@ resource "aws_route_table" "demo_vpc_rt_c_private" {
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_private_c",
+      "Name", "demo_vpc_rt_private_c-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
