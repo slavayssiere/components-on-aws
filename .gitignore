@@ -10,3 +10,5 @@ terraform/layer-base/errored.tfstate
 terraform/layer-bastion/errored.tfstate
 terraform/layer-alb/errored.tfstate
 terraform/layer-eks/errored.tfstate
+cilium.tar.gz
+cilium-*/

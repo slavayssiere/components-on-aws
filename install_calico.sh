@@ -1,7 +1,5 @@
 #!/bin/bash
 
-kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.5/calico.yaml
-
 # 
 # cf: https://docs.projectcalico.org/v3.5/getting-started/kubernetes/tutorials/stars-policy/
 #
