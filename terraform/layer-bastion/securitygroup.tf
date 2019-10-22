@@ -44,8 +44,8 @@ resource "aws_security_group" "allow_ssh" {
 
   tags = "${
     map(
-     "Name", "sg_for_bastion-${terraform.workspace}",
-     "Plateform", "${terraform.workspace}"
+      "Name", "sg_for_bastion-${terraform.workspace}",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }

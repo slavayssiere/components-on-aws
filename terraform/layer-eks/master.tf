@@ -22,8 +22,8 @@ resource "aws_eks_cluster" "demo" {
 
   tags = "${
     map(
-     "Name", "terraform-eks-demo-${terraform.workspace}",
-     "Plateform", "${terraform.workspace}"
+      "Name", "terraform-eks-demo-${terraform.workspace}",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }

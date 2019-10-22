@@ -13,7 +13,7 @@ terraform {
 }
 
 data "terraform_remote_state" "layer-base" {
-  backend = "s3"
+  backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {
@@ -24,7 +24,7 @@ data "terraform_remote_state" "layer-base" {
 }
 
 data "terraform_remote_state" "layer-eks" {
-  backend = "s3"
+  backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {
@@ -36,7 +36,7 @@ data "terraform_remote_state" "layer-eks" {
 
 
 data "terraform_remote_state" "layer-bastion" {
-  backend = "s3"
+  backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {

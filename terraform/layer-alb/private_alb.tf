@@ -3,11 +3,11 @@ resource "aws_lb" "private_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.allow_https.id}"]
-  subnets            = [
-      "${data.terraform_remote_state.layer-base.outputs.sn_public_a_id}",
-      "${data.terraform_remote_state.layer-base.outputs.sn_public_b_id}",
-      "${data.terraform_remote_state.layer-base.outputs.sn_public_c_id}"
-    ]
+  subnets = [
+    "${data.terraform_remote_state.layer-base.outputs.sn_public_a_id}",
+    "${data.terraform_remote_state.layer-base.outputs.sn_public_b_id}",
+    "${data.terraform_remote_state.layer-base.outputs.sn_public_c_id}"
+  ]
 
   enable_deletion_protection = false
 

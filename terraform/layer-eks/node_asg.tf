@@ -70,7 +70,7 @@ resource "aws_autoscaling_group" "demo" {
     "${data.terraform_remote_state.layer-base.outputs.sn_private_c_id}"
   ]
 
-  target_group_arns = [ 
+  target_group_arns = [
     "${aws_lb_target_group.eks-nodes-public-ingress.arn}",
     "${aws_lb_target_group.eks-nodes-private-ingress.arn}"
   ]

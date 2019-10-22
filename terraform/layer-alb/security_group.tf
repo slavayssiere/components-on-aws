@@ -11,9 +11,9 @@ resource "aws_security_group" "allow_https" {
   }
 
   egress {
-    from_port   = 32001
-    to_port     = 32002
-    protocol    = "tcp"
+    from_port       = 32001
+    to_port         = 32002
+    protocol        = "tcp"
     security_groups = ["${data.terraform_remote_state.layer-eks.outputs.nodes_sg}"]
   }
 

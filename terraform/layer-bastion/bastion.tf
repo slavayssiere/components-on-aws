@@ -31,8 +31,8 @@ resource "aws_instance" "bastion" {
 
   tags = "${
     map(
-     "Name", "Bastion-${terraform.workspace}",
-     "Plateform", "${terraform.workspace}"
+      "Name", "Bastion-${terraform.workspace}",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }

@@ -5,8 +5,8 @@ resource "aws_vpc" "demo_vpc" {
 
   tags = "${
     map(
-     "Name", "terraform-eks-demo-node",
-     "Plateform", "${terraform.workspace}"
+      "Name", "terraform-eks-demo-node",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -26,8 +26,8 @@ resource "aws_subnet" "demo_sn_public_a" {
 
   tags = "${
     map(
-     "Name", "demo_sn_public_a",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_sn_public_a",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -40,8 +40,8 @@ resource "aws_subnet" "demo_sn_public_b" {
 
   tags = "${
     map(
-     "Name", "demo_sn_public_b",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_sn_public_b",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -54,8 +54,8 @@ resource "aws_subnet" "demo_sn_public_c" {
 
   tags = "${
     map(
-     "Name", "demo_sn_public_c",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_sn_public_c",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -71,8 +71,8 @@ resource "aws_subnet" "demo_sn_private_a" {
 
   tags = "${
     map(
-     "Name", "demo_sn_private_a",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_sn_private_a",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -85,8 +85,8 @@ resource "aws_subnet" "demo_sn_private_b" {
 
   tags = "${
     map(
-     "Name", "demo_sn_private_b",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_sn_private_b",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -99,8 +99,8 @@ resource "aws_subnet" "demo_sn_private_c" {
 
   tags = "${
     map(
-     "Name", "demo_sn_private_c",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_sn_private_c",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -119,8 +119,8 @@ resource "aws_route_table" "demo_vpc_rt_public" {
 
   tags = "${
     map(
-     "Name", "demo_vpc_rt_public",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_vpc_rt_public",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -161,8 +161,8 @@ resource "aws_security_group" "demo_sg_public" {
 
   tags = "${
     map(
-     "Name", "demo_sg_public",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_sg_public",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 
@@ -220,8 +220,8 @@ resource "aws_route_table" "demo_vpc_rt_a_private" {
 
   tags = "${
     map(
-     "Name", "demo_vpc_rt_private_a",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_vpc_rt_private_a",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -241,8 +241,8 @@ resource "aws_route_table" "demo_vpc_rt_b_private" {
 
   tags = "${
     map(
-     "Name", "demo_vpc_rt_private_b",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_vpc_rt_private_b",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
@@ -262,8 +262,8 @@ resource "aws_route_table" "demo_vpc_rt_c_private" {
 
   tags = "${
     map(
-     "Name", "demo_vpc_rt_private_c",
-     "Plateform", "${terraform.workspace}"
+      "Name", "demo_vpc_rt_private_c",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }

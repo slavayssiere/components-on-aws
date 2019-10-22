@@ -15,9 +15,9 @@ resource "aws_security_group" "demo-node" {
 
   tags = "${
     map(
-     "Name", "terraform-eks-demo-node",
-     "kubernetes.io/cluster/${var.cluster-name}-${terraform.workspace}", "owned",
-     "Plateform", "${terraform.workspace}"
+      "Name", "terraform-eks-demo-node",
+      "kubernetes.io/cluster/${var.cluster-name}-${terraform.workspace}", "owned",
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }

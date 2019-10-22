@@ -8,7 +8,7 @@ resource "aws_route53_zone" "soa-public-dns" {
 
   tags = "${
     map(
-     "Plateform", "${terraform.workspace}"
+      "Plateform", "${terraform.workspace}"
     )
   }"
 }
