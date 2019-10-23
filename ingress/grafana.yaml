@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: grafana
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+  name: private-ingress-grafana
+  namespace: observability
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: prometheus-operator-grafana
+          servicePort: service
+        path: /grafana

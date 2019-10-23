@@ -46,14 +46,38 @@ else
 fi
 
 kubectl apply -f ./tmp/cm_auth_$PLATEFORM_NAME.yaml
+
+kubectl create ns observability
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/alertmanager.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheus.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheusrule.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/servicemonitor.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/podmonitor.crd.yaml
+
+helm3 install \
+    --namespace observability \
+    --values ./helm_values/prometheus-operator.yaml \
+    --version 6.21.0 \
+    prometheus-operator stable/prometheus-operator
+
 helm3 install \
     --namespace kube-system \
     --values ./helm_values/traefik-public.yaml \
+    --set dashboard.domain=private.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr \
     public-ingress stable/traefik
 helm3 install \
     --namespace kube-system \
     --values ./helm_values/traefik-private.yaml \
+    --set dashboard.domain=private.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr \
     private-ingress stable/traefik
+
+# add ingress
+kubectl apply -f ./ingress/traefik-private.yaml
+kubectl apply -f ./ingress/traefik-public.yaml
+kubectl apply -f ./ingress/grafana.yaml
+kubectl apply -f ./ingress/prometheus-k8s.yaml
+
+GRAFANA_ADMIN_PASSWORD=$(kubectl get secret prometheus-operator-grafana -n observability -o jsonpath="{.data.admin-password}" | base64 -d)
 
 ssh -S my-ctrl-socket -O exit ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr
 #lsof -nP -i4TCP:8443 | grep LISTEN

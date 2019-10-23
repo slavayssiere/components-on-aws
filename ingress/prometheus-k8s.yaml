@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: prometheus-k8s
+  annotations:
+    kubernetes.io/ingress.class: private-ingress
+    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+  name: private-ingress-prometheus-k8s
+  namespace: observability
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: prometheus-operator-prometheus
+          servicePort: web
+        path: /prometheus-k8s
