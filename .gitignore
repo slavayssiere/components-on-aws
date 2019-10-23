@@ -12,3 +12,5 @@ terraform/layer-alb/errored.tfstate
 terraform/layer-eks/errored.tfstate
 cilium.tar.gz
 cilium-*/
+tmp/.kubeconfig_*
+tmp/cm_auth_*yaml

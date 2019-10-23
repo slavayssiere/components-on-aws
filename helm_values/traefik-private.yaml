@@ -14,7 +14,7 @@ testFramework:
   tag: "0.4.0"
 
 ## can switch the service type to NodePort if required
-serviceType: LoadBalancer
+serviceType: NodePort
 # loadBalancerIP: ""
 # loadBalancerSourceRanges: []
 whiteListSourceRange: []
@@ -64,12 +64,12 @@ tolerations: []
 #   value: "value"
 #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
 ## Kubernetes ingress filters
-# kubernetes:
+kubernetes:
   # endpoint:
   # namespaces:
   # - default
   # labelSelector:
-  # ingressClass:
+  ingressClass: private-ingress
   # ingressEndpoint:
   #   hostname: "localhost"
   #   ip: "127.0.0.1"
@@ -353,7 +353,7 @@ dashboard:
     #   key: value
   ingress: {}
     # annotations:
-    #   key: value
+    #   kubernetes.io/ingress.class: private-ingress
     # labels:
     #   key: value
     # tls:
@@ -375,7 +375,7 @@ service:
   ## Default config with empty string "" will assign a dynamic
   ## nodePort to http and https ports
   nodePorts:
-    http: ""
+    http: 32001
     https: ""
   ## If static nodePort configuration is required it can be enabled as below
   ## Configure ports in allowable range (eg. 30000 - 32767 on minikube)
@@ -403,21 +403,21 @@ accessLogs:
       names: {}
         # Authorization: redact
 rbac:
-  enabled: false
+  enabled: true
 ## Enable the /metrics endpoint, for now only supports prometheus
 ## set to true to enable metric collection by prometheus
 metrics:
   prometheus:
-    enabled: false
+    enabled: true
     ## If true, prevents exposing port 8080 on the main Traefik service, reserving
     ## it to the dashboard service only
     restrictAccess: false
     # buckets: [0.1,0.3,1.2,5]
-  # serviceMonitor:
+  serviceMonitor:
     # When set true and if Prometheus Operator is installed then use a ServiceMonitor to configure scraping
-    # enabled: false
+    enabled: true
     # Set the namespace the ServiceMonitor should be deployed
-    # namespace: monitoring
+    # namespace: observability
     # Set how frequently Prometheus should scrape
     # interval: 30s
     # Set labels for the ServiceMonitor, use this to define your scrape label for Prometheus Operator
