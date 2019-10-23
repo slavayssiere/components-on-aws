@@ -28,6 +28,23 @@ ssh -M -S my-ctrl-socket -fnNT -L 8443:k8s-master.slavayssiere.wescale:443 ec2-u
 
 export KUBECONFIG="./tmp/.kubeconfig_$PLATEFORM_NAME"
 
+# creation des identitées IAM dans EKS
+kubectl apply -f ./tmp/cm_auth_$PLATEFORM_NAME.yaml
+
+# création des CRD de prometheus-operator
+kubectl create ns observability
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/alertmanager.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheus.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheusrule.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/servicemonitor.crd.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/podmonitor.crd.yaml
+
+until kubectl get crd servicemonitors.monitoring.coreos.com
+do
+  echo "wait for servicemonitors"
+done
+
+# on installe le CNI
 if [ "$NETWORK_TYPE" == "calico" ]; then
     echo "Installation de calico"
     kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.5/calico.yaml
@@ -45,21 +62,14 @@ else
         cilium cilium-v1.6.3/install/kubernetes/cilium
 fi
 
-kubectl apply -f ./tmp/cm_auth_$PLATEFORM_NAME.yaml
-
-kubectl create ns observability
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/alertmanager.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheus.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheusrule.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/servicemonitor.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/podmonitor.crd.yaml
-
+# installation du prometheus operator
 helm3 install \
     --namespace observability \
     --values ./helm_values/prometheus-operator.yaml \
     --version 6.21.0 \
     prometheus-operator stable/prometheus-operator
 
+# installation des IngressController
 helm3 install \
     --namespace kube-system \
     --values ./helm_values/traefik-public.yaml \
@@ -77,7 +87,7 @@ kubectl apply -f ./ingress/traefik-public.yaml
 kubectl apply -f ./ingress/grafana.yaml
 kubectl apply -f ./ingress/prometheus-k8s.yaml
 
-GRAFANA_ADMIN_PASSWORD=$(kubectl get secret prometheus-operator-grafana -n observability -o jsonpath="{.data.admin-password}" | base64 -d)
+# GRAFANA_ADMIN_PASSWORD=$(kubectl get secret prometheus-operator-grafana -n observability -o jsonpath="{.data.admin-password}" | base64 -D)
 
 ssh -S my-ctrl-socket -O exit ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr
 #lsof -nP -i4TCP:8443 | grep LISTEN

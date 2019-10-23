@@ -375,7 +375,7 @@ service:
   ## Default config with empty string "" will assign a dynamic
   ## nodePort to http and https ports
   nodePorts:
-    http: 32001
+    http: 32002
     https: ""
   ## If static nodePort configuration is required it can be enabled as below
   ## Configure ports in allowable range (eg. 30000 - 32767 on minikube)
