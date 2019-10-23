@@ -59,10 +59,10 @@ resource "aws_lb_target_group" "eks-nodes-private-ingress" {
 }
 
 resource "aws_autoscaling_group" "demo" {
-  desired_capacity     = 2
+  desired_capacity     = 3
   launch_configuration = "${aws_launch_configuration.demo.id}"
-  max_size             = 2
-  min_size             = 1
+  max_size             = 6
+  min_size             = 3
   name                 = "terraform-eks-demo-${terraform.workspace}"
   vpc_zone_identifier = [
     "${data.terraform_remote_state.layer-base.outputs.sn_private_a_id}",
