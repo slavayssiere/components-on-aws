@@ -10,8 +10,8 @@ data:
   datasource.yaml: |-
     apiVersion: 1
     datasources:
-    - name: Prometheus
-      type: prometheus-kube-system
+    - name: prometheus-kube-system
+      type: Prometheus
       url: http://prometheus-operated.kube-system:9090/
       access: proxy
       isDefault: false
