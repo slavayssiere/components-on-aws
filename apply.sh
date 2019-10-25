@@ -1,7 +1,7 @@
 #!/bin/bash
 
-NETWORK_TYPE="cilium"
-PLATEFORM_NAME="cilium"
+NETWORK_TYPE="calico"
+PLATEFORM_NAME="calico"
 
 cd terraform/layer-base
 terraform workspace new $PLATEFORM_NAME
@@ -31,6 +31,9 @@ export KUBECONFIG="./tmp/.kubeconfig_$PLATEFORM_NAME"
 # creation des identitées IAM dans EKS
 kubectl apply -f ./tmp/cm_auth_$PLATEFORM_NAME.yaml
 
+echo "wait for node to register"
+sleep 30
+
 # création des CRD de prometheus-operator
 kubectl create ns observability
 kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/alertmanager.crd.yaml
@@ -44,10 +47,15 @@ do
   echo "wait for servicemonitors"
 done
 
+kubectl apply -f ./mon-cilium/prometheus.yaml
+kubectl apply -f ./mon-cilium/grafana-datasource.yaml
+
 # on installe le CNI
 if [ "$NETWORK_TYPE" == "calico" ]; then
     echo "Installation de calico"
     kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.5/calico.yaml
+    kubectl apply -f ./mon-cilium/calico-sm.yaml
+
 else
     echo "Installation de cilium"
     if [ ! -d "cilium-v1.6.3" ]; then
@@ -62,12 +70,9 @@ else
         cilium cilium-v1.6.3/install/kubernetes/cilium
 
     # la création des SM dans cilium est désactivé
-    kubectl apply -f ./mon-cilium/prometheus.yaml
     kubectl apply -f ./mon-cilium/agent-sm.yaml
     kubectl apply -f ./mon-cilium/operator-sm.yaml
-    kubectl apply -f ./mon-cilium/grafana-datasource.yaml
-    kubectl apply -f ./mon-cilium/grafana-dashboard.yaml
-    
+    kubectl apply -f ./mon-cilium/cilium-dashboard.yaml
 fi
 
 # installation du prometheus operator
