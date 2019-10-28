@@ -58,3 +58,19 @@ resource "aws_lb_listener" "public_alb" {
     target_group_arn = "${data.terraform_remote_state.layer-eks.outputs.public-target-group}"
   }
 }
+
+resource "aws_lb_listener" "public_alb_redirect_https" {
+  load_balancer_arn = "${aws_lb.public_alb.arn}"
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}

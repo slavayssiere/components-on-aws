@@ -20,7 +20,8 @@ resource "aws_key_pair" "sandbox-key" {
 }
 
 resource "aws_instance" "bastion" {
-  ami                         = "ami-0bdb1d6c15a40392c"
+  # old: "ami-0bdb1d6c15a40392c"
+  ami                         = "ami-0ce71448843cb18a1"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = ["${aws_security_group.allow_ssh.id}"]
   subnet_id                   = "${data.terraform_remote_state.layer-base.outputs.sn_public_a_id}"
