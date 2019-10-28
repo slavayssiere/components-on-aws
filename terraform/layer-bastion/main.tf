@@ -23,6 +23,17 @@ data "terraform_remote_state" "layer-base" {
   }
 }
 
+data "terraform_remote_state" "layer-eks" {
+  backend   = "s3"
+  workspace = "${terraform.workspace}"
+
+  config = {
+    bucket = "${var.bucket_layer_base}"
+    region = "eu-west-1"
+    key    = "eks-test/layer-eks"
+  }
+}
+
 variable "bucket_layer_base" {
   default = "wescale-slavayssiere-terraform"
 }

@@ -8,17 +8,17 @@ terraform workspace new $PLATEFORM_NAME
 terraform apply -auto-approve
 cd -
 
-cd terraform/layer-bastion
-terraform workspace new $PLATEFORM_NAME
-terraform apply -auto-approve
-cd -
-
 cd terraform/layer-eks
 terraform workspace new $PLATEFORM_NAME
 terraform apply -auto-approve
 terraform output kubeconfig > ../../tmp/.kubeconfig_$PLATEFORM_NAME
 terraform output config_map_aws_auth > ../../tmp/cm_auth_$PLATEFORM_NAME.yaml
 K8S_ENDPOINT=$(terraform output k8s_endpoint)
+cd -
+
+cd terraform/layer-bastion
+terraform workspace new $PLATEFORM_NAME
+terraform apply -auto-approve
 cd -
 
 helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
