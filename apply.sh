@@ -1,11 +1,23 @@
 #!/bin/bash
 
-NETWORK_TYPE="calico"
-PLATEFORM_NAME="calico"
+PLATEFORM_NAME=$1
+NETWORK_TYPE=$2
+
+ACCOUNT="549637939820"
+
+if [ -z "$NETWORK_TYPE" ]
+then
+    NETWORK_TYPE="calico"
+fi
+
+if [ -z "$PLATEFORM_NAME" ]
+then
+    PLATEFORM_NAME="calico"
+fi
 
 cd terraform/layer-base
 terraform workspace new $PLATEFORM_NAME
-terraform apply -auto-approve
+terraform apply -var "account_id=$ACCOUNT" -auto-approve
 cd -
 
 cd terraform/layer-eks
@@ -114,4 +126,4 @@ terraform apply -auto-approve
 cd -
 
 # you can use aws eks --region eu-west-1 update-kubeconfig --name eks-test too
-ssh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr aws --region eu-west-1 eks update-kubeconfig --name eks-test-$PLATEFORM_NAME --role-arn arn:aws:iam::549637939820:role/bastion_role_$PLATEFORM_NAME
+ssh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr aws --region eu-west-1 eks update-kubeconfig --name eks-test-$PLATEFORM_NAME --role-arn arn:aws:iam::$ACCOUNT:role/bastion_role_$PLATEFORM_NAME

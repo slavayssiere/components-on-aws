@@ -12,7 +12,7 @@ data:
       groups:
         - system:bootstrappers
         - system:nodes
-    - rolearn: arn:aws:iam::549637939820:role/bastion_role_${terraform.workspace}
+    - rolearn: arn:aws:iam::${data.terraform_remote_state.layer-base.outputs.account_id}:role/bastion_role_${terraform.workspace}
       username: bastionrole
       groups:
         - system:masters
