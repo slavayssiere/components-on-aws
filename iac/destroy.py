@@ -38,7 +38,10 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
 
         if 'component-bastion' in plateform:
             print("delete bastion")
-            delete_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={})
+            eks_enabled = False
+            if 'component-eks' in plateform:
+                eks_enabled = True
+            delete_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={'enable_eks': eks_enabled})
 
         ## component eks
         if 'component-eks' in plateform:

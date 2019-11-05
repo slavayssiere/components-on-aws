@@ -49,7 +49,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
 
             create_component(working_dir='../terraform/component-eks', plateform_name=plateform_name, var_component={})
             ## need bastion for folowing
-            create_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={})
+            create_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={'enable_eks': True})
             ## launch eks script
             print("Post Apply script execution...")
             subprocess.call(["../terraform/component-eks/apply.sh", plateform_name, network_type, account])
@@ -65,7 +65,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
             if 'component-eks' in plateform:
                 print("bastion created")
             else:
-                create_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={})
+                create_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={'enable_eks': False})
 
         if 'component-rds' in plateform:
             for rds in plateform['component-rds']:

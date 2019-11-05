@@ -52,6 +52,7 @@ resource "aws_security_group" "allow_ssh" {
 
 #add IP from home to connect to master
 resource "aws_security_group_rule" "demo-cluster-ingress-workstation-https" {
+  count             = var.enable_eks ? 1 : 0
   cidr_blocks       = ["${aws_instance.bastion.private_ip}/32"]
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
