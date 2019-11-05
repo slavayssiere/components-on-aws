@@ -1,10 +1,8 @@
-nom: cilium
+name: cilium
 type: dev
 account: '549637939820'
 region: eu-west-1
 public-dns: 'aws-wescale.slavayssiere.fr.'
-component-base:
-  enabled: true
 component-network:
   enabled: true
 component-eks:

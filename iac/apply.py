@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from functions_terraform import create_component, delete_component
+from yaml_check import check_yaml, YamlCheckError
 import subprocess
 import yaml
 import sys 
@@ -19,6 +20,9 @@ except ImportError:
 with open("../plateform/"+name_file+".yaml", 'r') as stream:
     try:
         plateform=yaml.load(stream, Loader=Loader)
+
+        # validate YAML
+        check_yaml(plateform)
 
         # to allow multi_az, deletion_protection and others
         is_prod = False
@@ -81,5 +85,10 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
 
     except yaml.YAMLError as exc:
         print(exc)
+    except YamlCheckError as yce:
+        print("Yaml Check error in bloc: " + yce.block)
+        print("Yaml Check error message: " + yce.message)
     except Exception as inst:
         print(inst)
+    else:
+        print("Plateform " + plateform_name + " is running")
