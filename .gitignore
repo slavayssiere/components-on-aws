@@ -1,15 +1,15 @@
-terraform/layer-base/.terraform
-terraform/layer-bastion/.terraform
-terraform/layer-eks/.terraform
-terraform/layer-alb/.terraform
+terraform/component-base/.terraform
+terraform/component-bastion/.terraform
+terraform/component-eks/.terraform
+terraform/component-alb/.terraform
 terraform/connect-aws.sh
 
 tmp/.kubeconfig
 tmp/cm_auth.yaml
-terraform/layer-base/errored.tfstate
-terraform/layer-bastion/errored.tfstate
-terraform/layer-alb/errored.tfstate
-terraform/layer-eks/errored.tfstate
+terraform/component-base/errored.tfstate
+terraform/component-bastion/errored.tfstate
+terraform/component-alb/errored.tfstate
+terraform/component-eks/errored.tfstate
 cilium.tar.gz
 cilium-*/
 tmp/.kubeconfig_*

@@ -15,12 +15,12 @@ then
     PLATEFORM_NAME="calico"
 fi
 
-cd terraform/layer-base
+cd terraform/component-base
 terraform workspace new $PLATEFORM_NAME
 terraform apply -var "account_id=$ACCOUNT" -auto-approve
 cd -
 
-cd terraform/layer-eks
+cd terraform/component-eks
 terraform workspace new $PLATEFORM_NAME
 terraform apply -auto-approve
 terraform output kubeconfig > ../../tmp/.kubeconfig_$PLATEFORM_NAME
@@ -28,7 +28,7 @@ terraform output config_map_aws_auth > ../../tmp/cm_auth_$PLATEFORM_NAME.yaml
 K8S_ENDPOINT=$(terraform output k8s_endpoint)
 cd -
 
-cd terraform/layer-bastion
+cd terraform/component-bastion
 terraform workspace new $PLATEFORM_NAME
 terraform apply -auto-approve
 cd -
@@ -120,7 +120,7 @@ kubectl apply -f ./ingress/prometheus-k8s.yaml
 ssh -S my-ctrl-socket -O exit ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr
 #lsof -nP -i4TCP:8443 | grep LISTEN
 
-cd terraform/layer-alb
+cd terraform/component-alb
 terraform workspace new $PLATEFORM_NAME
 terraform apply -auto-approve
 cd -

@@ -8,18 +8,18 @@ terraform {
   backend "s3" {
     bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
-    key    = "eks-test/layer-eks"
+    key    = "eks-test/component-eks"
   }
 }
 
-data "terraform_remote_state" "layer-base" {
+data "terraform_remote_state" "component-base" {
   backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {
     bucket = "${var.bucket_layer_base}"
     region = "eu-west-1"
-    key    = "eks-test/layer-base"
+    key    = "eks-test/component-base"
   }
 }
 

@@ -2,28 +2,28 @@
 
 PLATEFORM_NAME=$1
 
-cd terraform/layer-alb
+cd terraform/component-alb
 terraform workspace select $PLATEFORM_NAME
 terraform destroy -auto-approve
 terraform workspace select default
 terraform workspace delete $PLATEFORM_NAME
 cd -
 
-cd terraform/layer-eks
+cd terraform/component-eks
 terraform workspace select $PLATEFORM_NAME
 terraform destroy -auto-approve
 terraform workspace select default
 terraform workspace delete $PLATEFORM_NAME
 cd -
 
-cd terraform/layer-bastion
+cd terraform/component-bastion
 terraform workspace select $PLATEFORM_NAME
 terraform destroy -auto-approve
 terraform workspace select default
 terraform workspace delete $PLATEFORM_NAME
 cd -
 
-cd terraform/layer-base
+cd terraform/component-base
 terraform workspace select $PLATEFORM_NAME
 terraform destroy -auto-approve
 terraform workspace select default

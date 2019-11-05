@@ -8,7 +8,7 @@ terraform {
   backend "s3" {
     bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
-    key    = "eks-test/layer-base"
+    key    = "eks-test/component-base"
   }
 }
 
