@@ -10,8 +10,8 @@ terraform/component-base/errored.tfstate
 terraform/component-bastion/errored.tfstate
 terraform/component-alb/errored.tfstate
 terraform/component-eks/errored.tfstate
-cilium.tar.gz
-cilium-*/
+terraform/component-eks/cilium.tar.gz
+terraform/component-eks/cilium-*
 tmp/.kubeconfig_*
 tmp/cm_auth_*yaml
 connect-aws.sh

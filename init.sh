@@ -1,27 +1,27 @@
 #!/bin/bash
 
-rm -Rf component-base/.terraform
-rm -Rf component-network/.terraform
-rm -Rf component-bastion/.terraform
-rm -Rf component-alb/.terraform
-rm -Rf component-eks/.terraform
+rm -Rf terraform/component-base/.terraform
+rm -Rf terraform/component-network/.terraform
+rm -Rf terraform/component-bastion/.terraform
+rm -Rf terraform/component-alb/.terraform
+rm -Rf terraform/component-eks/.terraform
 
-cd component-base
+cd terraform/component-base
 terraform init
 cd -
 
-cd component-network
+cd terraform/component-network
 terraform init
 cd -
 
-cd component-bastion
+cd terraform/component-bastion
 terraform init
 cd -
 
-cd component-alb
+cd terraform/component-alb
 terraform init
 cd -
 
-cd component-eks
+cd terraform/component-eks
 terraform init
 cd -

@@ -11,3 +11,4 @@
 - composant EKS Network Calico
 - composant EKS Network Cilium
 - composant SFTP
+- composant Logging
