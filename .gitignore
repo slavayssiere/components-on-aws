@@ -14,3 +14,4 @@ cilium.tar.gz
 cilium-*/
 tmp/.kubeconfig_*
 tmp/cm_auth_*yaml
+connect-aws.sh
