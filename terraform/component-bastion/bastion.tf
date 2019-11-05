@@ -24,7 +24,7 @@ resource "aws_instance" "bastion" {
   ami                         = "ami-0ce71448843cb18a1"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = ["${aws_security_group.allow_ssh.id}"]
-  subnet_id                   = "${data.terraform_remote_state.component-base.outputs.sn_public_a_id}"
+  subnet_id                   = "${data.terraform_remote_state.component-network.outputs.sn_public_a_id}"
   associate_public_ip_address = true
   user_data                   = "${file("install-bastion.sh")}"
   iam_instance_profile        = "${aws_iam_instance_profile.bastion_profile.name}"

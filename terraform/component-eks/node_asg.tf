@@ -39,7 +39,7 @@ resource "aws_lb_target_group" "eks-nodes-public-ingress" {
   name     = "eks-nodes-public-ingress-${terraform.workspace}"
   port     = 32001
   protocol = "HTTP"
-  vpc_id   = "${data.terraform_remote_state.component-base.outputs.vpc_id}"
+  vpc_id   = "${data.terraform_remote_state.component-network.outputs.vpc_id}"
 
   health_check {
     path = "/ping"
@@ -51,7 +51,7 @@ resource "aws_lb_target_group" "eks-nodes-private-ingress" {
   name     = "eks-nodes-private-ingress-${terraform.workspace}"
   port     = 32002
   protocol = "HTTP"
-  vpc_id   = "${data.terraform_remote_state.component-base.outputs.vpc_id}"
+  vpc_id   = "${data.terraform_remote_state.component-network.outputs.vpc_id}"
 
   health_check {
     path = "/ping"
@@ -65,9 +65,9 @@ resource "aws_autoscaling_group" "demo" {
   min_size             = 3
   name                 = "terraform-eks-demo-${terraform.workspace}"
   vpc_zone_identifier = [
-    "${data.terraform_remote_state.component-base.outputs.sn_private_a_id}",
-    "${data.terraform_remote_state.component-base.outputs.sn_private_b_id}",
-    "${data.terraform_remote_state.component-base.outputs.sn_private_c_id}"
+    "${data.terraform_remote_state.component-network.outputs.sn_private_a_id}",
+    "${data.terraform_remote_state.component-network.outputs.sn_private_b_id}",
+    "${data.terraform_remote_state.component-network.outputs.sn_private_c_id}"
   ]
 
   target_group_arns = [

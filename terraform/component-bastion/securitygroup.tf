@@ -1,7 +1,7 @@
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh_${terraform.workspace}"
   description = "Allow SSH traffic"
-  vpc_id      = "${data.terraform_remote_state.component-base.outputs.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.component-network.outputs.vpc_id}"
 
   ingress {
     from_port   = 22
@@ -31,7 +31,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${data.terraform_remote_state.component-base.outputs.vpc_cidr}"]
+    cidr_blocks = ["${data.terraform_remote_state.component-network.outputs.vpc_cidr}"]
   }
 
   # allow 8080 for traefik dashboard (private vpc cidr)
@@ -39,7 +39,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["${data.terraform_remote_state.component-base.outputs.vpc_cidr}"]
+    cidr_blocks = ["${data.terraform_remote_state.component-network.outputs.vpc_cidr}"]
   }
 
   tags = "${

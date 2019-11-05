@@ -7,9 +7,9 @@ resource "aws_eks_cluster" "demo" {
   vpc_config {
     security_group_ids = ["${aws_security_group.demo-cluster.id}"]
     subnet_ids = [
-      "${data.terraform_remote_state.component-base.outputs.sn_private_a_id}",
-      "${data.terraform_remote_state.component-base.outputs.sn_private_b_id}",
-      "${data.terraform_remote_state.component-base.outputs.sn_private_c_id}"
+      "${data.terraform_remote_state.component-network.outputs.sn_private_a_id}",
+      "${data.terraform_remote_state.component-network.outputs.sn_private_b_id}",
+      "${data.terraform_remote_state.component-network.outputs.sn_private_c_id}"
     ]
     endpoint_private_access = true
     endpoint_public_access  = false
@@ -33,8 +33,8 @@ output "k8s_endpoint" {
 }
 
 resource "aws_route53_record" "master-internal-dns" {
-  zone_id = "${data.terraform_remote_state.component-base.outputs.private_dns_zone_id}"
-  name    = "k8s-master.${data.terraform_remote_state.component-base.outputs.private_dns_zone}"
+  zone_id = "${data.terraform_remote_state.component-network.outputs.private_dns_zone_id}"
+  name    = "k8s-master.${data.terraform_remote_state.component-network.outputs.private_dns_zone}"
   type    = "CNAME"
   ttl     = "300"
   records = ["${replace(aws_eks_cluster.demo.endpoint, "https://", "")}"]
