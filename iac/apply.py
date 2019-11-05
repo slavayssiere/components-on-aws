@@ -61,6 +61,12 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
             else:
                 delete_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={})
 
+        if 'component-bastion' in plateform:
+            if 'component-eks' in plateform:
+                print("bastion created")
+            else:
+                create_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={})
+
         if 'component-rds' in plateform:
             for rds in plateform['component-rds']:
                 rds_plateform_name = plateform_name + "-" + rds['name']

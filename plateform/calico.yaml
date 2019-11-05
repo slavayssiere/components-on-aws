@@ -8,6 +8,8 @@ component-network:
 component-rds:
   - name: app-cal-1
   - name: app-cal-2
+component-bastion:
+  enabled: true
 applications:
   - component-project-a:
       enabled: true
