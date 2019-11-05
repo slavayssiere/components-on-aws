@@ -45,3 +45,7 @@ variable "dns-name" {
   type    = string
   default = "app"
 }
+
+variable "password" {
+  type = string
+}

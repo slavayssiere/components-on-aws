@@ -11,9 +11,12 @@ resource "aws_lb" "private_alb" {
 
   enable_deletion_protection = false
 
-  tags = {
-    Environment = "test"
-  }
+  tags = "${
+    map(
+      "Name", "private-alb-${terraform.workspace}",
+      "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_route53_record" "private_alb_dns" {
@@ -28,9 +31,11 @@ resource "aws_acm_certificate" "private_alb" {
   domain_name       = "${aws_route53_record.private_alb_dns.fqdn}"
   validation_method = "DNS"
 
-  tags = {
-    Environment = "test"
-  }
+  tags = "${
+    map(
+      "Plateform", "${terraform.workspace}"
+    )
+  }"
 }
 
 resource "aws_route53_record" "private_alb_cert_validation" {

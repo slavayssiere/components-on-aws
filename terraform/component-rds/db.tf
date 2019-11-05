@@ -9,8 +9,8 @@ resource "aws_db_instance" "rds-instance" {
   instance_class       = "db.t2.micro"
 
   # to be changed
-  username             = "foo"
-  password             = "foobarbaz"
+  username             = "admin"
+  password             = "${var.password}"
 
   parameter_group_name = "default.mysql5.7"
 

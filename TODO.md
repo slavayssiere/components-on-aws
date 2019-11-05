@@ -1,6 +1,16 @@
-# Composants
+# TODO
 
-## liste todo
+## improve
+
+- variables name
+- add kms management
+- remove grafana from prometheus-operator, use Grafana Helm Chart
+- add tag policy
+- secret rotation in RDS component
+
+## Composants
+
+### liste todo
 
 - composant ALB + ASG
 - composant AWS Batch + Glue
@@ -8,7 +18,7 @@
 - composant Logging
 - composant DynamoDB
 
-## liste done
+### liste done
 
 - composant base
 - composant network
