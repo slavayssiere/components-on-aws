@@ -1,16 +1,22 @@
 #!/bin/bash
 
-terraform workspace new $PLATEFORM_NAME
-terraform apply -auto-approve
+PLATEFORM_NAME=$1
+NETWORK_TYPE=$2
+ACCOUNT=$3
+
+if [ -z "$NETWORK_TYPE" ]
+then
+    NETWORK_TYPE="calico"
+fi
+
+if [ -z "$PLATEFORM_NAME" ]
+then
+    PLATEFORM_NAME="calico"
+fi
+
 terraform output kubeconfig > ./tmp/.kubeconfig_$PLATEFORM_NAME
 terraform output config_map_aws_auth > ./tmp/cm_auth_$PLATEFORM_NAME.yaml
 K8S_ENDPOINT=$(terraform output k8s_endpoint)
-
-
-cd ../component-bastion
-terraform workspace new $PLATEFORM_NAME
-terraform apply -auto-approve
-cd -
 
 helm3 repo add stable https://kubernetes-charts.storage.googleapis.com/
 
@@ -98,6 +104,11 @@ kubectl apply -f ./ingress/prometheus-k8s.yaml
 
 ssh -S my-ctrl-socket -O exit ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr
 #lsof -nP -i4TCP:8443 | grep LISTEN
+
+cd ./component-alb
+terraform workspace new $PLATEFORM_NAME
+terraform apply -auto-approve
+cd -
 
 # you can use aws eks --region eu-west-1 update-kubeconfig --name eks-test too
 ssh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr aws --region eu-west-1 eks update-kubeconfig --name eks-test-$PLATEFORM_NAME --role-arn arn:aws:iam::$ACCOUNT:role/bastion_role_$PLATEFORM_NAME

@@ -48,7 +48,7 @@ resource "aws_lb_target_group" "eks-nodes-public-ingress" {
 
 
 resource "aws_lb_target_group" "eks-nodes-private-ingress" {
-  name     = "eks-nodes-private-ingress-${terraform.workspace}"
+  name     = "eks-nds-priv-ing-${terraform.workspace}"
   port     = 32002
   protocol = "HTTP"
   vpc_id   = "${data.terraform_remote_state.component-network.outputs.vpc_id}"

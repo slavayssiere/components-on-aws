@@ -20,11 +20,16 @@ terraform workspace new $PLATEFORM_NAME
 terraform apply -var "account_id=$ACCOUNT" -auto-approve
 cd -
 
+cd terraform/component-network
+terraform workspace new $PLATEFORM_NAME
+terraform apply -auto-approve
+cd -
+
 cd terraform/component-eks
-./apply.sh
+./apply.sh $PLATEFORM_NAME $NETWORK_TYPE
 cd -
 
 cd terraform/component-bastion
-terraform workspace new $PLATEFORM_NAME
+terraform workspace new $PLATEFORM_NAME 
 terraform apply -auto-approve
 cd -

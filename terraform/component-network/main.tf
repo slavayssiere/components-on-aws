@@ -8,11 +8,8 @@ terraform {
   backend "s3" {
     bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
-    key    = "eks-test/component-base"
+    key    = "eks-test/component-network"
   }
-}
-
-variable "account_id" {
 }
 
 variable "region" {
