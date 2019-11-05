@@ -1,0 +1,15 @@
+nom: calico
+type: dev
+account: '549637939820'
+region: eu-west-1
+public-dns: 'aws-wescale.slavayssiere.fr.'
+component-network:
+  enabled: true
+component-rds:
+  - name: app-cal-1
+  - name: app-cal-2
+applications:
+  - component-project-a:
+      enabled: true
+  - component-project-b:
+      enabled: true

@@ -2,7 +2,7 @@ resource "aws_lb" "private_alb" {
   name               = "private-alb-${terraform.workspace}"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = ["${aws_security_group.allow_https.id}"]
+  security_groups    = ["${data.terraform_remote_state.component-eks.outputs.allow_https_id}"]
   subnets = [
     "${data.terraform_remote_state.component-network.outputs.sn_public_a_id}",
     "${data.terraform_remote_state.component-network.outputs.sn_public_b_id}",

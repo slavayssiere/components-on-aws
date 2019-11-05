@@ -17,7 +17,7 @@ sudo mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 ## update aws-cli
 yum -y install awscli
 
-wget -O helm.tar.gz https://get.helm.sh/helm-v3.0.0-beta.5-linux-amd64.tar.gz
+wget -O helm.tar.gz https://get.helm.sh/helm-v3.0.0-rc.2-linux-amd64.tar.gz
 tar -xf helm.tar.gz
 chmod +x linux-amd64/helm
 sudo mv linux-amd64/helm /usr/local/bin/helm
@@ -30,8 +30,8 @@ sudo mv jq-linux64 /usr/local/bin/jq
 # helm configure
 aws configure set region eu-west-1
 sudo yum install -y git >> /dev/null 2>&1
-helm plugin install https://github.com/hypnoglow/helm-s3.git >> /dev/null 2>&1
-helm repo add my-charts s3://wescale-slavayssiere-helm/
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+
 
 #install calicoctl
 curl -O -L  https://github.com/projectcalico/calicoctl/releases/download/v3.3.0/calicoctl  >> /dev/null 2>&1

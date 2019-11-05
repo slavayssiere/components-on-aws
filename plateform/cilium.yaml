@@ -1,0 +1,17 @@
+nom: cilium
+type: dev
+account: '549637939820'
+component-base:
+  enabled: true
+component-network:
+  enabled: true
+component-eks:
+  enabled: true
+  network-type: cilium
+component-bastion:
+  enabled: true
+applications:
+  - component-project-a:
+      enabled: true
+  - component-project-b:
+      enabled: true

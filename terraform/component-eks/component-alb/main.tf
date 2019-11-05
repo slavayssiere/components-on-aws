@@ -23,6 +23,17 @@ data "terraform_remote_state" "component-base" {
   }
 }
 
+data "terraform_remote_state" "component-network" {
+  backend   = "s3"
+  workspace = "${terraform.workspace}"
+
+  config = {
+    bucket = "${var.bucket_component_base}"
+    region = "eu-west-1"
+    key    = "eks-test/component-network"
+  }
+}
+
 data "terraform_remote_state" "component-eks" {
   backend   = "s3"
   workspace = "${terraform.workspace}"

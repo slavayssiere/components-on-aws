@@ -2,6 +2,7 @@ terraform/component-base/.terraform
 terraform/component-bastion/.terraform
 terraform/component-eks/.terraform
 terraform/component-eks/component-alb/.terraform
+terraform/component-rds/.terraform
 terraform/connect-aws.sh
 
 tmp/.kubeconfig
@@ -14,3 +15,6 @@ terraform/component-eks/cilium.tar.gz
 terraform/component-eks/cilium-*
 connect-aws.sh
 terraform/component-eks/tmp/*
+iac/tmp/.kubeconfig_*
+iac/tmp/cm_auth_*.yaml
+**/*.pyc
