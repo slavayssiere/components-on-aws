@@ -7,6 +7,7 @@
 - remove grafana from prometheus-operator, use Grafana Helm Chart
 - add tag policy
 - secret rotation in RDS component
+- add private link for SOFFY
 
 ## Composants
 
@@ -17,6 +18,12 @@
 - composant SFTP
 - composant Logging
 - composant DynamoDB
+- composant observability
+
+  - alerting
+  - monitoring
+  - tracing
+  - logging
 
 ### liste done
 

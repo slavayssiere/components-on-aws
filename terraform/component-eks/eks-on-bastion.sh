@@ -38,6 +38,9 @@ else
     kubectl apply -f ./mon-network/cilium-dashboard.yaml
 fi
 
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo update
+
 # installation du prometheus operator
 helm install \
     --namespace observability \
@@ -61,7 +64,7 @@ helm install \
     private-ingress stable/traefik
 
 # add ingress
-kubectl apply -f $WORKDIR/../terraform/component-eks/ingress/traefik-private.yaml
-kubectl apply -f $WORKDIR/../terraform/component-eks/ingress/traefik-public.yaml
-kubectl apply -f $WORKDIR/../terraform/component-eks/ingress/grafana.yaml
-kubectl apply -f $WORKDIR/../terraform/component-eks/ingress/prometheus-k8s.yaml
+kubectl apply -f ./ingress/traefik-private.yaml
+kubectl apply -f ./ingress/traefik-public.yaml
+kubectl apply -f ./ingress/grafana.yaml
+kubectl apply -f ./ingress/prometheus-k8s.yaml

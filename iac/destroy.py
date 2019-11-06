@@ -1,4 +1,5 @@
 from functions_terraform import delete_component
+from yaml_check import check_yaml, YamlCheckError
 import subprocess
 import yaml
 import sys 
@@ -18,11 +19,13 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
     try:
         plateform=yaml.load(stream, Loader=Loader)
 
+        # validate YAML
+        check_yaml(plateform)
 
         # to allow multi_az, deletion_protection and others
         is_prod = False
         account = plateform['account']
-        plateform_name = plateform['nom']
+        plateform_name = plateform['name']
 
         print("Will delete plateform: " + plateform_name + " in account:" + account)
 

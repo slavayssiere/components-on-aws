@@ -10,6 +10,10 @@ output "nodes_sg" {
   value = aws_security_group.demo-node.id
 }
 
+output "master_sg" {
+  value = aws_security_group.demo-cluster.id
+}
+
 output "allow_https_id" {
   value = aws_security_group.allow_https.id
 }

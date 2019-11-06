@@ -20,8 +20,10 @@ def get_secret_value(rds_name):
       SecretId='rds-admin-secret-'+rds_name
     )
   except client.exceptions.ResourceNotFoundException:
+    print('Generate new secret')
     return generate_secret()
   else:
+    print('Get secret from SecretManager')
     response = client.get_secret_value(
       SecretId='rds-admin-secret-'+rds_name
     )
