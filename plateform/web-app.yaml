@@ -17,6 +17,9 @@ component-web:
     user-data: |
       amazon-linux-extras install nginx1.12 -y
       service nginx start
+component-observability:
+  tracing: enabled
+  grafana: enabled
 applications:
   - component-project-a:
       enabled: true

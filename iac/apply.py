@@ -99,6 +99,18 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
                 }
                 create_component(working_dir='../terraform/component-web', plateform_name=web_plateform_name, var_component=var_web)
 
+        if 'component-observability' in plateform:
+            if 'grafana' in plateform['component-observability']:
+                grafana_plateform_name=plateform_name+"-grafana"
+                var_web={
+                    'workspace-network': plateform_name,
+                    'dns-name': 'grafana',
+                    'ami': 'ami-0cd35dee04b2dc36c',
+                    'port': '3000',
+                    'health-check': '/api/health'
+                }
+                create_component(working_dir='../terraform/component-web', plateform_name=grafana_plateform_name, var_component=var_web)
+
     except yaml.YAMLError as exc:
         print(exc)
     except YamlCheckError as yce:
