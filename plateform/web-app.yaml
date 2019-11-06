@@ -1,0 +1,23 @@
+name: web-app
+type: dev
+account: '549637939820'
+region: eu-west-1
+public-dns: 'aws-wescale.slavayssiere.fr.'
+component-network:
+  enabled: true
+component-rds:
+  - name: app-cal-1
+component-bastion:
+  enabled: true
+component-web:
+  ami: ami-0ce71448843cb18a1
+  port: 80
+  health-check: '/'
+  user-data: |
+    amazon-linux-extras install nginx1.12 -y
+    service nginx start
+applications:
+  - component-project-a:
+      enabled: true
+  - component-project-b:
+      enabled: true
