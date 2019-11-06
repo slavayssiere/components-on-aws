@@ -15,10 +15,11 @@ def generate_secret():
 
 def get_secret_value(rds_name):
   client = boto3.client('secretsmanager')
-  response = client.describe_secret(
-    SecretId='rds-admin-secret-'+rds_name
-  )
-  if 'Name' not in response:
+  try:
+    response = client.describe_secret(
+      SecretId='rds-admin-secret-'+rds_name
+    )
+  except client.exceptions.ResourceNotFoundException:
     return generate_secret()
   else:
     response = client.get_secret_value(

@@ -31,7 +31,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
             is_prod = True
         
         account = plateform['account']
-        plateform_name = plateform['nom']
+        plateform_name = plateform['name']
 
         print("Will create plateform: " + plateform_name + " in account:" + account)
 
