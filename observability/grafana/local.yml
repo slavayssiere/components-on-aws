@@ -1,0 +1,14 @@
+---
+- hosts: all
+  roles:
+    - cloudalchemy.grafana
+  vars:
+    grafana_datasources:
+          - name: cloudwatch
+            type: cloudwatch
+            access: proxy
+            basicAuth: false
+    grafana_dashboards:
+          - dashboard_id: 590
+            datasource: cloudwatch
+            revision_id: 7

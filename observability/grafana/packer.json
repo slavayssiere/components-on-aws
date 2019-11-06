@@ -11,18 +11,7 @@
       "owners": ["amazon"],
       "most_recent": true
     },
-    "vpc_filter": {
-      "filters": {
-        "tag:Class": "build",
-        "isDefault": "false"
-      }
-    },
-    "subnet_filter": {
-      "filters": {
-        "tag:Class": "build"
-      },
-      "random": true
-    },
+    "associate_public_ip_address": "True",
     "instance_type": "t2.micro",
     "ssh_username": "ec2-user",
     "ami_name": "grafana-{{timestamp}}"
@@ -30,12 +19,13 @@
   "provisioners": [
     {
       "type": "shell",
-      "inline":[
-          "yum install -y https://dl.grafana.com/oss/release/grafana-6.4.3-1.x86_64.rpm",
-          "systemctl daemon-reload",
-          "systemctl start grafana-server",
-          "systemctl enable grafana-server.service"
-      ]
+      "inline": ["sudo amazon-linux-extras install ansible2"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "./local.yml",
+      "galaxy_file": "./requirements.yml",
+      "extra_arguments": [ "--extra-vars \"grafana_security={ admin_user: {{user `admin_user` }}, admin_password: {{ user `admin_password` }} }\"" ]
     }
   ]
 }
