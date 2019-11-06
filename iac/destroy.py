@@ -35,7 +35,8 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
                 rds_plateform_name = plateform_name + "-" + rds['name']
                 print("Delete " + rds_plateform_name + " rds")
                 var_rds={
-                    'workspace-network': plateform_name
+                    'workspace-network': plateform_name,
+                    'password': "temp-for-remove"
                 }
                 delete_component(working_dir='../terraform/component-rds', plateform_name=rds_plateform_name, var_component=var_rds)
 
