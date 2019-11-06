@@ -46,15 +46,14 @@ def check_rds(plateform):
         raise YamlCheckError('rds', 'component-rds should be a list')
     pass
 
-def check_alb_asg(plateform):
+def check_web(plateform):
     if 'component-network' not in plateform:
-        raise YamlCheckError('alb_asg', 'component-network is mandatory')
+        raise YamlCheckError('web', 'component-network is mandatory')
+    if not isinstance(plateform['component-web'], list):
+        raise YamlCheckError('web', 'component-web should be a list')
     pass
 
 def check_yaml(plateform):
-
-    print(plateform)
-
     # component base check
     check_base(plateform)
 
@@ -70,37 +69,6 @@ def check_yaml(plateform):
     if 'component-rds' in plateform: 
         check_rds(plateform)
 
-    if 'component-alb-asg' in plateform: 
-        check_alb_asg(plateform)
+    if 'component-web' in plateform: 
+        check_web(plateform)
 
-
-###
-###   to test check yaml file
-###
-
-if len(sys.argv) > 1:
-    name_file = sys.argv[1]
-    print("create from file: ../plateform/" + name_file + ".yaml")
-else:
-    name_file = input("Nom du fichier: ")
-
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
-
-with open("../plateform/"+name_file+".yaml", 'r') as stream:
-    try:
-        plateform=yaml.load(stream, Loader=Loader)
-
-        check_yaml(plateform)
-
-    except yaml.YAMLError as exc:
-        print(exc)
-    except YamlCheckError as yce:
-        print("Yaml Check error in bloc: " + yce.block)
-        print("Yaml Check error message: " + yce.message)
-    except Exception as inst:
-        print(inst)
-    else:
-        print("no error")

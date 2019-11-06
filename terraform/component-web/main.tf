@@ -25,7 +25,7 @@ data "terraform_remote_state" "component-base" {
 
 data "terraform_remote_state" "component-network" {
   backend   = "s3"
-  workspace = "${terraform.workspace}"
+  workspace = "${var.workspace-network}"
 
   config = {
     bucket = "${var.bucket_component_state}"
@@ -38,7 +38,14 @@ variable "bucket_component_state" {
   default = "wescale-slavayssiere-terraform"
 }
 
+variable "workspace-network" {
+}
+
 variable "ami" {
+  type = string
+}
+
+variable "dns-name" {
   type = string
 }
 

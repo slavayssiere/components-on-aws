@@ -18,7 +18,7 @@ resource "aws_lb" "web-alb" {
 
 resource "aws_route53_record" "web-alb-dns" {
   zone_id = "${data.terraform_remote_state.component-base.outputs.public_dns_zone_id}"
-  name    = "web.${data.terraform_remote_state.component-base.outputs.public_dns_zone}"
+  name    = "${var.dns-name}.${data.terraform_remote_state.component-base.outputs.public_dns_zone}"
   type    = "CNAME"
   ttl     = "300"
   records = ["${aws_lb.web-alb.dns_name}"]

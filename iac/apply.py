@@ -85,6 +85,20 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
                 }
                 create_component(working_dir='../terraform/component-rds', plateform_name=rds_plateform_name, var_component=var_rds)
 
+        if 'component-web' in plateform:
+            for web in plateform['component-web']:
+                web_plateform_name = plateform_name + "-" + web['name']
+                print("Create " + web_plateform_name + " web")
+                var_web={
+                    'workspace-network': plateform_name,
+                    'dns-name': web['name'],
+                    'ami': web['ami'],
+                    'user-data': web['user-data'],
+                    'port': web['port'],
+                    'health-check': web['health-check']
+                }
+                create_component(working_dir='../terraform/component-web', plateform_name=web_plateform_name, var_component=var_web)
+
     except yaml.YAMLError as exc:
         print(exc)
     except YamlCheckError as yce:
