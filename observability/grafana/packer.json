@@ -1,0 +1,41 @@
+{
+  "builders": [{
+    "type": "amazon-ebs",
+    "region": "eu-west-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "amzn2-ami-hvm-*-gp2",
+        "root-device-type": "ebs"
+      },
+      "owners": ["amazon"],
+      "most_recent": true
+    },
+    "vpc_filter": {
+      "filters": {
+        "tag:Class": "build",
+        "isDefault": "false"
+      }
+    },
+    "subnet_filter": {
+      "filters": {
+        "tag:Class": "build"
+      },
+      "random": true
+    },
+    "instance_type": "t2.micro",
+    "ssh_username": "ec2-user",
+    "ami_name": "grafana-{{timestamp}}"
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline":[
+          "yum install -y https://dl.grafana.com/oss/release/grafana-6.4.3-1.x86_64.rpm",
+          "systemctl daemon-reload",
+          "systemctl start grafana-server",
+          "systemctl enable grafana-server.service"
+      ]
+    }
+  ]
+}

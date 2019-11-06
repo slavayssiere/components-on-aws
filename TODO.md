@@ -8,6 +8,7 @@
 - add tag policy
 - secret rotation in RDS component
 - add private link for SOFFY
+- add link between component-web and component-rds
 
 ## Composants
 
