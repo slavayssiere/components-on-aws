@@ -89,13 +89,19 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
             for web in plateform['component-web']:
                 web_plateform_name = plateform_name + "-" + web['name']
                 print("Create " + web_plateform_name + " web")
+                if 'health-check-port' not in web:
+                    health_check_port = web['port']
+                else:
+                    health_check_port = web['health-check-port']
+
                 var_web={
                     'workspace-network': plateform_name,
                     'dns-name': web['name'],
                     'ami': web['ami'],
                     'user-data': web['user-data'],
                     'port': web['port'],
-                    'health-check': web['health-check']
+                    'health_check': web['health-check'],
+                    'health_check_port': health_check_port
                 }
                 create_component(working_dir='../terraform/component-web', plateform_name=web_plateform_name, var_component=var_web)
 
@@ -107,7 +113,19 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
                     'dns-name': 'grafana',
                     'ami': 'ami-0cd35dee04b2dc36c',
                     'port': '3000',
-                    'health-check': '/api/health'
+                    'health_check': '/api/health',
+                    'health_check_port': '3000'
+                }
+                create_component(working_dir='../terraform/component-web', plateform_name=grafana_plateform_name, var_component=var_web)
+            if 'tracing' in plateform['component-observability']:
+                grafana_plateform_name=plateform_name+"-tracing"
+                var_web={
+                    'workspace-network': plateform_name,
+                    'dns-name': 'tracing',
+                    'ami': 'ami-',
+                    'port': '16686',
+                    'health_check': '/',
+                    'health_check_port': '16687'
                 }
                 create_component(working_dir='../terraform/component-web', plateform_name=grafana_plateform_name, var_component=var_web)
 

@@ -20,6 +20,7 @@ resource "aws_lb_target_group" "web-tg" {
 
   health_check {
     path = "${var.health_check}"
+    port = "${var.health_check_port}"
   }
 }
 

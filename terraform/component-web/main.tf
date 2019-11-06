@@ -60,3 +60,7 @@ variable "port" {
 variable "health_check" {
     default = "/"
 }
+
+variable "health_check_port" {
+  default = "80"
+}
