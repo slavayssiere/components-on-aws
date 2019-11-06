@@ -30,11 +30,6 @@
   }],
   "provisioners": [
     {
-      "type": "file",
-      "source": "grafana/install.sh",
-      "destination": "/tmp/install.sh"
-    },
-    {
       "type": "shell",
       "inline": ["sudo amazon-linux-extras install ansible2"]
     },
