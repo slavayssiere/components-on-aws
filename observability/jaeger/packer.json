@@ -26,18 +26,16 @@
     "associate_public_ip_address": true,
     "instance_type": "t2.micro",
     "ssh_username": "ec2-user",
-    "ami_name": "grafana-{{timestamp}}"
+    "ami_name": "jaeger-{{timestamp}}"
   }],
   "provisioners": [
     {
-      "type": "file",
-      "source": "grafana/install.sh",
-      "destination": "/tmp/install.sh"
-    },
-    {
       "type": "shell",
       "inline":[
-          "sudo /tmp/install.sh"
+          "wget -O jaeger.tar.gz https://github.com/jaegertracing/jaeger/releases/download/v1.14.0/jaeger-1.14.0-linux-amd64.tar.gz",
+          "tar -xf jaeger.tar.gz",
+          "systemctl start grafana-server",
+          "systemctl enable grafana-server.service"
       ]
     }
   ]
