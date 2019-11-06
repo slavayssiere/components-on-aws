@@ -30,12 +30,24 @@
   }],
   "provisioners": [
     {
+      "type": "file",
+      "source": "jaeger/jaeger-collector.service",
+      "destination": "/tmp/jaeger-collector.service"
+    },
+    {
+      "type": "file",
+      "source": "jaeger/jaeger-query.service",
+      "destination": "/tmp/jaeger-query.service"
+    },
+    {
+      "type": "file",
+      "source": "jaeger/install.sh",
+      "destination": "/tmp/install.sh"
+    },
+    {
       "type": "shell",
       "inline":[
-          "wget -O jaeger.tar.gz https://github.com/jaegertracing/jaeger/releases/download/v1.14.0/jaeger-1.14.0-linux-amd64.tar.gz",
-          "tar -xf jaeger.tar.gz",
-          "systemctl start grafana-server",
-          "systemctl enable grafana-server.service"
+        "sudo /tmp/install.sh"
       ]
     }
   ]
