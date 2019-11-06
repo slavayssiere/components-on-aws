@@ -122,7 +122,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
                 var_web={
                     'workspace-network': plateform_name,
                     'dns-name': 'tracing',
-                    'ami': 'ami-',
+                    'ami': 'ami-0d18c15886d01bddc',
                     'port': '16686',
                     'health_check': '/',
                     'health_check_port': '16687'
