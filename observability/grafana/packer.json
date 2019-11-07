@@ -35,9 +35,9 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./local.yml",
-      "galaxy_file": "./requirements.yml",
-      "extra_arguments": [ "--extra-vars \"grafana_security={ admin_user: {{user `admin_user` }}, admin_password: {{ user `admin_password` }} }\"" ]
+      "playbook_file": "./grafana/local.yml",
+      "galaxy_file": "./grafana/requirements.yml",
+      "extra_arguments": [ "--extra-vars \"grafana_security={ admin_user: {{user `admin_user`}}, admin_password: {{user `admin_password`}} }\"" ]
     }
   ]
 }

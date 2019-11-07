@@ -4,5 +4,12 @@
 
 APP=$1
 
-packer validate $APP/packer.json
-packer build $APP/packer.json
+if test -f "variables.json"; then
+    echo "Parameter file: $APP/variables.json"
+    packer validate -var-file=$APP/variables.json $APP/packer.json 
+    packer build -var-file=$APP/variables.json $APP/packer.json
+else
+    echo "No parameter file"
+    packer validate $APP/packer.json 
+    packer build $APP/packer.json
+fi
