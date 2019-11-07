@@ -64,7 +64,7 @@
   loop:
     #- jaeger-collector.service
     #- jaeger-query.service
-    - jaeger-collector.service
+    - jaeger-allineone.service
       
       
 
