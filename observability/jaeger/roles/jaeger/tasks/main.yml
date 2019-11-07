@@ -53,7 +53,7 @@
   loop:
     - { src: jaeger-collector.service.j2, dest: /etc/systemd/system/jaeger-collector.service }
     - { src: jaeger-query.service.j2, dest: /etc/systemd/system/jaeger-query.service }
-    - { src: jaeger-allinione.service.j2, dest: /etc/systemd/system/jaeger-allinone.service }
+    - { src: jaeger-all-in-one.service.j2, dest: /etc/systemd/system/jaeger-all-in-one.service }
 
 - name: Enable and start services
   systemd:      
@@ -64,7 +64,7 @@
   loop:
     #- jaeger-collector.service
     #- jaeger-query.service
-    - jaeger-allineone.service
+    - jaeger-all-in-one.service
       
       
 
