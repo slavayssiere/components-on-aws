@@ -42,7 +42,7 @@
     - { src: "/usr/local/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64/jaeger-query", dest: /usr/local/bin/jaeger-query }
 
 - name: Install Systemd files
-  copy:
+  template:
       dest: "{{ item.dest }}"
       src: "{{ item.src }}"
       force: yes
@@ -51,8 +51,9 @@
       mode: 0644
       owner: root
   loop:
-    - { src: jaeger-collector.service, dest: /etc/systemd/system/jaeger-collector.service }
-    - { src: jaeger-query.service, dest: /etc/systemd/system/jaeger-query.service }
+    - { src: jaeger-collector.service.j2, dest: /etc/systemd/system/jaeger-collector.service }
+    - { src: jaeger-query.service.j2, dest: /etc/systemd/system/jaeger-query.service }
+    - { src: jaeger-allinione.service.j2, dest: /etc/systemd/system/jaeger-allinone.service }
 
 - name: Enable and start services
   systemd:      
@@ -61,8 +62,9 @@
       daemon_reload: yes
       state: started
   loop:
+    #- jaeger-collector.service
+    #- jaeger-query.service
     - jaeger-collector.service
-    - jaeger-query.service
       
       
 

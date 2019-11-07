@@ -1,0 +1,14 @@
+[Unit]
+Description=Jaeger Query
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User="{{ service_user }}"
+ExecStart=/usr/local/bin/jaeger-query
+
+[Install]
+WantedBy=multi-user.target
