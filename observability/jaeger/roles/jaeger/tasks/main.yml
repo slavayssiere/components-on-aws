@@ -1,0 +1,72 @@
+---
+- name: Install dependencies
+  package:
+    name: python2-pip
+    state: present
+
+- name: Get Github PIP module
+  pip: 
+    name: github3.py
+    state: present
+
+- name: Get Last version of Jaeger
+  github_release:
+      repo: jaeger
+      user: jaegertracing
+      action: latest_release
+  register: jaeger_version
+
+- name: Downloading Jaeger
+  get_url:
+      dest: /tmp
+      url: "https://github.com/jaegertracing/jaeger/releases/download/v{{ jaeger_version['tag'] | regex_replace('^v', '') }}/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64.tar.gz"
+      use_proxy: yes
+
+- name: Deploy Jaeger
+  unarchive:
+      src: "/tmp/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64.tar.gz"
+      dest: /usr/local
+      owner: root
+
+- name: Linking Jaeger to /usr/local/bin
+  file:
+      path: "{{ item.dest }}"
+      src: "{{ item.src }}"
+      state: link
+  loop:
+    - { src: "/usr/local/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64/example-hotrod", dest: /usr/local/bin/example-hotrod }
+    - { src: "/usr/local/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64/jaeger-agent", dest: /usr/local/bin/jaeger-agent }
+    - { src: "/usr/local/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64/jaeger-all-in-one", dest: /usr/local/bin/jaeger-all-in-one }
+    - { src: "/usr/local/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64/jaeger-collector", dest: /usr/local/bin/jaeger-collector }
+    - { src: "/usr/local/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64/jaeger-ingester", dest: /usr/local/bin/jaeger-ingester }
+    - { src: "/usr/local/jaeger-{{ jaeger_version['tag'] | regex_replace('^v', '') }}-linux-amd64/jaeger-query", dest: /usr/local/bin/jaeger-query }
+
+- name: Install Systemd files
+  template:
+      dest: "{{ item.dest }}"
+      src: "{{ item.src }}"
+      force: yes
+      remote_src: no
+      group: root
+      mode: 0644
+      owner: root
+  loop:
+    - { src: jaeger-collector.service.j2, dest: /etc/systemd/system/jaeger-collector.service }
+    - { src: jaeger-query.service.j2, dest: /etc/systemd/system/jaeger-query.service }
+    - { src: jaeger-all-in-one.service.j2, dest: /etc/systemd/system/jaeger-all-in-one.service }
+
+- name: Enable and start services
+  systemd:      
+      name: "{{ item }}"
+      enabled: yes
+      daemon_reload: yes
+      state: started
+  loop:
+    #- jaeger-collector.service
+    #- jaeger-query.service
+    - jaeger-all-in-one.service
+      
+      
+
+
+      

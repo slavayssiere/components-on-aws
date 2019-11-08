@@ -30,25 +30,13 @@
   }],
   "provisioners": [
     {
-      "type": "file",
-      "source": "jaeger/jaeger-collector.service",
-      "destination": "/tmp/jaeger-collector.service"
-    },
-    {
-      "type": "file",
-      "source": "jaeger/jaeger-query.service",
-      "destination": "/tmp/jaeger-query.service"
-    },
-    {
-      "type": "file",
-      "source": "jaeger/install.sh",
-      "destination": "/tmp/install.sh"
-    },
-    {
       "type": "shell",
-      "inline":[
-        "sudo /tmp/install.sh"
-      ]
+      "inline": ["sudo amazon-linux-extras install ansible2"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "./jaeger/local.yml",
+      "role_paths": ["./jaeger/roles/jaeger"]
     }
   ]
 }

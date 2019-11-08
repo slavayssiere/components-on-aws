@@ -7,8 +7,8 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=1
-User=ec2-user
-ExecStart=/usr/local/bin/jaeger-collector
+User={{ service_user }}
+ExecStart=/usr/local/bin/jaeger-all-in-one
 
 [Install]
 WantedBy=multi-user.target
