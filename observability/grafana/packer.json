@@ -13,17 +13,17 @@
     },
     "vpc_filter": {
       "filters": {
-        "tag:Class": "build",
+        "tag:Stack": "lz",
         "isDefault": "false"
       }
     },
     "subnet_filter": {
       "filters": {
-        "tag:Class": "build"
+        "tag:Stack": "lz"
       },
       "random": true
     },
-    "associate_public_ip_address": true,
+   "associate_public_ip_address": true,
     "instance_type": "t2.micro",
     "ssh_username": "ec2-user",
     "ami_name": "grafana-{{timestamp}}"
