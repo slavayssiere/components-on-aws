@@ -1,5 +1,5 @@
 module.exports = {
-  base: '/',
+  base: '/components-on-aws',
   dest: 'dist',
   title: 'AWS Components',
   description: 'Some AWS Components orchestration',
@@ -23,5 +23,8 @@ module.exports = {
       ['/exemples', 'Examples']
     ],
     sidebarDepth: 2
+  },
+  scripts: {
+    "docs:build": "vuepress build docs"
   }
 }

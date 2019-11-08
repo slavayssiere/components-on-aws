@@ -1,3 +1,3 @@
 #!/bin/bash
 
-vuepress build --dest ../docs
+vuepress build . --dest ../docs
