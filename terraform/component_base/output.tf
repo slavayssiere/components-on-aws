@@ -10,3 +10,7 @@ output "public_dns_zone_id" {
 output "account_id" {
   value = var.account_id
 }
+
+output "wildcard-acme" {
+  value = aws_acm_certificate_validation.web-alb-cert-validation.certificate_arn
+}

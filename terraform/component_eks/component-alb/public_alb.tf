@@ -24,35 +24,35 @@ resource "aws_route53_record" "public_alb_dns" {
   records = ["${aws_lb.public_alb.dns_name}"]
 }
 
-resource "aws_acm_certificate" "public_alb" {
-  domain_name       = "${aws_route53_record.public_alb_dns.fqdn}"
-  validation_method = "DNS"
+// resource "aws_acm_certificate" "public_alb" {
+//   domain_name       = "${aws_route53_record.public_alb_dns.fqdn}"
+//   validation_method = "DNS"
 
-  tags = {
-    Environment = "test"
-  }
-}
+//   tags = {
+//     Environment = "test"
+//   }
+// }
 
-resource "aws_route53_record" "public_alb_cert_validation" {
-  name    = "${aws_acm_certificate.public_alb.domain_validation_options.0.resource_record_name}"
-  type    = "${aws_acm_certificate.public_alb.domain_validation_options.0.resource_record_type}"
-  zone_id = "${data.terraform_remote_state.component_base.outputs.public_dns_zone_id}"
-  records = ["${aws_acm_certificate.public_alb.domain_validation_options.0.resource_record_value}"]
-  ttl     = 60
-}
+// resource "aws_route53_record" "public_alb_cert_validation" {
+//   name    = "${aws_acm_certificate.public_alb.domain_validation_options.0.resource_record_name}"
+//   type    = "${aws_acm_certificate.public_alb.domain_validation_options.0.resource_record_type}"
+//   zone_id = "${data.terraform_remote_state.component_base.outputs.public_dns_zone_id}"
+//   records = ["${aws_acm_certificate.public_alb.domain_validation_options.0.resource_record_value}"]
+//   ttl     = 60
+// }
 
-resource "aws_acm_certificate_validation" "public_alb_cert_validation" {
-  certificate_arn         = "${aws_acm_certificate.public_alb.arn}"
-  validation_record_fqdns = ["${aws_route53_record.public_alb_cert_validation.fqdn}"]
-}
+// resource "aws_acm_certificate_validation" "public_alb_cert_validation" {
+//   certificate_arn         = "${aws_acm_certificate.public_alb.arn}"
+//   validation_record_fqdns = ["${aws_route53_record.public_alb_cert_validation.fqdn}"]
+// }
 
 resource "aws_lb_listener" "public_alb" {
   load_balancer_arn = "${aws_lb.public_alb.arn}"
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = "${aws_acm_certificate_validation.public_alb_cert_validation.certificate_arn}"
-
+  // certificate_arn   = "${aws_acm_certificate_validation.public_alb_cert_validation.certificate_arn}"
+  certificate_arn   = "${data.terraform_remote_state.component_base.outputs.wildcard-acme}"
   default_action {
     type             = "forward"
     target_group_arn = "${data.terraform_remote_state.component_eks.outputs.public-target-group}"
