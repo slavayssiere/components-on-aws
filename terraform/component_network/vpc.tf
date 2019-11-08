@@ -172,50 +172,57 @@ resource "aws_security_group" "demo_sg_public" {
 /* nat gateway eu-west-1a */
 
 resource "aws_eip" "demo_nat_a_gw_eip" {
-  vpc = true
+  count = var.enable_nat_gateway ? 1 : 0
+  vpc   = true
 }
 
 resource "aws_nat_gateway" "demo_nat_a_gw" {
+  count      = var.enable_nat_gateway ? 1 : 0
   depends_on = ["aws_internet_gateway.demo_vpc_igtw"]
 
-  allocation_id = "${aws_eip.demo_nat_a_gw_eip.id}"
+  allocation_id = "${aws_eip.demo_nat_a_gw_eip[count.index].id}"
   subnet_id     = "${aws_subnet.demo_sn_public_a.id}"
 }
 
 /* nat gateway eu-west-1b */
 
 resource "aws_eip" "demo_nat_b_gw_eip" {
-  vpc = true
+  count = var.enable_nat_gateway ? 1 : 0
+  vpc   = true
 }
 
 resource "aws_nat_gateway" "demo_nat_b_gw" {
+  count      = var.enable_nat_gateway ? 1 : 0
   depends_on = ["aws_internet_gateway.demo_vpc_igtw"]
 
-  allocation_id = "${aws_eip.demo_nat_b_gw_eip.id}"
+  allocation_id = "${aws_eip.demo_nat_b_gw_eip[count.index].id}"
   subnet_id     = "${aws_subnet.demo_sn_public_b.id}"
 }
 
 /* nat gateway eu-west-1c */
 
 resource "aws_eip" "demo_nat_c_gw_eip" {
-  vpc = true
+  count = var.enable_nat_gateway ? 1 : 0
+  vpc   = true
 }
 
 resource "aws_nat_gateway" "demo_nat_c_gw" {
+  count      = var.enable_nat_gateway ? 1 : 0
   depends_on = ["aws_internet_gateway.demo_vpc_igtw"]
 
-  allocation_id = "${aws_eip.demo_nat_c_gw_eip.id}"
+  allocation_id = "${aws_eip.demo_nat_c_gw_eip[count.index].id}"
   subnet_id     = "${aws_subnet.demo_sn_public_c.id}"
 }
 
 /* ici on autorise le réseau "privé" à accéder à la NAT Gateway */
 
 resource "aws_route_table" "demo_vpc_rt_a_private" {
+  count  = var.enable_nat_gateway ? 1 : 0
   vpc_id = "${aws_vpc.demo_vpc.id}"
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.demo_nat_a_gw.id}"
+    nat_gateway_id = "${aws_nat_gateway.demo_nat_a_gw[count.index].id}"
   }
 
   tags = "${
@@ -227,16 +234,18 @@ resource "aws_route_table" "demo_vpc_rt_a_private" {
 }
 
 resource "aws_route_table_association" "demo_vpc_rta_private_a" {
+  count          = var.enable_nat_gateway ? 1 : 0
   subnet_id      = "${aws_subnet.demo_sn_private_a.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_a_private.id}"
+  route_table_id = "${aws_route_table.demo_vpc_rt_a_private[count.index].id}"
 }
 
 resource "aws_route_table" "demo_vpc_rt_b_private" {
+  count  = var.enable_nat_gateway ? 1 : 0
   vpc_id = "${aws_vpc.demo_vpc.id}"
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.demo_nat_b_gw.id}"
+    nat_gateway_id = "${aws_nat_gateway.demo_nat_b_gw[count.index].id}"
   }
 
   tags = "${
@@ -248,16 +257,18 @@ resource "aws_route_table" "demo_vpc_rt_b_private" {
 }
 
 resource "aws_route_table_association" "demo_vpc_rta_private_b" {
+  count          = var.enable_nat_gateway ? 1 : 0
   subnet_id      = "${aws_subnet.demo_sn_private_b.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_b_private.id}"
+  route_table_id = "${aws_route_table.demo_vpc_rt_b_private[count.index].id}"
 }
 
 resource "aws_route_table" "demo_vpc_rt_c_private" {
+  count  = var.enable_nat_gateway ? 1 : 0
   vpc_id = "${aws_vpc.demo_vpc.id}"
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.demo_nat_c_gw.id}"
+    nat_gateway_id = "${aws_nat_gateway.demo_nat_c_gw[count.index].id}"
   }
 
   tags = "${
@@ -269,6 +280,7 @@ resource "aws_route_table" "demo_vpc_rt_c_private" {
 }
 
 resource "aws_route_table_association" "demo_vpc_rta_private_c" {
+  count          = var.enable_nat_gateway ? 1 : 0
   subnet_id      = "${aws_subnet.demo_sn_private_c.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_c_private.id}"
+  route_table_id = "${aws_route_table.demo_vpc_rt_c_private[count.index].id}"
 }

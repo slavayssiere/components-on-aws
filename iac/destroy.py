@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from functions_terraform import delete_component
 from yaml_check import check_yaml, YamlCheckError
 import subprocess

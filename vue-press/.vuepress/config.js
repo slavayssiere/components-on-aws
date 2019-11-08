@@ -20,6 +20,7 @@ module.exports = {
       '/',
       ['/how-to', 'Guide'],
       ['/list', 'Composants'],
+      ['/apps', 'Composants applicatifs'],
       ['/exemples', 'Examples']
     ],
     sidebarDepth: 2

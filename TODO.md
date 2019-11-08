@@ -11,6 +11,7 @@
 - add link between component_web and component_rds
 - acme 'create before destroy' add
 - acme wildcard certificat in layer-base
+- component_web alb as public or internal
 
 ## Composants
 

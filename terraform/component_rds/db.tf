@@ -1,16 +1,16 @@
 resource "aws_db_instance" "rds-instance" {
 
-  identifier           = "rds-instance-${terraform.workspace}"
+  identifier                = "rds-instance-${terraform.workspace}"
   final_snapshot_identifier = "rds-instance-${terraform.workspace}-final"
 
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t2.micro"
+  storage_type   = "gp2"
+  engine         = "mysql"
+  engine_version = "5.7"
+  instance_class = "db.t2.micro"
 
   # to be changed
-  username             = "admin"
-  password             = "${var.password}"
+  username = "admin"
+  password = "${var.password}"
 
   parameter_group_name = "default.mysql5.7"
 

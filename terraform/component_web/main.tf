@@ -54,15 +54,15 @@ variable "dns-name" {
 }
 
 variable "user-data" {
-    default = ""
+  default = ""
 }
 
 variable "port" {
-    default = "80"
+  default = "80"
 }
 
 variable "health_check" {
-    default = "/"
+  default = "/"
 }
 
 variable "health_check_port" {
