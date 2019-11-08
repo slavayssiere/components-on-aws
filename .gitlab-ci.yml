@@ -7,8 +7,10 @@ build:
   stage: build
   script:
     - cd observability
-    - ./build.sh grafana
-    - ./build.sh jaeger
+    - packer validate ./grafana/packer.json
+    - packer build ./grafana/packer.json
+    - packer validate ./jaeger/packer.json
+    - packer build ./jaeger/packer.json
   only:
     - master
 
