@@ -4,11 +4,14 @@
     - cloudalchemy.grafana
   vars:
     grafana_datasources:
-          - name: cloudwatch
-            type: cloudwatch
-            access: proxy
-            basicAuth: false
+      - name: cloudwatch
+        type: cloudwatch
+        access: proxy
+        basicAuth: false
     grafana_dashboards:
-          - dashboard_id: 590
-            datasource: cloudwatch
-            revision_id: 7
+      - dashboard_id: 590
+        datasource: cloudwatch
+        revision_id: 7
+    grafana_security:
+      admin_user: admin
+      admin_password: password
