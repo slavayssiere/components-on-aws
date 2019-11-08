@@ -1,0 +1,19 @@
+image:
+  name: hashicorp/packer
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - cd observability && packer validate ./grafana/packer.json
+    - cd observability && packer build ./grafana/packer.json
+    - cd observability && packer validate ./jaeger/packer.json
+    - cd observability && packer build ./jaeger/packer.json
+  only:
+    - master
+
