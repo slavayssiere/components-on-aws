@@ -40,7 +40,7 @@ resource "aws_acm_certificate" "wildcard-acme" {
 resource "aws_route53_record" "wildcard-acme-cert-validation" {
   name    = "${aws_acm_certificate.wildcard-acme.domain_validation_options.0.resource_record_name}"
   type    = "${aws_acm_certificate.wildcard-acme.domain_validation_options.0.resource_record_type}"
-  zone_id = "${data.terraform_remote_state.component_base.outputs.public_dns_zone_id}"
+  zone_id = "${aws_route53_zone.soa-public-dns.id}"
   records = ["${aws_acm_certificate.wildcard-acme.domain_validation_options.0.resource_record_value}"]
   ttl     = 60
 }

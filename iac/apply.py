@@ -40,6 +40,8 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
         # check if credential is always available
         is_always_connected()
 
+        bucket_component_state = plateform['bucket-component-state']
+
         # to allow multi_az, deletion_protection and others
         is_prod = False
         if plateform['type'] == "prod":
@@ -59,23 +61,23 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
 
         ## component eks
         if 'component_eks' in plateform:
-            apply_eks(plateform)
+            apply_eks(bucket_component_state, plateform)
 
         if 'component_bastion' in plateform:
             if 'component_eks' in plateform:
                 print("bastion already created")
             else:
-                apply_bastion(plateform)
+                apply_bastion(bucket_component_state, plateform)
         else:
-            destroy_bastion(plateform)
+            destroy_bastion(bucket_component_state, plateform)
 
         if 'component_rds' in plateform:
             for rds in plateform['component_rds']:
-                apply_rds(rds, plateform['name'], is_prod)
+                apply_rds(bucket_component_state, rds, plateform['name'], is_prod)
 
         if 'component_web' in plateform:
             for web in plateform['component_web']:
-                apply_web(web, plateform['name'], plateform['account'])
+                apply_web(bucket_component_state, web, plateform['name'], plateform['account'])
 
         if 'component_observability' in plateform:
             apply_observability(plateform)

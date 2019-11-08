@@ -28,7 +28,6 @@ variable "workspace-network" {
 }
 
 variable "bucket_component_state" {
-  default = "wescale-slavayssiere-terraform"
 }
 
 variable "deletion_protection" {

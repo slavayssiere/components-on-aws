@@ -8,19 +8,19 @@ from iac.functions_terraform import create_component, delete_component
 from terraform.component_bastion.functions import apply as apply_bastion
 import subprocess
 
-def apply(plateform):
+def apply(bucket_component_state, plateform):
 
   network_type = plateform['component_eks']['network-type']
 
-  create_component(working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={})
+  create_component(working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
 
   ## need bastion for folowing
-  apply_bastion(plateform)
+  apply_bastion(bucket_component_state, plateform)
 
   ## launch eks script
   print("Post Apply script execution...")
   subprocess.call(["../terraform/component_eks/apply.sh", plateform['name'], network_type, plateform['account']])
-  create_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform['name'], var_component={})
+  create_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
 
   # we do not need a bastion
   if 'component_bastion' in plateform:

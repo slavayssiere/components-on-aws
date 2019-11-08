@@ -1,14 +1,16 @@
-name: cilium
+name: calico
 type: dev
-account: '549637939820'
+account: '659066714468'
 region: eu-west-1
-public-dns: 'aws-wescale.slavayssiere.fr.'
-bucket-component-state: 'wescale-slavayssiere-terraform'
+public-dns: 'slavayssiere.lzdev.cloud.'
+bucket-component-state: 'accor-slavayssiere-terraform'
 component_network:
   enabled: true
+component_rds:
+  - name: app-cal-1
 component_eks:
   enabled: true
-  network-type: cilium
+  network-type: calico
 component_bastion:
   enabled: true
 applications:

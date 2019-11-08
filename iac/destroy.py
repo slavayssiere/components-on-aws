@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from functions_terraform import delete_component
+from terraform.component_web.functions import destroy as destroy_web
 from yaml_check import check_yaml, YamlCheckError
 import subprocess
 import yaml
@@ -24,6 +25,8 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
         # validate YAML
         check_yaml(plateform)
 
+        bucket_component_state = plateform['bucket-component-state']
+
         # to allow multi_az, deletion_protection and others
         is_prod = False
         account = plateform['account']
@@ -37,24 +40,30 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
                 rds_plateform_name = plateform_name + "-" + rds['name']
                 print("Delete " + rds_plateform_name + " rds")
                 var_rds={
+                    'bucket_component_state': bucket_component_state,
                     'workspace-network': plateform_name,
                     'password': "temp-for-remove"
                 }
                 delete_component(working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
+
+        if 'component_web' in plateform:
+            print("delete web")
+            for web in plateform['component_web']:
+                destroy_web(bucket_component_state, web, plateform['name'], plateform['account'])
 
         if 'component_bastion' in plateform:
             print("delete bastion")
             eks_enabled = False
             if 'component_eks' in plateform:
                 eks_enabled = True
-            delete_component(working_dir='../terraform/component_bastion', plateform_name=plateform_name, var_component={'enable_eks': eks_enabled})
+            delete_component(working_dir='../terraform/component_bastion', plateform_name=plateform_name, var_component={'bucket_component_state': bucket_component_state, 'enable_eks': eks_enabled})
 
         ## component eks
         if 'component_eks' in plateform:
             print("delete alb")
-            delete_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform_name, var_component={})
+            delete_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform_name, var_component={'bucket_component_state': bucket_component_state})
             print("delete eks")
-            delete_component(working_dir='../terraform/component_eks', plateform_name=plateform_name, var_component={})
+            delete_component(working_dir='../terraform/component_eks', plateform_name=plateform_name, var_component={'bucket_component_state': bucket_component_state})
            
         ## component network
         if 'component_network' in plateform:

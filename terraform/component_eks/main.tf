@@ -35,7 +35,6 @@ data "terraform_remote_state" "component_network" {
 }
 
 variable "bucket_component_state" {
-  default = "wescale-slavayssiere-terraform"
 }
 
 variable "cluster-name" {

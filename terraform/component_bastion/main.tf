@@ -17,7 +17,7 @@ data "terraform_remote_state" "component_base" {
   workspace = "${terraform.workspace}"
 
   config = {
-    bucket = "${var.bucket_component_state}"
+    bucket = var.bucket_component_state
     region = "eu-west-1"
     key    = "eks-test/component_base"
   }
@@ -28,7 +28,7 @@ data "terraform_remote_state" "component_network" {
   workspace = "${terraform.workspace}"
 
   config = {
-    bucket = "${var.bucket_component_state}"
+    bucket = var.bucket_component_state
     region = "eu-west-1"
     key    = "eks-test/component_network"
   }
@@ -39,14 +39,13 @@ data "terraform_remote_state" "component_eks" {
   workspace = "${terraform.workspace}"
 
   config = {
-    bucket = "${var.bucket_component_state}"
+    bucket = var.bucket_component_state
     region = "eu-west-1"
     key    = "eks-test/component_eks"
   }
 }
 
 variable "bucket_component_state" {
-  default = "wescale-slavayssiere-terraform"
 }
 
 variable "enable_eks" {

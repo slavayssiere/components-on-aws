@@ -7,10 +7,11 @@ sys.path.insert(1, '../..')
 from iac.functions_terraform import create_component, delete_component
 from iac.aws_object import get_secret_value
 
-def apply(rds, plateform_name, is_prod):
+def apply(bucket_component_state, rds, plateform_name, is_prod):
   rds_plateform_name = plateform_name + "-" + rds['name']
   print("Create " + rds_plateform_name + " rds")
   var_rds={
+      'bucket_component_state': bucket_component_state,
       'workspace-network': plateform_name,
       'dns-name': rds['name'],
       'deletion_protection': is_prod,
