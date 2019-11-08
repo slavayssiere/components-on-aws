@@ -5,6 +5,10 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
+from iac.yaml_check import YamlCheckError
 
 def apply(plateform):
   create_component(working_dir='../terraform/component_network', plateform_name=plateform['name'], var_component={})
+
+def check(plateform):
+    pass

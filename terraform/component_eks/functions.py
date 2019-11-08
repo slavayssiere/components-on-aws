@@ -5,6 +5,7 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
+from iac.yaml_check import YamlCheckError
 from terraform.component_bastion.functions import apply as apply_bastion
 import subprocess
 
@@ -27,3 +28,15 @@ def apply(bucket_component_state, plateform):
       print("do not delete bastion")
   else:
       delete_component(working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={})
+
+
+def check(plateform):
+    # dependencies test
+    if 'component_network' not in plateform:
+        raise YamlCheckError('eks', 'component_network is mandatory')
+    
+    # component struct test
+    component = plateform['component_eks']
+    if 'network-type' not in component:
+        raise YamlCheckError('eks', 'network-type is missing')
+    pass

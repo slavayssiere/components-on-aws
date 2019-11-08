@@ -5,6 +5,7 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
+from iac.yaml_check import YamlCheckError
 
 def apply(bucket_component_state, web, plateform_name, account):
     web_plateform_name = plateform_name + "-" + web['name']
@@ -63,3 +64,10 @@ def destroy(bucket_component_state, web, plateform_name, account):
         'health_check_port': health_check_port
     }
     delete_component(working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
+
+def check(plateform):
+    if 'component_network' not in plateform:
+        raise YamlCheckError('web', 'component_network is mandatory')
+    if not isinstance(plateform['component_web'], list):
+        raise YamlCheckError('web', 'component_web should be a list')
+    pass

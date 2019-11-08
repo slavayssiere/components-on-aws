@@ -1,57 +1,18 @@
 #!/usr/bin/env python3
 
+from terraform.component_base.functions import check as check_base
+from terraform.component_network.functions import check as check_network
+from terraform.component_bastion.functions import check as check_bastion
+from terraform.component_eks.functions import check as check_eks
+from terraform.component_rds.functions import check as check_rds
+from terraform.component_web.functions import check as check_web
+
 import yaml
-import sys 
 
 class YamlCheckError(Exception):
     def __init__(self, block, message):
         self.block = block
         self.message = message
-
-def check_base(plateform):
-    if 'name' not in plateform:
-        raise YamlCheckError('base', 'please add name of plateform')
-    if 'type' not in plateform:
-        raise YamlCheckError('base', 'please add type of plateform')
-    if 'account' not in plateform:
-        raise YamlCheckError('base', 'please add aws account of plateform')
-    if 'region' not in plateform:
-        raise YamlCheckError('base', 'please add aws region of plateform')
-    if 'public-dns' not in plateform:
-        raise YamlCheckError('base', 'please add public-dns SOA of plateform')
-
-def check_network(plateform):
-    pass
-
-def check_eks(plateform):
-    # dependencies test
-    if 'component_network' not in plateform:
-        raise YamlCheckError('eks', 'component_network is mandatory')
-    
-    # component struct test
-    component = plateform['component_eks']
-    if 'network-type' not in component:
-        raise YamlCheckError('eks', 'network-type is missing')
-    pass
-
-def check_bastion(plateform):
-    if 'component_network' not in plateform:
-        raise YamlCheckError('bastion', 'component_network is mandatory')
-    pass
-
-def check_rds(plateform):
-    if 'component_network' not in plateform:
-        raise YamlCheckError('rds', 'component_network is mandatory')
-    if not isinstance(plateform['component_rds'], list):
-        raise YamlCheckError('rds', 'component_rds should be a list')
-    pass
-
-def check_web(plateform):
-    if 'component_network' not in plateform:
-        raise YamlCheckError('web', 'component_network is mandatory')
-    if not isinstance(plateform['component_web'], list):
-        raise YamlCheckError('web', 'component_web should be a list')
-    pass
 
 def check_yaml(plateform):
     # component base check
