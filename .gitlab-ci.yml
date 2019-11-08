@@ -1,0 +1,14 @@
+image: hashicorp/packer:light
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - cd observability
+    - ./build.sh grafana
+    - ./build.sh jaeger
+  only:
+    - master
+
