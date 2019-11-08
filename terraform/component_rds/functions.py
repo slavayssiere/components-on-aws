@@ -30,7 +30,7 @@ def destroy(bucket_component_state, rds, plateform_name, is_prod):
       'dns-name': rds['name'],
       'deletion_protection': is_prod,
       'multi_az': is_prod,
-      'password': get_secret_value(rds_plateform_name)
+      'password': 'tmp_to_delete'
   }
   delete_component(working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
 

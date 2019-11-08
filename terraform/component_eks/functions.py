@@ -20,8 +20,8 @@ def apply(bucket_component_state, plateform):
 
   ## launch eks script
   print("Post Apply script execution...")
-  subprocess.call(["../terraform/component_eks/apply.sh", plateform['name'], network_type, plateform['account']])
-  create_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+  subprocess.call(["../terraform/component_eks/apply.sh", plateform['name'], network_type, plateform['account'], plateform['public-dns']])
+  create_component(working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
 
   # we do not need a bastion
   if 'component_bastion' in plateform:
@@ -31,9 +31,9 @@ def apply(bucket_component_state, plateform):
 
 def destroy(bucket_component_state, plateform):
     print("delete alb")
-    delete_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform_name, var_component={'bucket_component_state': bucket_component_state})
+    delete_component(working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
     print("delete eks")
-    delete_component(working_dir='../terraform/component_eks', plateform_name=plateform_name, var_component={'bucket_component_state': bucket_component_state})
+    delete_component(working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
         
 
 def check(plateform):

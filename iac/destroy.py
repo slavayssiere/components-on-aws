@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
+import sys
+sys.path.append("..")
 
-from functions_terraform import delete_component
 from terraform.component_web.functions import destroy as destroy_web
 from terraform.component_rds.functions import destroy as destroy_rds
 from terraform.component_eks.functions import destroy as destroy_eks
 from terraform.component_base.functions import destroy as destroy_base
 from terraform.component_network.functions import destroy as destroy_network
 from terraform.component_bastion.functions import destroy as destroy_bastion
-from yaml_check import check_yaml, YamlCheckError
+from yaml_check import check_yaml
+from yaml_check_error import YamlCheckError
 import subprocess
 import yaml
 import sys 
@@ -42,7 +44,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
     if 'component_rds' in plateform:
       print("delete rds")
       for rds in plateform['component_rds']:
-        destroy_rds(bucket_component_state, web, plateform['name'], plateform['account'])
+        destroy_rds(bucket_component_state, rds, plateform['name'], plateform['account'])
 
     if 'component_web' in plateform:
       print("delete web")

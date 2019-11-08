@@ -3,7 +3,6 @@
 import sys
 sys.path.append("..")
 
-from functions_terraform import create_component, delete_component
 from yaml_check import check_yaml
 from yaml_check_error import YamlCheckError
 from aws_object import get_secret_value, is_always_connected
