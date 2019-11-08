@@ -5,7 +5,7 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
-from terraform.component_bastion.apply import apply as apply_bastion
+from terraform.component_bastion.functions import apply as apply_bastion
 import subprocess
 
 def apply(plateform):
