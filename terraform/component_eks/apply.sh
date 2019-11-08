@@ -6,7 +6,7 @@ ACCOUNT=$3
 
 WORKDIR=$PWD
 
-cd ../terraform/component-eks
+cd ../terraform/component_eks
 terraform output kubeconfig > $WORKDIR/tmp/.kubeconfig_$PLATEFORM_NAME
 terraform output config_map_aws_auth > $WORKDIR/tmp/cm_auth_$PLATEFORM_NAME.yaml
 cd -
@@ -24,9 +24,9 @@ ssh -S my-ctrl-socket -O exit ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slava
 # you can use aws eks --region eu-west-1 update-kubeconfig --name eks-test too
 ssh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr aws --region eu-west-1 eks update-kubeconfig --name eks-test-$PLATEFORM_NAME --role-arn arn:aws:iam::$ACCOUNT:role/bastion_role_$PLATEFORM_NAME
 
-scp -r $WORKDIR/../terraform/component-eks/mon-network ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
-scp -r $WORKDIR/../terraform/component-eks/helm_values ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
-scp -r $WORKDIR/../terraform/component-eks/ingress ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
-scp $WORKDIR/../terraform/component-eks/eks-on-bastion.sh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
+scp -r $WORKDIR/../terraform/component_eks/mon-network ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
+scp -r $WORKDIR/../terraform/component_eks/helm_values ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
+scp -r $WORKDIR/../terraform/component_eks/ingress ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
+scp $WORKDIR/../terraform/component_eks/eks-on-bastion.sh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr:
 
 ssh ec2-user@bastion.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr ./eks-on-bastion.sh

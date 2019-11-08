@@ -1,7 +1,7 @@
 resource "aws_security_group" "allow_https" {
   name        = "allow_https-${terraform.workspace}"
   description = "Allow TLS inbound traffic"
-  vpc_id      = "${data.terraform_remote_state.component-network.outputs.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.component_network.outputs.vpc_id}"
 
   ingress {
     from_port   = 443

@@ -4,7 +4,7 @@
 resource "aws_security_group" "demo-node" {
   name        = "terraform-eks-demo-node-${terraform.workspace}"
   description = "Security group for all nodes in the cluster"
-  vpc_id      = "${data.terraform_remote_state.component-network.outputs.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.component_network.outputs.vpc_id}"
 
   egress {
     from_port   = 0

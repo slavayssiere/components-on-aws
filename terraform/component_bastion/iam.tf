@@ -40,5 +40,5 @@ resource "aws_iam_role_policy_attachment" "EKS-attach" {
 
 resource "aws_iam_role_policy_attachment" "STS-assume-role-attach" {
   role       = "${aws_iam_role.bastion_role.name}"
-  policy_arn = "arn:aws:iam::${data.terraform_remote_state.component-base.outputs.account_id}:policy/STSAssumeRoleOnly"
+  policy_arn = "arn:aws:iam::${data.terraform_remote_state.component_base.outputs.account_id}:policy/STSAssumeRoleOnly"
 }

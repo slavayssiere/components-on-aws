@@ -26,7 +26,7 @@ resource "aws_lb_target_group" "web-tg" {
   name     = "web-tg-${terraform.workspace}"
   port     = "${var.port}"
   protocol = "HTTP"
-  vpc_id   = "${data.terraform_remote_state.component-network.outputs.vpc_id}"
+  vpc_id   = "${data.terraform_remote_state.component_network.outputs.vpc_id}"
 
   health_check {
     path = "${var.health_check}"
@@ -41,9 +41,9 @@ resource "aws_autoscaling_group" "web-asg" {
   max_size             = 6
   min_size             = 3
   vpc_zone_identifier = [
-    "${data.terraform_remote_state.component-network.outputs.sn_private_a_id}",
-    "${data.terraform_remote_state.component-network.outputs.sn_private_b_id}",
-    "${data.terraform_remote_state.component-network.outputs.sn_private_c_id}"
+    "${data.terraform_remote_state.component_network.outputs.sn_private_a_id}",
+    "${data.terraform_remote_state.component_network.outputs.sn_private_b_id}",
+    "${data.terraform_remote_state.component_network.outputs.sn_private_c_id}"
   ]
 
   target_group_arns = [

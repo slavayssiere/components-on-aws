@@ -8,52 +8,52 @@ terraform {
   backend "s3" {
     bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
-    key    = "eks-test/component-alb"
+    key    = "eks-test/component_alb"
   }
 }
 
-data "terraform_remote_state" "component-base" {
+data "terraform_remote_state" "component_base" {
   backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {
     bucket = "${var.bucket_component_base}"
     region = "eu-west-1"
-    key    = "eks-test/component-base"
+    key    = "eks-test/component_base"
   }
 }
 
-data "terraform_remote_state" "component-network" {
+data "terraform_remote_state" "component_network" {
   backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {
     bucket = "${var.bucket_component_base}"
     region = "eu-west-1"
-    key    = "eks-test/component-network"
+    key    = "eks-test/component_network"
   }
 }
 
-data "terraform_remote_state" "component-eks" {
+data "terraform_remote_state" "component_eks" {
   backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {
     bucket = "${var.bucket_component_base}"
     region = "eu-west-1"
-    key    = "eks-test/component-eks"
+    key    = "eks-test/component_eks"
   }
 }
 
 
-data "terraform_remote_state" "component-bastion" {
+data "terraform_remote_state" "component_bastion" {
   backend   = "s3"
   workspace = "${terraform.workspace}"
 
   config = {
     bucket = "${var.bucket_component_base}"
     region = "eu-west-1"
-    key    = "eks-test/component-bastion"
+    key    = "eks-test/component_bastion"
   }
 }
 

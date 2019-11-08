@@ -1,7 +1,7 @@
 resource "aws_security_group" "web-asg-sg" {
   name        = "web-asg-sg-${terraform.workspace}"
   description = "Security group for web ASG"
-  vpc_id      = "${data.terraform_remote_state.component-network.outputs.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.component_network.outputs.vpc_id}"
 
   egress {
     from_port   = 0
