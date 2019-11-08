@@ -29,42 +29,42 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
 
         print("Will delete plateform: " + plateform_name + " in account:" + account)
 
-        if 'component-rds' in plateform:
+        if 'component_rds' in plateform:
             print("delete rds")
-            for rds in plateform['component-rds']:
+            for rds in plateform['component_rds']:
                 rds_plateform_name = plateform_name + "-" + rds['name']
                 print("Delete " + rds_plateform_name + " rds")
                 var_rds={
                     'workspace-network': plateform_name,
                     'password': "temp-for-remove"
                 }
-                delete_component(working_dir='../terraform/component-rds', plateform_name=rds_plateform_name, var_component=var_rds)
+                delete_component(working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
 
-        if 'component-bastion' in plateform:
+        if 'component_bastion' in plateform:
             print("delete bastion")
             eks_enabled = False
-            if 'component-eks' in plateform:
+            if 'component_eks' in plateform:
                 eks_enabled = True
-            delete_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={'enable_eks': eks_enabled})
+            delete_component(working_dir='../terraform/component_bastion', plateform_name=plateform_name, var_component={'enable_eks': eks_enabled})
 
         ## component eks
-        if 'component-eks' in plateform:
+        if 'component_eks' in plateform:
             print("delete alb")
-            delete_component(working_dir='../terraform/component-eks/component-alb', plateform_name=plateform_name, var_component={})
+            delete_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform_name, var_component={})
             print("delete eks")
-            delete_component(working_dir='../terraform/component-eks', plateform_name=plateform_name, var_component={})
+            delete_component(working_dir='../terraform/component_eks', plateform_name=plateform_name, var_component={})
            
         ## component network
-        if 'component-network' in plateform:
+        if 'component_network' in plateform:
             print("delete network")
-            delete_component(working_dir='../terraform/component-network', plateform_name=plateform_name, var_component={})
+            delete_component(working_dir='../terraform/component_network', plateform_name=plateform_name, var_component={})
  
         ## component base
         print("delete base")
         var_base={
             'account_id': account,
         }
-        delete_component(working_dir='../terraform/component-base', plateform_name=plateform_name, var_component=var_base)
+        delete_component(working_dir='../terraform/component_base', plateform_name=plateform_name, var_component=var_base)
 
     except yaml.YAMLError as exc:
         print(exc)

@@ -63,7 +63,7 @@ Pour supprimer une plateforme :
 Pour supprimer le bastion éphémère :
 
 ```language-bash
-cd terraform/component-bastion
+cd terraform/component_bastion
 terraform workspace select PLATEFORM_NAME
 terraform destroy
 ```

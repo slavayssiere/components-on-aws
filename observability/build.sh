@@ -4,7 +4,7 @@
 
 APP=$1
 
-if test -f "variables.json"; then
+if test -f "$APP/variables.json"; then
     echo "Parameter file: $APP/variables.json"
     packer validate -var-file=$APP/variables.json $APP/packer.json 
     packer build -var-file=$APP/variables.json $APP/packer.json

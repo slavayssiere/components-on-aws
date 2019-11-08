@@ -3,13 +3,13 @@ type: dev
 account: '549637939820'
 region: eu-west-1
 public-dns: 'aws-wescale.slavayssiere.fr.'
-component-network:
+component_network:
   enabled: true
-component-rds:
+component_rds:
   - name: app-cal-1
-component-bastion:
+component_bastion:
   enabled: true
-component-web:
+component_web:
   - name: nginx
     ami: ami-0ce71448843cb18a1
     port: 80
@@ -17,11 +17,11 @@ component-web:
     user-data: |
       amazon-linux-extras install nginx1.12 -y
       service nginx start
-component-observability:
+component_observability:
   tracing: enabled
   grafana: enabled
 applications:
-  - component-project-a:
+  - component_project-a:
       enabled: true
-  - component-project-b:
+  - component_project-b:
       enabled: true

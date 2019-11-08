@@ -3,15 +3,15 @@ type: dev
 account: '549637939820'
 region: eu-west-1
 public-dns: 'aws-wescale.slavayssiere.fr.'
-component-network:
+component_network:
   enabled: true
-component-eks:
+component_eks:
   enabled: true
   network-type: cilium
-component-bastion:
+component_bastion:
   enabled: true
 applications:
-  - component-project-a:
+  - component_project-a:
       enabled: true
-  - component-project-b:
+  - component_project-b:
       enabled: true

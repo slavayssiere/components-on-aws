@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append("..")
+
 from functions_terraform import create_component, delete_component
 from yaml_check import check_yaml, YamlCheckError
 from aws_object import get_secret_value
+from terraform.component_base.functions import apply as apply_base
+from terraform.component_network.functions import apply as apply_network
+from terraform.component_bastion.functions import apply as apply_bastion
+from terraform.component_bastion.functions import destroy as destroy_bastion
+from terraform.component_eks.functions import apply as apply_eks
+from terraform.component_rds.functions import apply as apply_rds
+from terraform.component_web.functions import apply as apply_web
+from terraform.component_observability.functions import apply as apply_observability
+
 import subprocess
 import yaml
 import sys 
@@ -36,99 +48,35 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
         print("Will create plateform: " + plateform_name + " in account:" + account)
 
         ## component base
-        var_base={
-            'account_id': account,
-            'region': plateform['region'],
-            'public_dns': plateform['public-dns']
-        }
-        create_component(working_dir='../terraform/component-base', plateform_name=plateform_name, var_component=var_base)
-
+        apply_base(plateform)
+        
         ## component network
-        if 'component-network' in plateform:
-            create_component(working_dir='../terraform/component-network', plateform_name=plateform_name, var_component={})
+        if 'component_network' in plateform:
+            apply_network(plateform)
 
         ## component eks
-        if 'component-eks' in plateform:
+        if 'component_eks' in plateform:
+            apply_eks(plateform)
 
-            network_type = plateform['component-eks']['network-type']
-
-            create_component(working_dir='../terraform/component-eks', plateform_name=plateform_name, var_component={})
-            ## need bastion for folowing
-            create_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={'enable_eks': True})
-            ## launch eks script
-            print("Post Apply script execution...")
-            subprocess.call(["../terraform/component-eks/apply.sh", plateform_name, network_type, account])
-            create_component(working_dir='../terraform/component-eks/component-alb', plateform_name=plateform_name, var_component={})
-
-            # we do not need a bastion
-            if 'component-bastion' in plateform:
-                print("do not delete bastion")
+        if 'component_bastion' in plateform:
+            if 'component_eks' in plateform:
+                print("bastion already created")
             else:
-                delete_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={})
+                apply_bastion(plateform)
+        else:
+            destroy_bastion(plateform)
 
-        if 'component-bastion' in plateform:
-            if 'component-eks' in plateform:
-                print("bastion created")
-            else:
-                create_component(working_dir='../terraform/component-bastion', plateform_name=plateform_name, var_component={'enable_eks': False})
+        if 'component_rds' in plateform:
+            for rds in plateform['component_rds']:
+                apply_rds(rds, plateform['name'], is_prod)
 
-        if 'component-rds' in plateform:
-            for rds in plateform['component-rds']:
-                rds_plateform_name = plateform_name + "-" + rds['name']
-                print("Create " + rds_plateform_name + " rds")
-                var_rds={
-                    'workspace-network': plateform_name,
-                    'dns-name': rds['name'],
-                    'deletion_protection': is_prod,
-                    'multi_az': is_prod,
-                    'password': get_secret_value(rds_plateform_name)
-                }
-                create_component(working_dir='../terraform/component-rds', plateform_name=rds_plateform_name, var_component=var_rds)
+        if 'component_web' in plateform:
+            for web in plateform['component_web']:
+                apply_web(web, plateform['name'])
 
-        if 'component-web' in plateform:
-            for web in plateform['component-web']:
-                web_plateform_name = plateform_name + "-" + web['name']
-                print("Create " + web_plateform_name + " web")
-                if 'health-check-port' not in web:
-                    health_check_port = web['port']
-                else:
-                    health_check_port = web['health-check-port']
-
-                var_web={
-                    'workspace-network': plateform_name,
-                    'dns-name': web['name'],
-                    'ami': web['ami'],
-                    'user-data': web['user-data'],
-                    'port': web['port'],
-                    'health_check': web['health-check'],
-                    'health_check_port': health_check_port
-                }
-                create_component(working_dir='../terraform/component-web', plateform_name=web_plateform_name, var_component=var_web)
-
-        if 'component-observability' in plateform:
-            if 'grafana' in plateform['component-observability']:
-                grafana_plateform_name=plateform_name+"-grafana"
-                var_web={
-                    'workspace-network': plateform_name,
-                    'dns-name': 'grafana',
-                    'ami': 'ami-0cd35dee04b2dc36c',
-                    'port': '3000',
-                    'health_check': '/api/health',
-                    'health_check_port': '3000'
-                }
-                create_component(working_dir='../terraform/component-web', plateform_name=grafana_plateform_name, var_component=var_web)
-            if 'tracing' in plateform['component-observability']:
-                grafana_plateform_name=plateform_name+"-tracing"
-                var_web={
-                    'workspace-network': plateform_name,
-                    'dns-name': 'tracing',
-                    'ami': 'ami-0d18c15886d01bddc',
-                    'port': '16686',
-                    'health_check': '/',
-                    'health_check_port': '16687'
-                }
-                create_component(working_dir='../terraform/component-web', plateform_name=grafana_plateform_name, var_component=var_web)
-
+        if 'component_observability' in plateform:
+            apply_observability(plateform)
+            
     except yaml.YAMLError as exc:
         print(exc)
     except YamlCheckError as yce:

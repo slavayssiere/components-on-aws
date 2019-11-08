@@ -1,8 +1,8 @@
 terraform/**/errored.tfstate
 terraform/**/.terraform
 
-terraform/component-eks/cilium.tar.gz
-terraform/component-eks/cilium-*
+terraform/component_eks/cilium.tar.gz
+terraform/component_eks/cilium-*
 
 connect-aws.sh
 
