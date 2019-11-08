@@ -1,7 +1,4 @@
 image: hashicorp/packer:light
-  entrypoint:
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
 stages:
   - build
@@ -14,3 +11,4 @@ build:
     - ./build.sh jaeger
   only:
     - master
+
