@@ -14,7 +14,8 @@ stages:
 build:
   stage: build
   script:
-    - for dir in *; do ./build.sh $dir; done
+    - packer validate grafana/packer.json
+    - packer build grafana/packer.json
   only:
     - master
 
