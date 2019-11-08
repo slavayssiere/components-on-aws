@@ -41,7 +41,11 @@ variable "bucket_component_state" {
 variable "workspace-network" {
 }
 
-variable "ami" {
+variable "ami-name" {
+  type = string
+}
+
+variable "account" {
   type = string
 }
 

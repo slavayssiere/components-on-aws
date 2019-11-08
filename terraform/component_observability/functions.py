@@ -12,7 +12,7 @@ def apply(plateform):
     var_web={
         'workspace-network': plateform['name'],
         'dns-name': 'grafana',
-        'ami': 'ami-0cd35dee04b2dc36c',
+        'ami-name': 'grafana-*',
         'port': '3000',
         'health_check': '/api/health',
         'health_check_port': '3000'
@@ -23,7 +23,7 @@ def apply(plateform):
     var_web={
         'workspace-network': plateform['name'],
         'dns-name': 'tracing',
-        'ami': 'ami-0d18c15886d01bddc',
+        'ami-name': 'jaeger-*',
         'port': '16686',
         'health_check': '/',
         'health_check_port': '16687'

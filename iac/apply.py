@@ -72,7 +72,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
 
         if 'component_web' in plateform:
             for web in plateform['component_web']:
-                apply_web(web, plateform['name'])
+                apply_web(web, plateform['name'], plateform['account'])
 
         if 'component_observability' in plateform:
             apply_observability(plateform)

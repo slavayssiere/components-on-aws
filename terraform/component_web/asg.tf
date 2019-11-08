@@ -1,8 +1,18 @@
+data "aws_ami" "custom-ami" {
+  filter {
+    name   = "name"
+    values = ["${var.ami-name}"]
+  }
+
+  most_recent = true
+  owners      = ["${var.account}"]
+}
+
+
 resource "aws_launch_configuration" "web-lc" {
   associate_public_ip_address = false
-//   iam_instance_profile        = "${aws_iam_instance_profile.demo-node.name}"
-  image_id                    = "${var.ami}"
-  instance_type               = "m4.large"
+  image_id                    = "${data.aws_ami.custom-ami.id}"
+  instance_type               = "m4.medium"
   name_prefix                 = "terraform-eks-demo-${terraform.workspace}"
   security_groups             = ["${aws_security_group.web-asg-sg.id}"]
   user_data_base64            = "${base64encode(var.user-data)}"
