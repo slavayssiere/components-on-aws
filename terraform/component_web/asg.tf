@@ -5,12 +5,41 @@ data "aws_ami" "custom-ami" {
   }
 
   most_recent = true
-  owners      = ["${var.account}"]
+  owners      = ["${var.ami-account}"]
 }
 
+resource "aws_iam_role" "web-role" {
+  name = "web-role-${terraform.workspace}"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "web-role-cw-attach" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+  role       = "${aws_iam_role.web-role.name}"
+}
+
+resource "aws_iam_instance_profile" "web-ip" {
+  name = "ip-${terraform.workspace}"
+  role = "${aws_iam_role.web-role.name}"
+}
 
 resource "aws_launch_configuration" "web-lc" {
   associate_public_ip_address = false
+  # iam_instance_profile        = "${aws_iam_instance_profile.web-ip.name}"
   image_id                    = "${data.aws_ami.custom-ami.id}"
   instance_type               = "m4.medium"
   name_prefix                 = "terraform-eks-demo-${terraform.workspace}"

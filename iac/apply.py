@@ -5,7 +5,7 @@ sys.path.append("..")
 
 from functions_terraform import create_component, delete_component
 from yaml_check import check_yaml, YamlCheckError
-from aws_object import get_secret_value
+from aws_object import get_secret_value, is_always_connected
 from terraform.component_base.functions import apply as apply_base
 from terraform.component_network.functions import apply as apply_network
 from terraform.component_bastion.functions import apply as apply_bastion
@@ -36,6 +36,9 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
 
         # validate YAML
         check_yaml(plateform)
+
+        # check if credential is always available
+        is_always_connected()
 
         # to allow multi_az, deletion_protection and others
         is_prod = False

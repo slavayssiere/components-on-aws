@@ -28,3 +28,7 @@ def get_secret_value(rds_name):
       SecretId='rds-admin-secret-'+rds_name
     )
     return response['SecretString']
+
+def is_always_connected():
+  client = boto3.client('sts')
+  client.get_caller_identity()

@@ -5,28 +5,25 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
+from terraform.component_web.functions import apply as apply_web
 
 def apply(plateform):            
   if 'grafana' in plateform['component_observability']:
-    grafana_plateform_name=plateform['name']+"-grafana"
-    var_web={
-        'workspace-network': plateform['name'],
-        'dns-name': 'grafana',
+    web={
+        'name': 'grafana',
         'ami-name': 'grafana-*',
         'port': '3000',
-        'health_check': '/api/health',
-        'health_check_port': '3000'
+        'health-check': '/api/health',
+        'health-check-port': '3000'
     }
-    create_component(working_dir='../terraform/component_web', plateform_name=grafana_plateform_name, var_component=var_web)
+    apply_web(web, plateform['name'], plateform['account'])
   if 'tracing' in plateform['component_observability']:
-    tracing_plateform_name=plateform['name']+"-tracing"
-    var_web={
-        'workspace-network': plateform['name'],
-        'dns-name': 'tracing',
+    web={
+        'name': 'tracing',
         'ami-name': 'jaeger-*',
         'port': '16686',
-        'health_check': '/',
-        'health_check_port': '16687'
+        'health-check': '/',
+        'health-check-port': '16687'
     }
-    create_component(working_dir='../terraform/component_web', plateform_name=tracing_plateform_name, var_component=var_web)
+    apply_web(web, plateform['name'], plateform['account'])
 

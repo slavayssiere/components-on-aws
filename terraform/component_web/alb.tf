@@ -2,7 +2,7 @@ resource "aws_lb" "web-alb" {
   name               = "web-alb-${terraform.workspace}"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = ["${data.terraform_remote_state.component_eks.outputs.allow_https_id}"]
+  security_groups    = ["${aws_security_group.web-asg-sg.id}"]
   subnets = [
     "${data.terraform_remote_state.component_network.outputs.sn_public_a_id}",
     "${data.terraform_remote_state.component_network.outputs.sn_public_b_id}",

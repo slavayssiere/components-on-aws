@@ -18,12 +18,16 @@ def apply(web, plateform_name, account):
     if 'ami-account' in web:
         ami_account = web['ami-account']
 
+    user_data = ''
+    if 'user-data' in web:
+        user_data = web['user-data']
+
     var_web={
         'workspace-network': plateform_name,
         'dns-name': web['name'],
         'ami-name': web['ami-name'],
         'ami-account': ami_account,
-        'user-data': web['user-data'],
+        'user-data': user_data,
         'port': web['port'],
         'health_check': web['health-check'],
         'health_check_port': health_check_port

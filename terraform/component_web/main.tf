@@ -14,10 +14,10 @@ terraform {
 
 data "terraform_remote_state" "component_base" {
   backend   = "s3"
-  workspace = "${terraform.workspace}"
+  workspace = var.workspace-network
 
   config = {
-    bucket = "${var.bucket_component_state}"
+    bucket = var.bucket_component_state
     region = "eu-west-1"
     key    = "eks-test/component_base"
   }
@@ -28,7 +28,7 @@ data "terraform_remote_state" "component_network" {
   workspace = "${var.workspace-network}"
 
   config = {
-    bucket = "${var.bucket_component_state}"
+    bucket = var.bucket_component_state
     region = "eu-west-1"
     key    = "eks-test/component_network"
   }
@@ -45,7 +45,7 @@ variable "ami-name" {
   type = string
 }
 
-variable "account" {
+variable "ami-account" {
   type = string
 }
 

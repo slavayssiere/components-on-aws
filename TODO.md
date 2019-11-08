@@ -9,6 +9,8 @@
 - secret rotation in RDS component
 - add private link for SOFFY
 - add link between component_web and component_rds
+- acme 'create before destroy' add
+- acme wildcard certificat in layer-base
 
 ## Composants
 
