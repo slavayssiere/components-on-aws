@@ -5,7 +5,7 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
-from iac.yaml_check import YamlCheckError
+from iac.yaml_check_error import YamlCheckError
 from terraform.component_bastion.functions import apply as apply_bastion
 import subprocess
 
@@ -29,6 +29,12 @@ def apply(bucket_component_state, plateform):
   else:
       delete_component(working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={})
 
+def destroy(bucket_component_state, plateform):
+    print("delete alb")
+    delete_component(working_dir='../terraform/component_eks/component_alb', plateform_name=plateform_name, var_component={'bucket_component_state': bucket_component_state})
+    print("delete eks")
+    delete_component(working_dir='../terraform/component_eks', plateform_name=plateform_name, var_component={'bucket_component_state': bucket_component_state})
+        
 
 def check(plateform):
     # dependencies test

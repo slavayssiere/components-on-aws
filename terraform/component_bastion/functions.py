@@ -5,7 +5,7 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
-from iac.yaml_check import YamlCheckError
+from iac.yaml_check_error import YamlCheckError
 
 def apply(bucket_component_state, plateform):
 
