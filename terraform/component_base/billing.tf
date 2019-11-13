@@ -16,7 +16,7 @@ resource "aws_cloudwatch_metric_alarm" "billing" {
 
 data "template_file" "cloudformation_sns_stack" {
   template = "${file("${path.module}/email-sns-stack.json.tpl")}"
-  vars {
+  vars = {
     display_name  = "billing-alert-${terraform.workspace}"
     subscriptions = "${join("," , formatlist("{ \"Endpoint\": \"%s\", \"Protocol\": \"%s\"  }", var.email_address, "email"))}"
   }

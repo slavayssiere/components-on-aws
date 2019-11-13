@@ -16,6 +16,9 @@ component_eks:
   network-type: cilium
 component_bastion:
   enabled: true
+component_observability:
+  tracing: enabled
+  grafana: enabled
 applications:
   - component_project-a:
       enabled: true
