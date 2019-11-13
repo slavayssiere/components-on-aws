@@ -67,3 +67,5 @@ variable "engine_version" {
   default = "5.7"
 }
 
+variable "snapshot_rds_paramater_name" {}
+

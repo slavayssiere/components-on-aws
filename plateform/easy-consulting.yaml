@@ -19,6 +19,7 @@ component_bastion:
 component_web:
   - name: backend
     ami-name: 'ec2-just-for-test-*'
+    ami-account: '200066602731'
     port: 8080
     health-check: '/'
     links-rds: app-cal-1
