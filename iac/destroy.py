@@ -44,7 +44,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
     if 'component_rds' in plateform:
       print("delete rds")
       for rds in plateform['component_rds']:
-        destroy_rds(bucket_component_state, rds, plateform['name'], plateform['account'])
+        destroy_rds(bucket_component_state, rds, plateform['name'], False)
 
     if 'component_web' in plateform:
       print("delete web")
