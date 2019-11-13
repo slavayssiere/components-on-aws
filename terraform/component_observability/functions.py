@@ -7,7 +7,7 @@ sys.path.insert(1, '../..')
 from iac.functions_terraform import create_component, delete_component
 from terraform.component_web.functions import apply as apply_web
 
-def apply(plateform):            
+def apply(bucket_component_state, plateform):            
   if 'grafana' in plateform['component_observability']:
     web={
         'name': 'grafana',
@@ -16,7 +16,7 @@ def apply(plateform):
         'health-check': '/api/health',
         'health-check-port': '3000'
     }
-    apply_web(web, plateform['name'], plateform['account'])
+    apply_web(bucket_component_state=bucket_component_state, web, plateform['name'], plateform['account'])
   if 'tracing' in plateform['component_observability']:
     web={
         'name': 'tracing',
@@ -25,5 +25,5 @@ def apply(plateform):
         'health-check': '/',
         'health-check-port': '16687'
     }
-    apply_web(web, plateform['name'], plateform['account'])
+    apply_web(bucket_component_state=bucket_component_state, web, plateform['name'], plateform['account'])
 

@@ -10,6 +10,12 @@ from iac.aws_object import get_secret_value
 
 def apply(bucket_component_state, rds, plateform_name, is_prod):
   rds_plateform_name = plateform_name + "-" + rds['name']
+  snapshot_enable = False
+  snapshot_name = ''
+  if 'snapshot_name' in rds:
+      snapshot_enable = True
+      snapshot_name = rds['snapshot_name']
+
   print("Create " + rds_plateform_name + " rds")
   var_rds={
       'bucket_component_state': bucket_component_state,
@@ -17,22 +23,36 @@ def apply(bucket_component_state, rds, plateform_name, is_prod):
       'dns-name': rds['name'],
       'deletion_protection': is_prod,
       'multi_az': is_prod,
-      'password': get_secret_value(rds_plateform_name)
+      'password': get_secret_value(rds_plateform_name),
+      'snapshot_enable': snapshot_enable,
+      'snapshot_name': snapshot_name,
+      'engine': rds['engine'],
+      'engine_version': rds['engine_version']
   }
-  create_component(working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
+  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
 
 def destroy(bucket_component_state, rds, plateform_name, is_prod):
   rds_plateform_name = plateform_name + "-" + rds['name']
   print("Delete " + rds_plateform_name + " rds")
+  snapshot_enable = False
+  snapshot_name = ''
+  if 'snapshot_name' in rds:
+      snapshot_enable = True
+      snapshot_name = rds['snapshot_name']
+      
   var_rds={
       'bucket_component_state': bucket_component_state,
       'workspace-network': plateform_name,
       'dns-name': rds['name'],
       'deletion_protection': is_prod,
       'multi_az': is_prod,
-      'password': 'tmp_to_delete'
+      'password': 'tmp_to_delete',
+      'snapshot_enable': snapshot_enable,
+      'snapshot_name': snapshot_name,
+      'engine': 'mysql',
+      'engine_version': '5.7'
   }
-  delete_component(working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
+  delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
 
 def check(plateform):
     if 'component_network' not in plateform:

@@ -6,6 +6,7 @@ terraform/component_eks/cilium-*
 
 connect-aws.sh
 connect-accor.sh
+connect-ec.sh
 
 iac/tmp/.kubeconfig_*
 iac/tmp/cm_auth_*.yaml

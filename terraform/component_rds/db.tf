@@ -4,9 +4,11 @@ resource "aws_db_instance" "rds-instance" {
   final_snapshot_identifier = "rds-instance-${terraform.workspace}-final"
 
   storage_type   = "gp2"
-  engine         = "mysql"
-  engine_version = "5.7"
+  engine         = var.engine
+  engine_version = var.engine_version
   instance_class = "db.t2.micro"
+
+  snapshot_identifier = var.snapshot_enable ? var.snapshot_name : ""
 
   # to be changed
   username = "admin"

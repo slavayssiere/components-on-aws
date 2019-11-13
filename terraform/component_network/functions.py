@@ -11,13 +11,13 @@ def apply(plateform):
   var = {
     'private_dns_zone': plateform['private-dns']
   }
-  create_component(working_dir='../terraform/component_network', plateform_name=plateform['name'], var_component=var)
+  create_component(bucket_component_state=plateform['bucket_component_state'], working_dir='../terraform/component_network', plateform_name=plateform['name'], var_component=var)
 
 def destroy(plateform):
   var = {
     'private_dns_zone': plateform['private-dns']
   }
-  delete_component(working_dir='../terraform/component_network', plateform_name=plateform['name'], var_component=var)
+  delete_component(bucket_component_state=plateform['bucket_component_state'], working_dir='../terraform/component_network', plateform_name=plateform['name'], var_component=var)
 
 def check(plateform):
     pass

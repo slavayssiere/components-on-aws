@@ -41,7 +41,7 @@ resource "aws_launch_configuration" "web-lc" {
   associate_public_ip_address = false
   # iam_instance_profile        = "${aws_iam_instance_profile.web-ip.name}"
   image_id         = "${data.aws_ami.custom-ami.id}"
-  instance_type    = "m4.large"
+  instance_type    = "m5.large"
   name_prefix      = "terraform-eks-demo-${terraform.workspace}"
   security_groups  = ["${aws_security_group.web-asg-sg.id}"]
   user_data_base64 = "${base64encode(var.user-data)}"

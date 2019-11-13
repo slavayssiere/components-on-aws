@@ -1,7 +1,8 @@
 from python_terraform import Terraform, IsNotFlagged, IsFlagged    
 
-def create_component(working_dir, plateform_name, var_component):
+def create_component(bucket_component_state, working_dir, plateform_name, var_component):
     tf = Terraform(working_dir)
+    tf.init(backend_config='bucket='+bucket_component_state, capture_output=False, no_color=IsNotFlagged)
     code, _, _ = tf.cmd("workspace select " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
     if code == 1:
         tf.cmd("workspace new " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
@@ -14,8 +15,9 @@ def create_component(working_dir, plateform_name, var_component):
     if code != 0:
         raise Exception("error in Terraform layer-base")
 
-def delete_component(working_dir, plateform_name, var_component):
+def delete_component(bucket_component_state, working_dir, plateform_name, var_component):
     tf = Terraform(working_dir=working_dir)
+    tf.init(backend_config='bucket='+bucket_component_state, capture_output=False, no_color=IsNotFlagged)
     code, _, _ = tf.cmd("workspace select " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
     if code == 1:
         print("workspace does not exist")

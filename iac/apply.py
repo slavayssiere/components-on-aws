@@ -80,7 +80,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
                 apply_web(bucket_component_state, web, plateform['name'], plateform['account'])
 
         if 'component_observability' in plateform:
-            apply_observability(plateform)
+            apply_observability(bucket_component_state, plateform)
             
     except yaml.YAMLError as exc:
         print(exc)

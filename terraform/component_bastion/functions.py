@@ -14,7 +14,7 @@ def apply(bucket_component_state, plateform):
   if 'component_eks' in plateform:
     enable_eks = True
 
-  create_component(working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={'enable_eks': enable_eks, 'bucket_component_state': bucket_component_state})
+  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={'enable_eks': enable_eks, 'bucket_component_state': bucket_component_state})
 
 def destroy(bucket_component_state, plateform):
   # enable EKS is used for open SG between bastion and master
@@ -22,7 +22,7 @@ def destroy(bucket_component_state, plateform):
   if 'component_eks' in plateform:
     enable_eks = True
 
-  delete_component(working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={'enable_eks': enable_eks, 'bucket_component_state': bucket_component_state})
+  delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={'enable_eks': enable_eks, 'bucket_component_state': bucket_component_state})
 
 def check(plateform):
     if 'component_network' not in plateform:

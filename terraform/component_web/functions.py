@@ -34,7 +34,7 @@ def apply(bucket_component_state, web, plateform_name, account):
         'health_check': web['health-check'],
         'health_check_port': health_check_port
     }
-    create_component(working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
+    create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
 
 def destroy(bucket_component_state, web, plateform_name, account):
     web_plateform_name = plateform_name + "-" + web['name']

@@ -13,7 +13,7 @@ def apply(bucket_component_state, plateform):
 
   network_type = plateform['component_eks']['network-type']
 
-  create_component(working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
 
   ## need bastion for folowing
   apply_bastion(bucket_component_state, plateform)
@@ -21,19 +21,19 @@ def apply(bucket_component_state, plateform):
   ## launch eks script
   print("Post Apply script execution...")
   subprocess.call(["../terraform/component_eks/apply.sh", plateform['name'], network_type, plateform['account'], plateform['public-dns'], plateform['private-dns']])
-  create_component(working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
 
   # we do not need a bastion
   if 'component_bastion' in plateform:
       print("do not delete bastion")
   else:
-      delete_component(working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={})
+      delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={})
 
 def destroy(bucket_component_state, plateform):
     print("delete alb")
-    delete_component(working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+    delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
     print("delete eks")
-    delete_component(working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+    delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
         
 
 def check(plateform):

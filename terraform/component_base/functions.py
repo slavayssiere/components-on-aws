@@ -16,7 +16,7 @@ def apply(plateform):
     'monthly_billing_threshold': plateform['billing-alert'],
     'email_address': plateform['billing-email']
   }
-  create_component(working_dir='../terraform/component_base', plateform_name=plateform['name'], var_component=var_base)
+  create_component(bucket_component_state=plateform['bucket_component_state'], working_dir='../terraform/component_base', plateform_name=plateform['name'], var_component=var_base)
 
 def destroy(plateform):
   ## component base
@@ -27,7 +27,7 @@ def destroy(plateform):
     'monthly_billing_threshold': plateform['billing-alert'],
     'email_address': plateform['billing-email']
   }
-  delete_component(working_dir='../terraform/component_base', plateform_name=plateform['name'], var_component=var_base)
+  delete_component(bucket_component_state=plateform['bucket_component_state'], working_dir='../terraform/component_base', plateform_name=plateform['name'], var_component=var_base)
 
 def check(plateform):
   if 'name' not in plateform:
