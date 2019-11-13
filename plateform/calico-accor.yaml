@@ -3,6 +3,7 @@ type: dev
 account: '659066714468'
 region: eu-west-1
 public-dns: 'slavayssiere.lzdev.cloud.'
+private-dns: 'slavayssiere.accor.'
 bucket-component-state: 'accor-slavayssiere-terraform'
 component_network:
   enabled: true
