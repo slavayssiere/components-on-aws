@@ -1,0 +1,27 @@
+name: ec-dev-1
+type: dev
+account: '440617404887'
+region: eu-west-1
+public-dns: 'easyconsulting.lzdev.cloud.'
+private-dns: 'easyconsulting.accor.'
+bucket-component-state: 'tfstates-440617404887'
+billing-alert: 100
+billing-email: manal.rhya@consulting-for.accor.com
+component_network:
+  enabled: true
+component_rds:
+  - name: app-cal-1
+    snapshot_name: 'arn:aws:rds:eu-west-1:200066602731:snapshot:just-for-test'
+    engine: 'postgres'
+    engine_version: '9.6'
+component_bastion:
+  enabled: true
+component_web:
+  - name: backend
+    ami-name: 'ec2-just-for-test-*'
+    port: 8080
+    health-check: '/'
+    links-rds: app-cal-1
+component_observability:
+  tracing: enabled
+  grafana: enabled

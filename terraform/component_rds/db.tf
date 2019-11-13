@@ -14,7 +14,7 @@ resource "aws_db_instance" "rds-instance" {
   username = "admin"
   password = "${var.password}"
 
-  parameter_group_name = "default.mysql5.7"
+  parameter_group_name = "default.${var.engine}${var.engine_version}"
 
   vpc_security_group_ids = ["${aws_security_group.rds-sec-group.id}"]
 
@@ -30,7 +30,7 @@ resource "aws_db_instance" "rds-instance" {
   backup_retention_period = 10
   backup_window           = "02:00-02:59"
 
-  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
+  enabled_cloudwatch_logs_exports = var.engine == "mysql" ? ["audit", "error", "general", "slowquery"] : ["postgresql"]
 
   # autoscaling enabled
   allocated_storage     = 50

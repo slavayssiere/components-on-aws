@@ -16,7 +16,7 @@ def apply(bucket_component_state, plateform):
         'health-check': '/api/health',
         'health-check-port': '3000'
     }
-    apply_web(bucket_component_state=bucket_component_state, web, plateform['name'], plateform['account'])
+    apply_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'])
   if 'tracing' in plateform['component_observability']:
     web={
         'name': 'tracing',
@@ -25,5 +25,5 @@ def apply(bucket_component_state, plateform):
         'health-check': '/',
         'health-check-port': '16687'
     }
-    apply_web(bucket_component_state=bucket_component_state, web, plateform['name'], plateform['account'])
+    apply_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'])
 

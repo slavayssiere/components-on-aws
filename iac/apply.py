@@ -14,6 +14,7 @@ from terraform.component_eks.functions import apply as apply_eks
 from terraform.component_rds.functions import apply as apply_rds
 from terraform.component_web.functions import apply as apply_web
 from terraform.component_observability.functions import apply as apply_observability
+from terraform.component_link.functions import apply as apply_link
 
 import subprocess
 import yaml
@@ -35,12 +36,15 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
         plateform=yaml.load(stream, Loader=Loader)
 
         # validate YAML
+        print("check yaml...")
         check_yaml(plateform)
 
         # check if credential is always available
+        print("check is always connected...")
         is_always_connected()
 
         bucket_component_state = plateform['bucket-component-state']
+        print("bucket used is: " + bucket_component_state)
 
         # to allow multi_az, deletion_protection and others
         is_prod = False
@@ -53,34 +57,44 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
         print("Will create plateform: " + plateform_name + " in account:" + account)
 
         ## component base
+        print("apply base...")
         apply_base(plateform)
         
         ## component network
         if 'component_network' in plateform:
+            print("apply network...")
             apply_network(plateform)
 
         ## component eks
         if 'component_eks' in plateform:
+            print("apply eks...")
             apply_eks(bucket_component_state, plateform)
 
         if 'component_bastion' in plateform:
             if 'component_eks' in plateform:
                 print("bastion already created")
             else:
+                print("apply bastion...")
                 apply_bastion(bucket_component_state, plateform)
         else:
             destroy_bastion(bucket_component_state, plateform)
 
         if 'component_rds' in plateform:
+            print("apply rds...")
             for rds in plateform['component_rds']:
                 apply_rds(bucket_component_state, rds, plateform['name'], is_prod)
 
         if 'component_web' in plateform:
+            print("apply web...")
             for web in plateform['component_web']:
                 apply_web(bucket_component_state, web, plateform['name'], plateform['account'])
 
         if 'component_observability' in plateform:
+            print("apply component_observability...")
             apply_observability(bucket_component_state, plateform)
+
+        print("search link between component for security-group opening")
+        apply_link(plateform)
             
     except yaml.YAMLError as exc:
         print(exc)
