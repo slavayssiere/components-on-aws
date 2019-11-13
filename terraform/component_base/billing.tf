@@ -7,13 +7,25 @@ resource "aws_cloudwatch_metric_alarm" "billing" {
   period                    = "28800"
   statistic                 = "Maximum"
   threshold                 = "${var.monthly_billing_threshold}"
-  alarm_actions             = ["${aws_sns_topic.sns_alert_topic.arn}"]
+  alarm_actions             = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
 
   dimensions = {
       Currency = var.currency
   }
 }
 
-resource "aws_sns_topic" "sns_alert_topic" {
-    name = "billing-alarm-notification-${lower(var.currency)}-${var.aws_env}"
+data "template_file" "cloudformation_sns_stack" {
+  template = "${file("${path.module}/email-sns-stack.json.tpl")}"
+  vars {
+    display_name  = "billing-alert-${terraform.workspace}"
+    subscriptions = "${join("," , formatlist("{ \"Endpoint\": \"%s\", \"Protocol\": \"%s\"  }", var.email_address, "email"))}"
+  }
+}
+
+resource "aws_cloudformation_stack" "sns_topic" {
+  name          = "billing-alert-${terraform.workspace}"
+  template_body = "${data.template_file.cloudformation_sns_stack.rendered}"
+  tags = "${merge(
+    map("Name", "billing-alert-${terraform.workspace}")
+  )}"
 }

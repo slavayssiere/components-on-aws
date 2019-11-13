@@ -6,3 +6,4 @@ public-dns: 'aws-wescale.slavayssiere.fr.'
 private-dns: 'slavayssiere.accor.'
 bucket-component-state: 'accor-slavayssiere-terraform'
 billing-alert: 100
+billing-email: sebastien.lavayssiere@wescale.fr

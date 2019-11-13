@@ -32,3 +32,5 @@ variable "monthly_billing_threshold" {
 variable "currency" {
   default = "USD"
 }
+
+variable "email_address" {}
