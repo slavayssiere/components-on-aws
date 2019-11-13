@@ -20,7 +20,7 @@ def apply(bucket_component_state, plateform):
 
   ## launch eks script
   print("Post Apply script execution...")
-  subprocess.call(["../terraform/component_eks/apply.sh", plateform['name'], network_type, plateform['account'], plateform['public-dns']])
+  subprocess.call(["../terraform/component_eks/apply.sh", plateform['name'], network_type, plateform['account'], plateform['public-dns'], plateform['private-dns']])
   create_component(working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
 
   # we do not need a bastion

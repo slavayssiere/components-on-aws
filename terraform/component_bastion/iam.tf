@@ -3,19 +3,14 @@ resource "aws_iam_role" "bastion_role" {
   assume_role_policy = "${data.aws_iam_policy_document.bastion-assume-role-policy.json}"
 }
 
-resource "aws_iam_role_policy_attachment" "EC2-attach" {
-  role       = "${aws_iam_role.bastion_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
-}
-
 resource "aws_iam_role_policy_attachment" "S3-attach" {
   role       = "${aws_iam_role.bastion_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
-resource "aws_iam_policy" "eks_full_access" {
-  name        = "eks_full_access_${terraform.workspace}"
-  description = "A EKSFullAccess policy"
+resource "aws_iam_policy" "eks_describe_access" {
+  name        = "eks_describe_access_${terraform.workspace}"
+  description = "A eks_describe_access policy"
 
   policy = <<EOF
 {
@@ -24,7 +19,8 @@ resource "aws_iam_policy" "eks_full_access" {
     {
       "Effect": "Allow",
       "Action": [
-        "eks:*"
+        "eks:DescribeCluster",
+        "sts:AssumeRole"
       ],
       "Resource": "*"
     }
@@ -35,10 +31,5 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "EKS-attach" {
   role       = "${aws_iam_role.bastion_role.name}"
-  policy_arn = "${aws_iam_policy.eks_full_access.arn}"
-}
-
-resource "aws_iam_role_policy_attachment" "STS-assume-role-attach" {
-  role       = "${aws_iam_role.bastion_role.name}"
-  policy_arn = "arn:aws:iam::${data.terraform_remote_state.component_base.outputs.account_id}:policy/STSAssumeRoleOnly"
+  policy_arn = "${aws_iam_policy.eks_describe_access.arn}"
 }

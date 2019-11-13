@@ -22,3 +22,15 @@ variable "region" {
 variable "public_dns" {
   default = "aws-wescale.slavayssiere.fr."
 }
+
+variable "monthly_billing_threshold" {
+  type = number
+  default = 10000
+}
+
+# Currency is optional and defaults to USD
+variable "currency" {
+  default = "USD"
+}
+
+variable "email_address" {}

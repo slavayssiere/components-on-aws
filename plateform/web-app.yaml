@@ -3,7 +3,10 @@ type: dev
 account: '549637939820'
 region: eu-west-1
 public-dns: 'aws-wescale.slavayssiere.fr.'
-bucket-component-state: 'wescale-slavayssiere-terraform'
+private-dns: 'slavayssiere.accor.'
+bucket-component-state: 'accor-slavayssiere-terraform'
+billing-alert: 100
+billing-email: sebastien.lavayssiere@wescale.fr
 component_network:
   enabled: true
 component_rds:

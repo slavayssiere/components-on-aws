@@ -17,7 +17,6 @@ variable "region" {
 }
 
 variable "private_dns_zone" {
-  default = "slavayssiere.wescale"
 }
 
 variable "vpc_cidr" {

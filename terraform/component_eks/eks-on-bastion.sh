@@ -1,5 +1,8 @@
 #!/bin/bash
 
+NETWORK_TYPE=$1
+DNS_PUBLIC=$2
+
 echo "wait for node to register"
 sleep 30
 
@@ -15,6 +18,7 @@ kubectl apply -f ./mon-network/prometheus.yaml
 kubectl apply -f ./mon-network/grafana-datasource.yaml
 
 # on installe le CNI
+echo "We install the $NETWORK_TYPE CNI"
 if [ "$NETWORK_TYPE" == "calico" ]; then
     echo "Installation de calico"
     kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.5/calico.yaml
@@ -42,7 +46,8 @@ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo update
 
 # installation du prometheus operator
-helm install \
+helm upgrade \
+    -i \
     --namespace observability \
     --values ./helm_values/prometheus-operator.yaml \
     --version 6.21.0 \
@@ -50,18 +55,22 @@ helm install \
     prometheus-operator stable/prometheus-operator
 
 # installation des IngressController
-helm install \
+helm upgrade \
+    -i \
     --namespace kube-system \
     --values ./helm_values/traefik-public.yaml \
-    --set dashboard.domain=private.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr \
+    --set dashboard.domain=private.$PLATEFORM_NAME.$DNS_PUBLIC \
     --wait \
     public-ingress stable/traefik
-helm install \
+
+helm upgrade \
+    -i \
     --namespace kube-system \
     --values ./helm_values/traefik-private.yaml \
-    --set dashboard.domain=private.$PLATEFORM_NAME.aws-wescale.slavayssiere.fr \
+    --set dashboard.domain=private.$PLATEFORM_NAME.$DNS_PUBLIC \
     --wait \
     private-ingress stable/traefik
+
 
 # add ingress
 kubectl apply -f ./ingress/traefik-private.yaml
