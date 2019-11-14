@@ -25,18 +25,18 @@
     },
    "associate_public_ip_address": true,
     "instance_type": "t2.micro",
-    "ssh_username": "ec2-user",
+    "ssh_username": "centos",
     "ami_name": "easyconsulting-{{timestamp}}"
   }],
   "provisioners": [
     {
       "type": "shell",
-      "inline": ["sudo amazon-linux-extras install ansible2"]
+      "inline": ["sudo yum -y install epel-release && sudo yum install -y install ansible"]
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./easyconsulting/local.yml",
-      "galaxy_file": "./easyconsulting/requirements.yml"
+      "playbook_file": "local.yml",
+      "galaxy_file": "requirements.yml"
     }
   ]
 }
