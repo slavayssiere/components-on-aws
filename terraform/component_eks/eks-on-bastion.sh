@@ -1,7 +1,8 @@
 #!/bin/bash
 
-NETWORK_TYPE=$1
-DNS_PUBLIC=$2
+PLATEFORM_NAME=$1
+NETWORK_TYPE=$2
+DNS_PUBLIC=$3
 
 echo "wait for node to register"
 sleep 30

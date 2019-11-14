@@ -9,13 +9,19 @@ billing-alert: 100
 billing-email: sebastien.lavayssiere@wescale.fr
 component_network:
   enabled: true
-component_rds:
-  - name: app-cal-1
+# component_rds:
+#   - name: app-cal-1
+#     username: admin
+#     engine: 'mysql'
+#     engine_version: '5.7'
 component_eks:
   enabled: true
   network-type: calico
 component_bastion:
   enabled: true
+component_observability:
+  tracing: enabled
+  grafana: enabled
 applications:
   - component_project-a:
       enabled: true

@@ -1,0 +1,4 @@
+plateform
+terraform/**/.terraform
+connect-*.sh
+**/__pycache__

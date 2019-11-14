@@ -32,4 +32,4 @@ scp -r $WORKDIR/../terraform/component_eks/helm_values ec2-user@bastion.$PLATEFO
 scp -r $WORKDIR/../terraform/component_eks/ingress ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 scp $WORKDIR/../terraform/component_eks/eks-on-bastion.sh ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 
-ssh ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC ./eks-on-bastion.sh $NETWORK_TYPE $DNS_PUBLIC
+ssh ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC ./eks-on-bastion.sh $PLATEFORM_NAME $NETWORK_TYPE $DNS_PUBLIC

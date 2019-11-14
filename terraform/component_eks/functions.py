@@ -35,7 +35,6 @@ def destroy(bucket_component_state, plateform):
     print("delete eks")
     delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
         
-
 def check(plateform):
     # dependencies test
     if 'component_network' not in plateform:

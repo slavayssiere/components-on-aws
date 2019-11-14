@@ -33,7 +33,7 @@ def apply(bucket_component_state, plateform):
         'port': '16686',
         'health-check': '/',
         'health-check-port': '16687',
-        'attach_cw_ro': True,
+        'attach_cw_ro': False,
         'efs-enable': False,
         'node-count': 1,
         'min-node-count': 1,
