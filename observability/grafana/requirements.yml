@@ -1,1 +1,2 @@
 - src: cloudalchemy.grafana
+- src: dhoeric.aws-ssm

@@ -5,7 +5,6 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.functions_terraform import create_component, delete_component
-from terraform.component_web.functions import apply as apply_web
 
 def apply(plateform):
     for web in plateform['component_web']:
@@ -17,3 +16,15 @@ def apply(plateform):
                 'workspace-rds': plateform['name'] + "-" + web['link-rds'],
             }
             create_component(plateform['bucket-component-state'], working_dir='../terraform/component_link', plateform_name=plateform['name'], var_component=var)
+
+
+def destroy(plateform):
+    for web in plateform['component_web']:
+        if 'link-rds' in web:
+            print("create SG between " + web['name'] + " and web: " + web['link-rds'])
+            var = {
+                'bucket_component_state': plateform['bucket-component-state'],
+                'workspace-web': plateform['name'] + "-" + web['name'],
+                'workspace-rds': plateform['name'] + "-" + web['link-rds'],
+            }
+            delete_component(plateform['bucket-component-state'], working_dir='../terraform/component_link', plateform_name=plateform['name'], var_component=var)

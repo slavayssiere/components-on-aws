@@ -7,7 +7,7 @@ sys.path.insert(1, '../..')
 from iac.functions_terraform import create_component, delete_component
 from iac.yaml_check_error import YamlCheckError
 
-def apply(bucket_component_state, web, plateform_name, account):
+def apply(bucket_component_state, web, plateform_name, account, bastion_enable):
     web_plateform_name = plateform_name + "-" + web['name']
     print("Create " + web_plateform_name + " web")
     if 'health-check-port' not in web:
@@ -21,6 +21,7 @@ def apply(bucket_component_state, web, plateform_name, account):
 
     user_data = ''
     if 'user-data' in web:
+        print("install with: " + web['user-data'])
         user_data = web['user-data']
 
     var_web={
@@ -32,7 +33,12 @@ def apply(bucket_component_state, web, plateform_name, account):
         'user-data': user_data,
         'port': web['port'],
         'health_check': web['health-check'],
-        'health_check_port': health_check_port
+        'health_check_port': health_check_port,
+        'efs_enable': web['efs-enable'],
+        'node-count': web['node-count'],
+        'min-node-count': web['min-node-count'],
+        'max-node-count': web['max-node-count'],
+        'bastion_enable': bastion_enable
     }
     create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
 
@@ -61,9 +67,11 @@ def destroy(bucket_component_state, web, plateform_name, account):
         'user-data': user_data,
         'port': web['port'],
         'health_check': web['health-check'],
-        'health_check_port': health_check_port
+        'health_check_port': health_check_port,
+        'efs_enable': web['efs-enable'],
+        'bastion_enable': True
     }
-    delete_component(working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
+    delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
 
 def check(plateform):
     if 'component_network' not in plateform:

@@ -5,10 +5,10 @@
     "source_ami_filter": {
       "filters": {
         "virtualization-type": "hvm",
-        "name": "amzn2-ami-hvm-*-gp2",
+        "name": "CentOS Linux 7 x86_64 HVM*",
         "root-device-type": "ebs"
       },
-      "owners": ["amazon"],
+      "owners": ["aws-marketplace"],
       "most_recent": true
     },
     "vpc_filter": {
@@ -26,7 +26,7 @@
    "associate_public_ip_address": true,
     "instance_type": "t2.micro",
     "ssh_username": "ec2-user",
-    "ami_name": "grafana-{{timestamp}}"
+    "ami_name": "easyconsulting-{{timestamp}}"
   }],
   "provisioners": [
     {
@@ -35,8 +35,8 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./grafana/local.yml",
-      "galaxy_file": "./grafana/requirements.yml"
+      "playbook_file": "./easyconsulting/local.yml",
+      "galaxy_file": "./easyconsulting/requirements.yml"
     }
   ]
 }

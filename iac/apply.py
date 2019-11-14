@@ -70,7 +70,9 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
       print("apply eks...")
       apply_eks(bucket_component_state, plateform)
 
+    bastion_enable = False
     if 'component_bastion' in plateform:
+      bastion_enable = True
       if 'component_eks' in plateform:
         print("bastion already created")
       else:
@@ -87,7 +89,7 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
     if 'component_web' in plateform:
       print("apply web...")
       for web in plateform['component_web']:
-        apply_web(bucket_component_state, web, plateform['name'], plateform['account'])
+        apply_web(bucket_component_state, web, plateform['name'], plateform['account'], bastion_enable)
 
     if 'component_observability' in plateform:
       print("apply component_observability...")

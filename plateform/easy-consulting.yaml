@@ -21,9 +21,20 @@ component_web:
   - name: backend
     ami-name: 'ec2-just-for-test-*'
     ami-account: '200066602731'
+    node-count: 1
+    min-node-count: 1
+    max-node-count: 3
     port: 8080
     health-check: '/'
+    efs-enable: true
     link-rds: app-cal-1
-# component_observability:
-#   tracing: enabled
-#   grafana: enabled
+    user-data: |
+      yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_386/amazon-ssm-agent.rpm
+      systemctl enable amazon-ssm-agent
+      systemctl start amazon-ssm-agent
+      yum install -y nfs-utils
+      mkdir -p /tmp/efs
+      mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport nfs.easyconsulting.accor:/ /tmp/efs
+component_observability:
+  tracing: enabled
+  grafana: enabled

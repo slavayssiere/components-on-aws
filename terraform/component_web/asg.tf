@@ -28,7 +28,13 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "web-role-cw-attach" {
+  count = var.attach_cw_ro ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+  role       = "${aws_iam_role.web-role.name}"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm-policy-attach" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   role       = "${aws_iam_role.web-role.name}"
 }
 
@@ -39,7 +45,7 @@ resource "aws_iam_instance_profile" "web-ip" {
 
 resource "aws_launch_configuration" "web-lc" {
   associate_public_ip_address = false
-  # iam_instance_profile        = "${aws_iam_instance_profile.web-ip.name}"
+  iam_instance_profile        = "${aws_iam_instance_profile.web-ip.name}"
   image_id         = "${data.aws_ami.custom-ami.id}"
   instance_type    = "m5.large"
   name_prefix      = "terraform-eks-demo-${terraform.workspace}"
@@ -65,10 +71,10 @@ resource "aws_lb_target_group" "web-tg" {
 
 resource "aws_autoscaling_group" "web-asg" {
   name                 = "web-asg-${terraform.workspace}"
-  desired_capacity     = 3
+  desired_capacity     = var.node-count
   launch_configuration = "${aws_launch_configuration.web-lc.id}"
-  max_size             = 6
-  min_size             = 3
+  max_size             = var.max-node-count
+  min_size             = var.min-node-count
   vpc_zone_identifier = [
     "${data.terraform_remote_state.component_network.outputs.sn_private_a_id}",
     "${data.terraform_remote_state.component_network.outputs.sn_private_b_id}",

@@ -8,6 +8,7 @@ from terraform.component_eks.functions import destroy as destroy_eks
 from terraform.component_base.functions import destroy as destroy_base
 from terraform.component_network.functions import destroy as destroy_network
 from terraform.component_bastion.functions import destroy as destroy_bastion
+from terraform.component_link.functions import destroy as destroy_link
 from yaml_check import check_yaml
 from yaml_check_error import YamlCheckError
 import subprocess
@@ -40,6 +41,8 @@ with open("../plateform/"+name_file+".yaml", 'r') as stream:
     plateform_name = plateform['name']
 
     print("Will delete plateform: " + plateform_name + " in account:" + account)
+
+    destroy_link(plateform)
 
     if 'component_rds' in plateform:
       print("delete rds")

@@ -13,13 +13,13 @@
     },
     "vpc_filter": {
       "filters": {
-        "tag:Class": "build",
+        "tag:Soffy": "lz",
         "isDefault": "false"
       }
     },
     "subnet_filter": {
       "filters": {
-        "tag:Class": "build"
+        "tag:Soffy": "lz"
       },
       "random": true
     },

@@ -34,6 +34,18 @@ data "terraform_remote_state" "component_network" {
   }
 }
 
+
+data "terraform_remote_state" "component_bastion" {
+  backend   = "s3"
+  workspace = "${var.workspace-network}"
+
+  config = {
+    bucket = var.bucket_component_state
+    region = "eu-west-1"
+    key    = "eks-test/component_bastion"
+  }
+}
+
 variable "bucket_component_state" {
 }
 
@@ -66,4 +78,33 @@ variable "health_check" {
 
 variable "health_check_port" {
   default = "80"
+}
+
+variable "efs_enable" {
+  type = bool
+  default = false
+}
+
+variable "node-count" {
+  type = number
+  default = 3
+}
+
+variable "max-node-count" {
+  type = number
+  default = 6
+}
+variable "min-node-count" {
+  type = number
+  default = 3
+}
+
+variable "attach_cw_ro" {
+  type = bool
+  default = false
+}
+
+variable "bastion_enable" {
+  type = bool
+  default = false
 }
