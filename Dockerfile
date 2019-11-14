@@ -3,8 +3,6 @@ FROM python:3-alpine
 RUN mkdir -p /app && \
   apk add --update git bash curl unzip zip openssl make openssh-client
 
-WORKDIR /app
-
 ENV TERRAFORM_VERSION="0.12.3"
 
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
@@ -15,8 +13,11 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
   && chmod +x ./kubectl \
   && mv ./kubectl /usr/local/bin/kubectl
 
-RUN echo "127.0.0.1	kubernetes" >> /etc/hosts
+RUN echo "127.0.0.1	kubernetes" >> /etc/hosts && mkdir -p /app/iac
+
+COPY iac/requirements.txt /app/iac/requirements.txt
+RUN pip install -r /app/iac/requirements.txt
 
 COPY . /app
 
-RUN pip install -r /app/iac/requirements.txt
+WORKDIR /app/iac
