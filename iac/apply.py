@@ -21,87 +21,87 @@ import yaml
 import sys 
 
 if len(sys.argv) > 1:
-    name_file = sys.argv[1]
-    print("create from file: ../plateform/" + name_file + ".yaml")
+  name_file = sys.argv[1]
+  print("create from file: ../plateform/" + name_file + ".yaml")
 else:
-    name_file = input("Nom du fichier: ")
+  name_file = input("Nom du fichier: ")
 
 try:
-    from yaml import CLoader as Loader, CDumper as Dumper
+  from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
-    from yaml import Loader, Dumper
+  from yaml import Loader, Dumper
 
 with open("../plateform/"+name_file+".yaml", 'r') as stream:
-    try:
-        plateform=yaml.load(stream, Loader=Loader)
+  try:
+    plateform=yaml.load(stream, Loader=Loader)
 
-        # validate YAML
-        print("check yaml...")
-        check_yaml(plateform)
+    # validate YAML
+    print("check yaml...")
+    check_yaml(plateform)
 
-        # check if credential is always available
-        print("check is always connected...")
-        is_always_connected()
+    # check if credential is always available
+    print("check is always connected...")
+    is_always_connected()
 
-        bucket_component_state = plateform['bucket-component-state']
-        print("bucket used is: " + bucket_component_state)
+    bucket_component_state = plateform['bucket-component-state']
+    print("bucket used is: " + bucket_component_state)
 
-        # to allow multi_az, deletion_protection and others
-        is_prod = False
-        if plateform['type'] == "prod":
-            is_prod = True
-        
-        account = plateform['account']
-        plateform_name = plateform['name']
+    # to allow multi_az, deletion_protection and others
+    is_prod = False
+    if plateform['type'] == "prod":
+      is_prod = True
+    
+    account = plateform['account']
+    plateform_name = plateform['name']
 
-        print("Will create plateform: " + plateform_name + " in account:" + account)
+    print("Will create plateform: " + plateform_name + " in account:" + account)
 
-        ## component base
-        print("apply base...")
-        apply_base(plateform)
-        
-        ## component network
-        if 'component_network' in plateform:
-            print("apply network...")
-            apply_network(plateform)
+    ## component base
+    print("apply base...")
+    apply_base(plateform)
+    
+    ## component network
+    if 'component_network' in plateform:
+      print("apply network...")
+      apply_network(plateform)
 
-        ## component eks
-        if 'component_eks' in plateform:
-            print("apply eks...")
-            apply_eks(bucket_component_state, plateform)
+    ## component eks
+    if 'component_eks' in plateform:
+      print("apply eks...")
+      apply_eks(bucket_component_state, plateform)
 
-        if 'component_bastion' in plateform:
-            if 'component_eks' in plateform:
-                print("bastion already created")
-            else:
-                print("apply bastion...")
-                apply_bastion(bucket_component_state, plateform)
-        else:
-            destroy_bastion(bucket_component_state, plateform)
-
-        if 'component_rds' in plateform:
-            print("apply rds...")
-            for rds in plateform['component_rds']:
-                apply_rds(bucket_component_state, rds, plateform['name'], is_prod)
-
-        if 'component_web' in plateform:
-            print("apply web...")
-            for web in plateform['component_web']:
-                apply_web(bucket_component_state, web, plateform['name'], plateform['account'])
-
-        if 'component_observability' in plateform:
-            print("apply component_observability...")
-            apply_observability(bucket_component_state, plateform)
-
-        print("search link between component for security-group opening")
-        apply_link(plateform)
-            
-    except yaml.YAMLError as exc:
-        print(exc)
-    except YamlCheckError as yce:
-        print("Yaml Check error in bloc: " + yce.block)
-        print("Yaml Check error message: " + yce.message)
-    except Exception as inst:
-        print(inst)
+    if 'component_bastion' in plateform:
+      if 'component_eks' in plateform:
+        print("bastion already created")
+      else:
+        print("apply bastion...")
+        apply_bastion(bucket_component_state, plateform)
     else:
-        print("Plateform " + plateform_name + " is running")
+      destroy_bastion(bucket_component_state, plateform)
+
+    if 'component_rds' in plateform:
+      print("apply rds...")
+      for rds in plateform['component_rds']:
+        apply_rds(bucket_component_state, rds, plateform['name'], is_prod)
+
+    if 'component_web' in plateform:
+      print("apply web...")
+      for web in plateform['component_web']:
+        apply_web(bucket_component_state, web, plateform['name'], plateform['account'])
+
+    if 'component_observability' in plateform:
+      print("apply component_observability...")
+      apply_observability(bucket_component_state, plateform)
+
+    print("search link between component for security-group opening")
+    apply_link(plateform)
+          
+  except yaml.YAMLError as exc:
+    print(exc)
+  except YamlCheckError as yce:
+    print("Yaml Check error in bloc: " + yce.block)
+    print("Yaml Check error message: " + yce.message)
+  except Exception as inst:
+    print(inst)
+  else:
+    print("Plateform " + plateform_name + " is running")

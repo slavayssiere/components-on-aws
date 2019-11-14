@@ -1,7 +1,7 @@
 import os
 from python_terraform import Terraform, IsNotFlagged, IsFlagged    
 
-def create_component(bucket_component_state, working_dir, plateform_name, var_component):
+def create_component(bucket_component_state, working_dir, plateform_name, var_component, skip_plan=True):
     if os.path.exists(working_dir+"/.terraform/environment"):
         os.remove(working_dir+"/.terraform/environment")
     else:
@@ -21,7 +21,7 @@ def create_component(bucket_component_state, working_dir, plateform_name, var_co
         var=var_component, 
         capture_output=False, 
         no_color=IsNotFlagged, 
-        skip_plan=True,
+        skip_plan=skip_plan,
         auto_approve=True)
     if code != 0:
         raise Exception("error in Terraform layer-base")

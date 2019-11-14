@@ -19,9 +19,12 @@ def apply(bucket_component_state, rds, plateform_name, is_prod):
   snapshot_parameter_name = 'snapshot-rds-'+plateform_name+"-" + rds['name']
   snapshot_id = get_parameter_value(snapshot_parameter_name)
 
+  print("current snapshot_id: " + snapshot_id)
+
   if snapshot_id == rds['snapshot_name']:
-    snapshot_enable = False
-    snapshot_name = ''
+    print("snapshot_id is the same as rds['snapshot_name']")
+    # snapshot_enable = False
+    # snapshot_name = ''
 
   print("Create " + rds_plateform_name + " rds")
   var_rds={
@@ -30,6 +33,7 @@ def apply(bucket_component_state, rds, plateform_name, is_prod):
       'dns-name': rds['name'],
       'deletion_protection': is_prod,
       'multi_az': is_prod,
+      'username': rds['username'],
       'password': get_secret_value(rds_plateform_name),
       'snapshot_enable': snapshot_enable,
       'snapshot_name': snapshot_name,
@@ -48,6 +52,8 @@ def destroy(bucket_component_state, rds, plateform_name, is_prod):
       snapshot_enable = True
       snapshot_name = rds['snapshot_name']
       
+  snapshot_parameter_name = 'snapshot-rds-'+plateform_name+"-" + rds['name']
+  
   var_rds={
       'bucket_component_state': bucket_component_state,
       'workspace-network': plateform_name,
@@ -58,7 +64,8 @@ def destroy(bucket_component_state, rds, plateform_name, is_prod):
       'snapshot_enable': snapshot_enable,
       'snapshot_name': snapshot_name,
       'engine': 'mysql',
-      'engine_version': '5.7'
+      'engine_version': '5.7',
+      'snapshot_rds_paramater_name': snapshot_parameter_name
   }
   delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
 

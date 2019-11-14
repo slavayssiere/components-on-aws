@@ -11,7 +11,7 @@ resource "aws_db_instance" "rds-instance" {
   snapshot_identifier = var.snapshot_enable ? var.snapshot_name : ""
 
   # to be changed
-  username = "admin"
+  username = "${var.username}"
   password = "${var.password}"
 
   parameter_group_name = "default.${var.engine}${var.engine_version}"

@@ -12,6 +12,7 @@ component_network:
 component_rds:
   - name: app-cal-1
     snapshot_name: 'arn:aws:rds:eu-west-1:200066602731:snapshot:just-for-test'
+    username: 'PgAdmin'
     engine: 'postgres'
     engine_version: '9.6'
 component_bastion:
@@ -22,7 +23,7 @@ component_web:
     ami-account: '200066602731'
     port: 8080
     health-check: '/'
-    links-rds: app-cal-1
-component_observability:
-  tracing: enabled
-  grafana: enabled
+    link-rds: app-cal-1
+# component_observability:
+#   tracing: enabled
+#   grafana: enabled

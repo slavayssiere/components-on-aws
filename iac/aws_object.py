@@ -35,7 +35,7 @@ def get_parameter_value(parameter_name):
     response = client.get_parameter(
       Name=parameter_name
     )
-  except client.exceptions.ResourceNotFoundException:
+  except client.exceptions.ParameterNotFound:
     print(parameter_name + ' not found')
     return ''
   else:

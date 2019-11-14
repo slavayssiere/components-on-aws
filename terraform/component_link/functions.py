@@ -16,4 +16,4 @@ def apply(plateform):
                 'workspace-web': plateform['name'] + "-" + web['name'],
                 'workspace-rds': plateform['name'] + "-" + web['link-rds'],
             }
-            create_component(plateform['bucket-component-state'], working_dir='terraform/component_link', plateform_name=plateform['name'], var_component=var)
+            create_component(plateform['bucket-component-state'], working_dir='../terraform/component_link', plateform_name=plateform['name'], var_component=var)
