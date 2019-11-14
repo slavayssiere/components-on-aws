@@ -9,14 +9,20 @@ from iac.yaml_check_error import YamlCheckError
 
 def apply(plateform):
   ## component base
+  enable_public_dns = True
+  if 'public-dns' not in plateform:
+    enable_public_dns = False
+    plateform['public-dns']='not'
+
   var_base={
     'account_id': plateform['account'],
     'region': plateform['region'],
     'public_dns': plateform['public-dns'],
+    'enable_public_dns': enable_public_dns,
     'monthly_billing_threshold': plateform['billing-alert'],
     'email_address': plateform['billing-email']
   }
-  create_component(bucket_component_state=plateform['bucket-component-state'], working_dir='../terraform/component_base', plateform_name=plateform['name'], var_component=var_base)
+  create_component(bucket_component_state=plateform['bucket-component-state'], working_dir='../terraform/component_base', plateform_name=plateform['name'], var_component=var_base, skip_plan=True)
 
 def destroy(plateform):
   ## component base

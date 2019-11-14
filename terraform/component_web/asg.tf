@@ -27,12 +27,6 @@ resource "aws_iam_role" "web-role" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "web-role-cw-attach" {
-  count = var.attach_cw_ro ? 1 : 0
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
-  role       = "${aws_iam_role.web-role.name}"
-}
-
 resource "aws_iam_role_policy_attachment" "ssm-policy-attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   role       = "${aws_iam_role.web-role.name}"

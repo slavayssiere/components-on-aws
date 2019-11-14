@@ -23,6 +23,11 @@ variable "public_dns" {
   default = "aws-wescale.slavayssiere.fr."
 }
 
+variable "enable_public_dns" {
+  default = true
+  type = bool
+}
+
 variable "monthly_billing_threshold" {
   type = number
   default = 10000

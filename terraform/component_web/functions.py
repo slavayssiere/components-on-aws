@@ -40,7 +40,7 @@ def apply(bucket_component_state, web, plateform_name, account, bastion_enable):
         'max-node-count': web['max-node-count'],
         'bastion_enable': bastion_enable
     }
-    create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
+    create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web, skip_plan=True)
 
 def destroy(bucket_component_state, web, plateform_name, account):
     web_plateform_name = plateform_name + "-" + web['name']

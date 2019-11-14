@@ -3,11 +3,13 @@
   roles:
     - cloudalchemy.grafana
   vars:
+    grafana_use_provisioning: true
     grafana_datasources:
       - name: cloudwatch
         type: cloudwatch
-        access: proxy
-        basicAuth: false
+        jsonData:
+          authType: credentials
+          defaultRegion: eu-west-1
     grafana_dashboards:
       - dashboard_id: 590
         datasource: cloudwatch
