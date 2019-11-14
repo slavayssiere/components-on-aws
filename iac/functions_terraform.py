@@ -1,6 +1,17 @@
+import os
 from python_terraform import Terraform, IsNotFlagged, IsFlagged    
 
 def create_component(bucket_component_state, working_dir, plateform_name, var_component):
+    if os.path.exists(working_dir+"/.terraform/environment"):
+        os.remove(working_dir+"/.terraform/environment")
+    else:
+        print("File environment not exist")
+    
+    if os.path.exists(working_dir+"/.terraform/terraform.tfstate"):
+        os.remove(working_dir+"/.terraform/terraform.tfstate")
+    else:
+        print("File terraform.tfstate not exist")
+    
     tf = Terraform(working_dir)
     tf.init(backend_config='bucket='+bucket_component_state, capture_output=False, no_color=IsNotFlagged)
     code, _, _ = tf.cmd("workspace select " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
@@ -16,6 +27,16 @@ def create_component(bucket_component_state, working_dir, plateform_name, var_co
         raise Exception("error in Terraform layer-base")
 
 def delete_component(bucket_component_state, working_dir, plateform_name, var_component):
+    if os.path.exists(working_dir+"/.terraform/environment"):
+        os.remove(working_dir+"/.terraform/environment")
+    else:
+        print("File environment not exist")
+    
+    if os.path.exists(working_dir+"/.terraform/terraform.tfstate"):
+        os.remove(working_dir+"/.terraform/terraform.tfstate")
+    else:
+        print("File terraform.tfstate not exist")
+    
     tf = Terraform(working_dir=working_dir)
     tf.init(backend_config='bucket='+bucket_component_state, capture_output=False, no_color=IsNotFlagged)
     code, _, _ = tf.cmd("workspace select " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
