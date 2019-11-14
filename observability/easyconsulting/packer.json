@@ -28,10 +28,16 @@
     "ssh_username": "centos",
     "ami_name": "easyconsulting-{{timestamp}}"
   }],
+  
   "provisioners": [
     {
       "type": "shell",
       "inline": ["sudo yum -y install epel-release && sudo yum install -y install ansible"]
+    },
+    {
+      "type": "file",
+      "source": "test.txt",
+      "destination": "/tmp/test.txt"
     },
     {
       "type": "ansible-local",
