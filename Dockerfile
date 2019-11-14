@@ -15,6 +15,8 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
   && chmod +x ./kubectl \
   && mv ./kubectl /usr/local/bin/kubectl
 
+RUN echo "127.0.0.1	kubernetes" >> /etc/hosts
+
 COPY . /app
 
 RUN pip install -r /app/iac/requirements.txt
