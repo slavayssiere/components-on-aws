@@ -35,8 +35,8 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "local.yml",
-      "galaxy_file": "requirements.yml"
+      "playbook_file": "./easyconsulting/local.yml",
+      "galaxy_file": "./easyconsulting/requirements.yml"
     }
   ]
 }
