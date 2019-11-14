@@ -1,4 +1,4 @@
-- src: bertvv.tomcat
+- src: geerlingguy.java
 - src: dhoeric.aws-ssm
 - src: cloudalchemy.node-exporter
 - src: jobscore.cloudwatch-logs
