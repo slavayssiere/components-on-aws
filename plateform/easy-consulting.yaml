@@ -10,13 +10,11 @@ billing-email: manal.rhya@consulting-for.accor.com
 component_network:
   enabled: true
 component_rds:
-  - name: app-cal-1
+  - name: db
     snapshot_name: 'arn:aws:rds:eu-west-1:200066602731:snapshot:just-for-test'
     username: 'PgAdmin'
     engine: 'postgres'
     engine_version: '9.6'
-component_bastion:
-  enabled: true
 component_web:
   - name: backend
     ami-name: 'ec2-just-for-test-*'
@@ -27,7 +25,7 @@ component_web:
     port: 8080
     health-check: '/'
     efs-enable: true
-    link-rds: app-cal-1
+    link-rds: db
     user-data: |
       yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_386/amazon-ssm-agent.rpm
       systemctl enable amazon-ssm-agent

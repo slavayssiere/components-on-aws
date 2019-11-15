@@ -24,6 +24,9 @@ def apply(bucket_component_state, web, plateform_name, account, bastion_enable):
         print("install with: " + web['user-data'])
         user_data = web['user-data']
 
+    if 'attach_cw_ro' not in web:
+        web['attach_cw_ro'] = False
+
     var_web={
         'bucket_component_state': bucket_component_state,
         'workspace-network': plateform_name,
@@ -38,7 +41,8 @@ def apply(bucket_component_state, web, plateform_name, account, bastion_enable):
         'node-count': web['node-count'],
         'min-node-count': web['min-node-count'],
         'max-node-count': web['max-node-count'],
-        'bastion_enable': bastion_enable
+        'bastion_enable': bastion_enable,
+        'attach_cw_ro': web['attach_cw_ro']
     }
     create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web, skip_plan=True)
 

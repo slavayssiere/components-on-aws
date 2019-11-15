@@ -17,7 +17,7 @@ import sys
 
 if len(sys.argv) > 1:
   name_file = sys.argv[1]
-  print("create from file: ../plateform/" + name_file + ".yaml")
+  print("create from file: " + name_file)
 else:
   name_file = input("Nom du fichier: ")
 
@@ -26,7 +26,7 @@ try:
 except ImportError:
   from yaml import Loader, Dumper
 
-with open("../plateform/"+name_file+".yaml", 'r') as stream:
+with open(name_file, 'r') as stream:
   try:
     plateform=yaml.load(stream, Loader=Loader)
 

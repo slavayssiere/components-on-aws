@@ -17,6 +17,21 @@
       - dashboard_id: 139
         datasource: cloudwatch
         revision_id: 13
+      - dashboard_id: 677
+        datasource: cloudwatch
+        revision_id: 3
+      - dashboard_id: 617
+        datasource: cloudwatch
+        revision_id: 3
+      - dashboard_id: 650
+        datasource: cloudwatch
+        revision_id: 7
+      - dashboard_id: 707
+        datasource: cloudwatch
+        revision_id: 2
+      - dashboard_id: 11154
+        datasource: cloudwatch
+        revision_id: 2
     grafana_security:
       admin_user: admin
       admin_password: password

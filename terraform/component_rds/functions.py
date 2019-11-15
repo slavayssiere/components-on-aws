@@ -59,6 +59,7 @@ def destroy(bucket_component_state, rds, plateform_name, is_prod):
     'dns-name': rds['name'],
     'deletion_protection': is_prod,
     'multi_az': is_prod,
+    'username': 'admin',
     'password': 'tmp_to_delete',
     'snapshot_enable': snapshot_enable,
     'snapshot_name': snapshot_name,
