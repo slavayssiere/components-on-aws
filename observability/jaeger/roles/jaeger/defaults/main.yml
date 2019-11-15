@@ -1,1 +1,1 @@
-service_user: ec2_user
+service_user: ec2-user
