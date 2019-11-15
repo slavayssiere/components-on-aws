@@ -27,6 +27,14 @@ def apply(bucket_component_state, web, plateform_name, account, bastion_enable):
     if 'attach_cw_ro' not in web:
         web['attach_cw_ro'] = False
 
+    if 'ips_whitelist' not in web:
+        web['ips_whitelist'] = ["0.0.0.0/0"]
+
+    if 'enable_cognito' not in web:
+        web['cognito_list']=[]
+    else:
+        web['cognito_list']=[1]
+
     var_web={
         'bucket_component_state': bucket_component_state,
         'workspace-network': plateform_name,
@@ -42,7 +50,9 @@ def apply(bucket_component_state, web, plateform_name, account, bastion_enable):
         'min-node-count': web['min-node-count'],
         'max-node-count': web['max-node-count'],
         'bastion_enable': bastion_enable,
-        'attach_cw_ro': web['attach_cw_ro']
+        'attach_cw_ro': web['attach_cw_ro'],
+        'ips_whitelist': web['ips_whitelist'],
+        'cognito_list': web['cognito_list']
     }
     create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web, skip_plan=True)
 
@@ -73,7 +83,9 @@ def destroy(bucket_component_state, web, plateform_name, account):
         'health_check': web['health-check'],
         'health_check_port': health_check_port,
         'efs_enable': web['efs-enable'],
-        'bastion_enable': True
+        'bastion_enable': True,
+        'ips_whitelist': web['ips_whitelist'],
+        'cognito_list': []
     }
     delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
 

@@ -7,14 +7,14 @@ resource "aws_security_group" "alb-sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ips_whitelist
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ips_whitelist
   }
 
   tags = "${
@@ -68,6 +68,19 @@ resource "aws_lb_listener" "web-alb" {
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   // certificate_arn   = "${aws_acm_certificate_validation.web-alb-cert-validation.certificate_arn}"
   certificate_arn   = "${data.terraform_remote_state.component_base.outputs.wildcard-acme}"
+
+  // dynamic "default_action" {
+  //   for_each = var.cognito_list
+  //   content {
+  //     type = "authenticate-cognito"
+
+  //     authenticate_cognito {
+  //       user_pool_arn       = "${data.terraform_remote_state.component_base.outputs.user_pool_arn}"
+  //       user_pool_client_id = "${data.terraform_remote_state.component_base.outputs.user_pool_client_id}"
+  //       user_pool_domain    = "${data.terraform_remote_state.component_base.outputs.user_pool_domain}"
+  //     }
+  //   }
+  // }
 
   default_action {
     type             = "forward"

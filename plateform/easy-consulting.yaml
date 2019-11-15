@@ -36,3 +36,5 @@ component_web:
 component_observability:
   tracing: enabled
   grafana: enabled
+  ips_whitelist:
+    - '195.137.181.15/32'

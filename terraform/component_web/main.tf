@@ -108,3 +108,12 @@ variable "bastion_enable" {
   type = bool
   default = false
 }
+
+variable "ips_whitelist" {
+  type = list(string)
+}
+
+variable "cognito_list" {
+  type = list(number)
+  default = []
+}
