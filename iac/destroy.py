@@ -9,6 +9,7 @@ from terraform.component_base.functions import destroy as destroy_base
 from terraform.component_network.functions import destroy as destroy_network
 from terraform.component_bastion.functions import destroy as destroy_bastion
 from terraform.component_link.functions import destroy as destroy_link
+from terraform.component_observability.functions import destroy as destroy_observability
 from yaml_check import check_yaml
 from yaml_check_error import YamlCheckError
 import subprocess
@@ -43,6 +44,10 @@ with open(name_file, 'r') as stream:
     print("Will delete plateform: " + plateform_name + " in account:" + account)
 
     destroy_link(plateform)
+
+    if 'component_observability' in plateform:
+      print("destroy component_observability...")
+      destroy_observability(bucket_component_state, plateform)
 
     if 'component_rds' in plateform:
       print("delete rds")
