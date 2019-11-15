@@ -45,6 +45,10 @@ with open(name_file, 'r') as stream:
 
     destroy_link(plateform)
 
+    bastion_enable = False
+    if 'component_bastion' in plateform:
+      bastion_enable = True
+
     if 'component_observability' in plateform:
       print("destroy component_observability...")
       destroy_observability(bucket_component_state, plateform)
@@ -57,7 +61,7 @@ with open(name_file, 'r') as stream:
     if 'component_web' in plateform:
       print("delete web")
       for web in plateform['component_web']:
-        destroy_web(bucket_component_state, web, plateform['name'], plateform['account'])
+        destroy_web(bucket_component_state, web, plateform['name'], plateform['account'], bastion_enable)
 
     if 'component_bastion' in plateform:
       print("delete bastion")

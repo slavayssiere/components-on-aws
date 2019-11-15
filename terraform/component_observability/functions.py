@@ -50,7 +50,11 @@ def apply(bucket_component_state, plateform):
     }
     apply_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'], bastion_enable=bastion_enable)
 
-def destroy(bucket_component_state, plateform):         
+def destroy(bucket_component_state, plateform):  
+  bastion_enable = False
+  if 'component_bastion' in plateform:
+    bastion_enable = True
+
   if 'grafana' in plateform['component_observability']:
     web={
         'name': 'grafana',
@@ -66,7 +70,7 @@ def destroy(bucket_component_state, plateform):
         'ips_whitelist': ["0.0.0.0/0"],
         'enable_cognito': True
     }
-    destroy_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'])
+    destroy_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'], bastion_enable=bastion_enable)
   if 'tracing' in plateform['component_observability']:
     web={
         'name': 'tracing',
@@ -82,7 +86,7 @@ def destroy(bucket_component_state, plateform):
         'ips_whitelist': ["0.0.0.0/0"],
         'enable_cognito': True
     }
-    destroy_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'])
+    destroy_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'], bastion_enable=bastion_enable)
 
 
         # 'user-data': '''

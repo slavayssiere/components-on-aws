@@ -56,7 +56,7 @@ def apply(bucket_component_state, web, plateform_name, account, bastion_enable):
     }
     create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web, skip_plan=True)
 
-def destroy(bucket_component_state, web, plateform_name, account):
+def destroy(bucket_component_state, web, plateform_name, account, bastion_enable):
     web_plateform_name = plateform_name + "-" + web['name']
     print("Delete " + web_plateform_name + " web")
     if 'health-check-port' not in web:
@@ -72,6 +72,12 @@ def destroy(bucket_component_state, web, plateform_name, account):
     if 'user-data' in web:
         user_data = web['user-data']
 
+    if 'ips_whitelist' not in web:
+        web['ips_whitelist'] = ["0.0.0.0/0"]
+    
+    if 'attach_cw_ro' not in web:
+        web['attach_cw_ro'] = False
+
     var_web={
         'bucket_component_state': bucket_component_state,
         'workspace-network': plateform_name,
@@ -83,8 +89,9 @@ def destroy(bucket_component_state, web, plateform_name, account):
         'health_check': web['health-check'],
         'health_check_port': health_check_port,
         'efs_enable': web['efs-enable'],
-        'bastion_enable': True,
+        'bastion_enable': bastion_enable,
         'ips_whitelist': web['ips_whitelist'],
+        'attach_cw_ro': web['attach_cw_ro'],
         'cognito_list': []
     }
     delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_web', plateform_name=web_plateform_name, var_component=var_web)
