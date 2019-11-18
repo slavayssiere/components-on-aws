@@ -11,7 +11,7 @@ class ComponentNetwork(Component):
 
   def define_var(self):
     self.var = {
-      'private_dns_zone': self.plateform['private-dns']
+      'private_dns_zone': self.plateform['component_network']['private-dns']
     }
 
   def apply(self):

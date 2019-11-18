@@ -34,10 +34,6 @@ with open(name_file, 'r') as stream:
   try:
     plateform=yaml.load(stream, Loader=Loader)
 
-    # validate YAML
-    print("check yaml...")
-    check_yaml(plateform)
-
     base = ComponentBase(plateform)
     bastion = ComponentBastion(plateform)
     eks = ComponentEKS(plateform)
