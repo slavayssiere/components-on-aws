@@ -4,44 +4,75 @@ import sys
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '../..')
 
-from iac.functions_terraform import create_component, delete_component
+from iac.def_component import Component
 from iac.yaml_check_error import YamlCheckError
-from terraform.component_bastion.functions import apply as apply_bastion
+from terraform.component_bastion.functions import ComponentBastion
 import subprocess
 
-def apply(bucket_component_state, plateform):
+class ComponentEKS(Component):
 
-  network_type = plateform['component_eks']['network-type']
+  def define_var(self):
+    self.var = {'bucket_component_state': self.bucket_component_state}
 
-  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+  def apply(self):
+    if 'component_eks' not in self.plateform:
+      pass
 
-  ## need bastion for folowing
-  apply_bastion(bucket_component_state, plateform)
+    bastion = ComponentBastion(self.plateform)
 
-  ## launch eks script
-  print("Post Apply script execution...")
-  subprocess.call(["../terraform/component_eks/apply.sh", plateform['name'], network_type, plateform['account'], plateform['public-dns'], plateform['private-dns']])
-  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+    self.create(
+      working_dir='../terraform/component_eks', 
+      plateform_name=self.plateform['name'], 
+      var_component=self.var
+    )
 
-  # we do not need a bastion
-  if 'component_bastion' in plateform:
-      print("do not delete bastion")
-  else:
-      delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={})
+    ## need bastion for folowing
+    bastion.apply()
 
-def destroy(bucket_component_state, plateform):
+    ## launch eks script
+    print("Post Apply script execution...")
+    subprocess.call([
+      "../terraform/component_eks/apply.sh",
+      self.plateform_name,
+      self.plateform['component_eks']['network-type'], 
+      self.plateform['account'], 
+      self.plateform['public-dns'], 
+      self.plateform['private-dns']
+    ])
+    
+    self.create(
+      working_dir='../terraform/component_eks/component-alb', 
+      plateform_name=self.plateform_name, 
+      var_component=self.var
+    )
+
+    # we do not need a bastion
+    if 'component_bastion' in self.plateform:
+        print("do not delete bastion")
+    else:
+        bastion.destroy()
+
+  def destroy(self):
     print("delete alb")
-    delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks/component-alb', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
+    self.delete(
+      working_dir='../terraform/component_eks/component-alb', 
+      plateform_name=self.plateform_name, 
+      var_component=self.var
+    )
     print("delete eks")
-    delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_eks', plateform_name=plateform['name'], var_component={'bucket_component_state': bucket_component_state})
-        
-def check(plateform):
+    self.delete(
+      working_dir='../terraform/component_eks', 
+      plateform_name=self.plateform_name, 
+      var_component=self.var
+    )
+          
+  def check(self):
     # dependencies test
-    if 'component_network' not in plateform:
+    if 'component_network' not in self.plateform:
         raise YamlCheckError('eks', 'component_network is mandatory')
     
     # component struct test
-    component = plateform['component_eks']
+    component = self.plateform['component_eks']
     if 'network-type' not in component:
         raise YamlCheckError('eks', 'network-type is missing')
     pass

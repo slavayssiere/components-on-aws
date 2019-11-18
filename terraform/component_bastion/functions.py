@@ -4,25 +4,38 @@ import sys
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '../..')
 
-from iac.functions_terraform import create_component, delete_component
+from iac.def_component import Component
 from iac.yaml_check_error import YamlCheckError
 
-def apply(bucket_component_state, plateform):
+class ComponentBastion(Component):
 
-  # enable EKS is used for open SG between bastion and master
-  enable_eks = False
-  if 'component_eks' in plateform:
-    enable_eks = True
+  def define_var(self):
+    # enable EKS is used for open SG between bastion and master
+    enable_eks = False
+    if 'component_eks' in self.plateform:
+      enable_eks = True
 
-  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={'enable_eks': enable_eks, 'bucket_component_state': bucket_component_state})
+    self.var = {
+      'enable_eks': enable_eks,
+      'bucket_component_state': self.bucket_component_state
+    }
 
-def destroy(bucket_component_state, plateform):
-  # enable EKS is used for open SG between bastion and master
-  enable_eks = False
-  if 'component_eks' in plateform:
-    enable_eks = True
+def apply(self):
+  if 'component_bastion' not in self.plateform:
+    pass
+  
+  self.create(
+    working_dir='../terraform/component_bastion', 
+    plateform_name=self.plateform_name, 
+    var_component=self.var
+  )
 
-  delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_bastion', plateform_name=plateform['name'], var_component={'enable_eks': enable_eks, 'bucket_component_state': bucket_component_state})
+def destroy(self):
+  self.delete(
+    working_dir='../terraform/component_bastion', 
+    plateform_name=self.plateform_name,
+    var_component=self.var_component
+  )
 
 def check(plateform):
     if 'component_network' not in plateform:

@@ -4,75 +4,69 @@ import sys
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '../..')
 
-from iac.functions_terraform import create_component, delete_component
+from iac.def_component import Component
 from iac.yaml_check_error import YamlCheckError
 from iac.aws_object import get_secret_value, get_parameter_value
 
-def apply(bucket_component_state, rds, plateform_name, is_prod):
-  rds_plateform_name = plateform_name + "-" + rds['name']
-  snapshot_parameter_name = 'snapshot-rds-'+plateform_name+"-" + rds['name']
-  snapshot_enable = False
-  snapshot_name = ''
-  if 'snapshot_name' in rds:
-    snapshot_enable = True
-    snapshot_name = rds['snapshot_name']
-    snapshot_id = get_parameter_value(snapshot_parameter_name)
+class ComponentRDS(Component):
 
-    print("current snapshot_id: " + snapshot_id)
+  def define_var(self):
+    pass
 
-    if snapshot_id == rds['snapshot_name']:
-      print("snapshot_id is the same as rds['snapshot_name']")
-      # snapshot_enable = False
-      # snapshot_name = ''
+  def apply(self):
+    if 'component_rds' in self.plateform:
+      print("apply rds...")
+      for rds in self.lateform['component_rds']:
+        self.compute_var(rds, self.create)
 
-  print("Create " + rds_plateform_name + " rds")
-  var_rds={
-    'bucket_component_state': bucket_component_state,
-    'workspace-network': plateform_name,
-    'dns-name': rds['name'],
-    'deletion_protection': is_prod,
-    'multi_az': is_prod,
-    'username': rds['username'],
-    'password': get_secret_value(rds_plateform_name),
-    'snapshot_enable': snapshot_enable,
-    'snapshot_name': snapshot_name,
-    'engine': rds['engine'],
-    'engine_version': rds['engine_version'],
-    'snapshot_rds_paramater_name': snapshot_parameter_name
-  }
-  create_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
+  def destroy(self):
+    if 'component_rds' in self.plateform:
+      print("apply rds...")
+      for rds in self.plateform['component_rds']:
+        self.compute_var(rds, self.delete)
 
-def destroy(bucket_component_state, rds, plateform_name, is_prod):
-  rds_plateform_name = plateform_name + "-" + rds['name']
-  print("Delete " + rds_plateform_name + " rds")
-  snapshot_enable = False
-  snapshot_name = ''
-  if 'snapshot_name' in rds:
-    snapshot_enable = True
-    snapshot_name = rds['snapshot_name']
-      
-  snapshot_parameter_name = 'snapshot-rds-'+plateform_name+"-" + rds['name']
-  
-  var_rds={
-    'bucket_component_state': bucket_component_state,
-    'workspace-network': plateform_name,
-    'dns-name': rds['name'],
-    'deletion_protection': is_prod,
-    'multi_az': is_prod,
-    'username': 'admin',
-    'password': 'tmp_to_delete',
-    'snapshot_enable': snapshot_enable,
-    'snapshot_name': snapshot_name,
-    'engine': 'mysql',
-    'engine_version': '5.7',
-    'snapshot_rds_paramater_name': snapshot_parameter_name
-  }
-  delete_component(bucket_component_state=bucket_component_state, working_dir='../terraform/component_rds', plateform_name=rds_plateform_name, var_component=var_rds)
+  def compute_var(self, rds, func):
+    rds_plateform_name = self.plateform_name + "-" + rds['name']
+    snapshot_parameter_name = 'snapshot-rds-' + self.plateform_name+"-" + rds['name']
+    snapshot_enable = False
+    snapshot_name = ''
 
-def check(plateform):
-  if 'component_network' not in plateform:
-    raise YamlCheckError('rds', 'component_network is mandatory')
-  if not isinstance(plateform['component_rds'], list):
-    raise YamlCheckError('rds', 'component_rds should be a list')
-  pass
+    is_prod = False
+    if self.plateform['type'] == 'prod':
+      is_prod = True
+
+    if 'snapshot_name' in rds:
+      snapshot_enable = True
+      snapshot_name = rds['snapshot_name']
+      snapshot_id = get_parameter_value(snapshot_parameter_name)
+
+      print("current snapshot_id: " + snapshot_id)
+
+    print("Create " + rds_plateform_name + " rds")
+    var={
+      'bucket_component_state': self.bucket_component_state,
+      'workspace-network': self.plateform_name,
+      'dns-name': rds['name'],
+      'deletion_protection': is_prod,
+      'multi_az': is_prod,
+      'username': rds['username'],
+      'password': get_secret_value(rds_plateform_name),
+      'snapshot_enable': snapshot_enable,
+      'snapshot_name': snapshot_name,
+      'engine': rds['engine'],
+      'engine_version': rds['engine_version'],
+      'snapshot_rds_paramater_name': snapshot_parameter_name
+    }
+    func(
+      working_dir='../terraform/component_rds', 
+      plateform_name=rds_plateform_name, 
+      var_component=var
+    )
+
+  def check(self):
+    if 'component_network' not in self.plateform:
+      raise YamlCheckError('rds', 'component_network is mandatory')
+    if not isinstance(self.plateform['component_rds'], list):
+      raise YamlCheckError('rds', 'component_rds should be a list')
+    pass
 

@@ -6,15 +6,14 @@ sys.path.append("..")
 from yaml_check import check_yaml
 from yaml_check_error import YamlCheckError
 from aws_object import get_secret_value, is_always_connected
-from terraform.component_base.functions import apply as apply_base
-from terraform.component_network.functions import apply as apply_network
-from terraform.component_bastion.functions import apply as apply_bastion
-from terraform.component_bastion.functions import destroy as destroy_bastion
-from terraform.component_eks.functions import apply as apply_eks
-from terraform.component_rds.functions import apply as apply_rds
-from terraform.component_web.functions import apply as apply_web
-from terraform.component_observability.functions import apply as apply_observability
-from terraform.component_link.functions import apply as apply_link
+from terraform.component_base.functions import ComponentBase
+from terraform.component_network.functions import ComponentNetwork
+from terraform.component_bastion.functions import ComponentBastion
+from terraform.component_eks.functions import ComponentEKS
+from terraform.component_rds.functions import ComponentRDS
+from terraform.component_web.functions import ComponentWeb
+from terraform.component_observability.functions import ComponentObservability
+from terraform.component_link.functions import ComponentLink
 
 import subprocess
 import yaml
@@ -39,64 +38,31 @@ with open(name_file, 'r') as stream:
     print("check yaml...")
     check_yaml(plateform)
 
+    base = ComponentBase(plateform)
+    bastion = ComponentBastion(plateform)
+    eks = ComponentEKS(plateform)
+    network = ComponentNetwork(plateform)
+    web = ComponentWeb(plateform)
+    link = ComponentLink(plateform)
+    obs = ComponentObservability(plateform)
+    rds = ComponentRDS(plateform)
+
     # check if credential is always available
     print("check is always connected...")
     is_always_connected()
 
-    bucket_component_state = plateform['bucket-component-state']
-    print("bucket used is: " + bucket_component_state)
+    print("Will create plateform: " + plateform['name'] + " in account:" + plateform['account'])
 
-    # to allow multi_az, deletion_protection and others
-    is_prod = False
-    if plateform['type'] == "prod":
-      is_prod = True
-    
-    account = plateform['account']
-    plateform_name = plateform['name']
-
-    print("Will create plateform: " + plateform_name + " in account:" + account)
-
-    ## component base
-    print("apply base...")
-    apply_base(plateform)
-    
-    ## component network
-    if 'component_network' in plateform:
-      print("apply network...")
-      apply_network(plateform)
-
-    ## component eks
-    if 'component_eks' in plateform:
-      print("apply eks...")
-      apply_eks(bucket_component_state, plateform)
-
-    bastion_enable = False
-    if 'component_bastion' in plateform:
-      bastion_enable = True
-      if 'component_eks' in plateform:
-        print("bastion already created")
-      else:
-        print("apply bastion...")
-        apply_bastion(bucket_component_state, plateform)
-    else:
-      destroy_bastion(bucket_component_state, plateform)
-
-    if 'component_rds' in plateform:
-      print("apply rds...")
-      for rds in plateform['component_rds']:
-        apply_rds(bucket_component_state, rds, plateform['name'], is_prod)
-
-    if 'component_web' in plateform:
-      print("apply web...")
-      for web in plateform['component_web']:
-        apply_web(bucket_component_state, web, plateform['name'], plateform['account'], bastion_enable)
-
-    if 'component_observability' in plateform:
-      print("apply component_observability...")
-      apply_observability(bucket_component_state, plateform)
+    base.apply()
+    network.apply()
+    eks.apply()
+    bastion.apply()
+    web.apply()
+    obs.apply()
+    rds.apply()
 
     print("search link between component for security-group opening")
-    apply_link(plateform)
+    link.apply()
           
   except yaml.YAMLError as exc:
     print(exc)
@@ -106,4 +72,4 @@ with open(name_file, 'r') as stream:
   except Exception as inst:
     print(inst)
   else:
-    print("Plateform " + plateform_name + " is running")
+    print("Plateform " + plateform['name'] + " is running")

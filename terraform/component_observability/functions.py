@@ -4,89 +4,66 @@ import sys
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '../..')
 
-from iac.functions_terraform import create_component, delete_component
-from terraform.component_web.functions import apply as apply_web
-from terraform.component_web.functions import destroy as destroy_web
+from iac.def_component import Component
+from terraform.component_web.functions import ComponentWeb
 
-def apply(bucket_component_state, plateform):
-  bastion_enable = False
-  if 'component_bastion' in plateform:
-    bastion_enable = True
+class ComponentObservability(Component):
 
-  if 'ips_whitelist' not in plateform['component_observability']:
-    plateform['component_observability']['ips_whitelist'] = ["0.0.0.0/0"]
-         
-  if 'grafana' in plateform['component_observability']:
+  def apply(self):
+    if 'ips_whitelist' not in self.plateform['component_observability']:
+      self.plateform['component_observability']['ips_whitelist'] = ["0.0.0.0/0"]
+
+    if 'grafana' in self.plateform['component_observability']:
+      self.grafana(self.create)
+
+    if 'tracing' in self.plateform['component_observability']:
+      self.tracing(self.create)
+
+  def destroy(self):
+    if 'ips_whitelist' not in self.plateform['component_observability']:
+      self.plateform['component_observability']['ips_whitelist'] = ["0.0.0.0/0"]
+
+    if 'grafana' in self.plateform['component_observability']:
+      self.grafana(self.delete)
+
+    if 'tracing' in self.plateform['component_observability']:
+      self.tracing(self.delete)
+
+  def grafana(self, func):
+    grafana = ComponentWeb(self.plateform)
     web={
-        'name': 'grafana',
-        'ami-name': 'grafana-*',
-        'port': '3000',
-        'health-check': '/api/health',
-        'health-check-port': '3000',
-        'attach_cw_ro': True,
-        'efs-enable': False,
-        'node-count': 1,
-        'min-node-count': 1,
-        'max-node-count': 1,
-        'ips_whitelist': plateform['component_observability']['ips_whitelist'],
-        'enable_cognito': True
+      'name': 'grafana',
+      'ami-name': 'grafana-*',
+      'port': '3000',
+      'health-check': '/api/health',
+      'health-check-port': '3000',
+      'attach_cw_ro': True,
+      'efs-enable': False,
+      'node-count': 1,
+      'min-node-count': 1,
+      'max-node-count': 1,
+      'ips_whitelist': self.plateform['component_observability']['ips_whitelist'],
+      'enable_cognito': True
     }
+    grafana.compute_var(web, func)
 
-    apply_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'], bastion_enable=bastion_enable)
-  if 'tracing' in plateform['component_observability']:
+  def tracing(self, func):
+    tracing = ComponentWeb(self.plateform)
     web={
-        'name': 'tracing',
-        'ami-name': 'jaeger-*',
-        'port': '16686',
-        'health-check': '/',
-        'health-check-port': '16687',
-        'attach_cw_ro': False,
-        'efs-enable': False,
-        'node-count': 1,
-        'min-node-count': 1,
-        'max-node-count': 1,
-        'ips_whitelist': plateform['component_observability']['ips_whitelist'],
-        'enable_cognito': True
+      'name': 'tracing',
+      'ami-name': 'jaeger-*',
+      'port': '16686',
+      'health-check': '/',
+      'health-check-port': '16687',
+      'attach_cw_ro': False,
+      'efs-enable': False,
+      'node-count': 1,
+      'min-node-count': 1,
+      'max-node-count': 1,
+      'ips_whitelist': self.plateform['component_observability']['ips_whitelist'],
+      'enable_cognito': True
     }
-    apply_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'], bastion_enable=bastion_enable)
-
-def destroy(bucket_component_state, plateform):  
-  bastion_enable = False
-  if 'component_bastion' in plateform:
-    bastion_enable = True
-
-  if 'grafana' in plateform['component_observability']:
-    web={
-        'name': 'grafana',
-        'ami-name': 'grafana-*',
-        'port': '3000',
-        'health-check': '/api/health',
-        'health-check-port': '3000',
-        'attach_cw_ro': True,
-        'efs-enable': False,
-        'node-count': 1,
-        'min-node-count': 1,
-        'max-node-count': 1,
-        'ips_whitelist': ["0.0.0.0/0"],
-        'enable_cognito': True
-    }
-    destroy_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'], bastion_enable=bastion_enable)
-  if 'tracing' in plateform['component_observability']:
-    web={
-        'name': 'tracing',
-        'ami-name': 'jaeger-*',
-        'port': '16686',
-        'health-check': '/',
-        'health-check-port': '16687',
-        'attach_cw_ro': False,
-        'efs-enable': False,
-        'node-count': 1,
-        'min-node-count': 1,
-        'max-node-count': 1,
-        'ips_whitelist': ["0.0.0.0/0"],
-        'enable_cognito': True
-    }
-    destroy_web(bucket_component_state=bucket_component_state, web=web, plateform_name=plateform['name'], account=plateform['account'], bastion_enable=bastion_enable)
+    tracing.compute_var(web, func)
 
 
         # 'user-data': '''
