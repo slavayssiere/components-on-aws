@@ -9,6 +9,9 @@ from iac.yaml_check_error import YamlCheckError
 
 class ComponentBase(Component):
 
+  blocname = "name"
+  component_name = "base"
+
   def define_var(self):
     enable_public_dns = True
     if 'public-dns' not in self.plateform:

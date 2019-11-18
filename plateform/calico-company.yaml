@@ -3,17 +3,12 @@ type: dev
 account: '659066714468'
 region: eu-west-1
 public-dns: 'slavayssiere.lzdev.cloud.'
-private-dns: 'slavayssiere.accor.'
 bucket-component-state: 'accor-slavayssiere-terraform'
 billing-alert: 100
 billing-email: sebastien.lavayssiere@wescale.fr
 component_network:
+  private-dns: 'slavayssiere.accor.'
   enabled: true
-# component_rds:
-#   - name: app-cal-1
-#     username: admin
-#     engine: 'mysql'
-#     engine_version: '5.7'
 component_eks:
   enabled: true
   network-type: calico

@@ -11,12 +11,15 @@ import subprocess
 
 class ComponentEKS(Component):
 
+  blocname = "component_eks"
+  component_name = "eks"
+
   def define_var(self):
     self.var = {'bucket_component_state': self.bucket_component_state}
 
   def apply(self):
-    if 'component_eks' not in self.plateform:
-      pass
+    if self.blocname not in self.plateform:
+      return
 
     bastion = ComponentBastion(self.plateform)
 
@@ -37,7 +40,7 @@ class ComponentEKS(Component):
       self.plateform['component_eks']['network-type'], 
       self.plateform['account'], 
       self.plateform['public-dns'], 
-      self.plateform['private-dns']
+      self.plateform['component_network']['private-dns']
     ])
     
     self.create(
@@ -53,6 +56,9 @@ class ComponentEKS(Component):
         bastion.destroy()
 
   def destroy(self):
+    if self.blocname not in self.plateform:
+      return
+
     print("delete alb")
     self.delete(
       working_dir='../terraform/component_eks/component-alb', 
@@ -75,4 +81,4 @@ class ComponentEKS(Component):
     component = self.plateform['component_eks']
     if 'network-type' not in component:
         raise YamlCheckError('eks', 'network-type is missing')
-    pass
+    return

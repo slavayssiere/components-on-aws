@@ -8,20 +8,25 @@ from iac.def_component import Component
 
 class ComponentLink(Component):
 
+  blocname = "component_web"
+  component_name = "link"
+
   def define_var(self):
     pass
 
   def apply(self):
-    if 'component_web' not in self.plateform:
-      pass
+    if self.blocname not in self.plateform:
+      return
+
     for web in self.plateform['component_web']:
       if 'link-rds' in web:
         print("create SG between " + web['name'] + " and web: " + web['link-rds'])
         self.compute_var(web, self.create)
 
   def destroy(self):
-    if 'component_web' not in self.plateform:
-      pass
+    if self.blocname not in self.plateform:
+      return
+
     for web in self.plateform['component_web']:
       if 'link-rds' in web:
         self.compute_var(web, self.delete)
@@ -29,7 +34,7 @@ class ComponentLink(Component):
 
   def compute_var(self, web, func):
     if 'link-rds' not in web:
-      pass
+      return
     
     tmp_plateform_name = self.plateform['name'] + "-" + web['name'] + "-" + web['link-rds']
 

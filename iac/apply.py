@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import sys
+import subprocess
+import yaml
+
 sys.path.append("..")
 
-from yaml_check import check_yaml
-from yaml_check_error import YamlCheckError
-from aws_object import get_secret_value, is_always_connected
+from iac.yaml_check_error import YamlCheckError
+from iac.aws_object import get_secret_value, is_always_connected
 from terraform.component_base.functions import ComponentBase
 from terraform.component_network.functions import ComponentNetwork
 from terraform.component_bastion.functions import ComponentBastion
@@ -15,25 +17,22 @@ from terraform.component_web.functions import ComponentWeb
 from terraform.component_observability.functions import ComponentObservability
 from terraform.component_link.functions import ComponentLink
 
-import subprocess
-import yaml
-import sys 
-
-if len(sys.argv) > 1:
-  name_file = sys.argv[1]
-  print("create from file: " + name_file)
-else:
-  name_file = input("Nom du fichier: ")
-
 try:
   from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
   from yaml import Loader, Dumper
 
+if len(sys.argv) > 1:
+  name_file = sys.argv[1]
+  print("create from file: " + name_file)
+else:
+  sys.exit()
+
 with open(name_file, 'r') as stream:
   try:
     plateform=yaml.load(stream, Loader=Loader)
-
+    
+    print("Load components...")
     base = ComponentBase(plateform)
     bastion = ComponentBastion(plateform)
     eks = ComponentEKS(plateform)
@@ -48,7 +47,6 @@ with open(name_file, 'r') as stream:
     is_always_connected()
 
     print("Will create plateform: " + plateform['name'] + " in account:" + plateform['account'])
-
     base.apply()
     network.apply()
     eks.apply()
@@ -56,8 +54,6 @@ with open(name_file, 'r') as stream:
     web.apply()
     obs.apply()
     rds.apply()
-
-    print("search link between component for security-group opening")
     link.apply()
           
   except yaml.YAMLError as exc:

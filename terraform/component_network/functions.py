@@ -9,14 +9,17 @@ from iac.yaml_check_error import YamlCheckError
 
 class ComponentNetwork(Component):
 
+  blocname = "component_network"
+  component_name = "network"
+
   def define_var(self):
     self.var = {
       'private_dns_zone': self.plateform['component_network']['private-dns']
     }
 
   def apply(self):
-    if 'component_network' not in self.plateform:
-      pass
+    if self.blocname not in self.plateform:
+      return
 
     self.create(
       working_dir='../terraform/component_network', 
@@ -25,11 +28,14 @@ class ComponentNetwork(Component):
     )
 
   def destroy(self):
+    if self.blocname not in self.plateform:
+      return
+    
     self.delete(
       working_dir='../terraform/component_network', 
       plateform_name=self.plateform_name, 
       var_component=self.var
     )
 
-  def check(plateform):
-      pass
+  def check(self):
+    pass

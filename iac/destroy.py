@@ -11,7 +11,6 @@ from terraform.component_rds.functions import ComponentRDS
 from terraform.component_web.functions import ComponentWeb
 from terraform.component_observability.functions import ComponentObservability
 from terraform.component_link.functions import ComponentLink
-from yaml_check import check_yaml
 from yaml_check_error import YamlCheckError
 import subprocess
 import yaml

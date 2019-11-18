@@ -9,6 +9,9 @@ from iac.yaml_check_error import YamlCheckError
 
 class ComponentBastion(Component):
 
+  blocname = "component_bastion"
+  component_name = "bastion"
+
   def define_var(self):
     # enable EKS is used for open SG between bastion and master
     enable_eks = False
@@ -20,24 +23,26 @@ class ComponentBastion(Component):
       'bucket_component_state': self.bucket_component_state
     }
 
-def apply(self):
-  if 'component_bastion' not in self.plateform:
-    pass
-  
-  self.create(
-    working_dir='../terraform/component_bastion', 
-    plateform_name=self.plateform_name, 
-    var_component=self.var
-  )
+  def apply(self):
+    if self.blocname not in self.plateform:
+      return
+    
+    self.create(
+      working_dir='../terraform/component_bastion', 
+      plateform_name=self.plateform_name, 
+      var_component=self.var
+    )
 
-def destroy(self):
-  self.delete(
-    working_dir='../terraform/component_bastion', 
-    plateform_name=self.plateform_name,
-    var_component=self.var_component
-  )
+  def destroy(self):
+    if self.blocname not in self.plateform:
+      return
 
-def check(plateform):
-    if 'component_network' not in plateform:
+    self.delete(
+      working_dir='../terraform/component_bastion', 
+      plateform_name=self.plateform_name,
+      var_component=self.var
+    )
+
+  def check(self):
+    if 'component_network' not in self.plateform:
         raise YamlCheckError('bastion', 'component_network is mandatory')
-    pass

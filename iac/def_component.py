@@ -5,21 +5,27 @@ from python_terraform import Terraform, IsNotFlagged, IsFlagged
 
 class Component:
 
+  blocname = ""
+  component_name = ""
+  
   def __init__(self, plateform):
     self.plateform = plateform
-    self.check()
     self.get_constantes()
+    if self.blocname not in plateform:
+      print("component " + self.component_name + " not in plateform : " + self.plateform['name'])
+      return
+    else:
+      print("component " + self.component_name + " in plateform : " + self.plateform['name'])
+    self.check()
     self.define_var()
 
 
   def get_constantes(self):
     self.bucket_component_state = self.plateform['bucket-component-state']
     self.plateform_name = self.plateform['name']
-    pass
 
   def define_var(self):
     self.var = {}
-    pass
 
   def apply(self):
     pass

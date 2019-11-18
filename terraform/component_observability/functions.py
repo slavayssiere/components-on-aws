@@ -9,7 +9,13 @@ from terraform.component_web.functions import ComponentWeb
 
 class ComponentObservability(Component):
 
+  blocname = "component_observability"
+  component_name = "observability"
+
   def apply(self):
+    if self.blocname not in self.plateform:
+      return
+
     if 'ips_whitelist' not in self.plateform['component_observability']:
       self.plateform['component_observability']['ips_whitelist'] = ["0.0.0.0/0"]
 
@@ -20,6 +26,9 @@ class ComponentObservability(Component):
       self.tracing(self.create)
 
   def destroy(self):
+    if self.blocname not in self.plateform:
+      return
+    
     if 'ips_whitelist' not in self.plateform['component_observability']:
       self.plateform['component_observability']['ips_whitelist'] = ["0.0.0.0/0"]
 

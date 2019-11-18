@@ -10,20 +10,23 @@ from iac.aws_object import get_secret_value, get_parameter_value
 
 class ComponentRDS(Component):
 
+  blocname = "component_rds"
+  component_name = "rds"
+
   def define_var(self):
     pass
 
   def apply(self):
-    if 'component_rds' in self.plateform:
-      print("apply rds...")
-      for rds in self.lateform['component_rds']:
-        self.compute_var(rds, self.create)
+    if self.blocname not in self.plateform:
+      return
+    for rds in self.plateform['component_rds']:
+      self.compute_var(rds, self.create)
 
   def destroy(self):
-    if 'component_rds' in self.plateform:
-      print("apply rds...")
-      for rds in self.plateform['component_rds']:
-        self.compute_var(rds, self.delete)
+    if self.blocname not in self.plateform:
+      return
+    for rds in self.plateform['component_rds']:
+      self.compute_var(rds, self.delete)
 
   def compute_var(self, rds, func):
     rds_plateform_name = self.plateform_name + "-" + rds['name']
@@ -68,5 +71,3 @@ class ComponentRDS(Component):
       raise YamlCheckError('rds', 'component_network is mandatory')
     if not isinstance(self.plateform['component_rds'], list):
       raise YamlCheckError('rds', 'component_rds should be a list')
-    pass
-

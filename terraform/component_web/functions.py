@@ -9,6 +9,9 @@ from iac.yaml_check_error import YamlCheckError
 
 class ComponentWeb(Component):
 
+  blocname = "component_web"
+  component_name = "web"
+
   def define_var(self):
     pass
   
@@ -24,7 +27,7 @@ class ComponentWeb(Component):
     else:
       health_check_port = web['health-check-port']
 
-    ami_account = self.plateform_name['account']
+    ami_account = self.plateform['account']
     if 'ami-account' in web:
       ami_account = web['ami-account']
 
@@ -71,16 +74,16 @@ class ComponentWeb(Component):
 
 
   def apply(self):
-    if 'component_web' not in self.plateform:
-      pass
+    if self.blocname not in self.plateform:
+      return
 
     for web in self.plateform['component_web']:
       print("Create web component: " + web['name'])
       self.compute_var(web, self.create)
       
   def destroy(self):
-    if 'component_web' not in self.plateform:
-      pass
+    if self.blocname not in self.plateform:
+      return
 
     for web in self.plateform['component_web']:
       print("Create web component: " + web['name'])
@@ -91,4 +94,3 @@ class ComponentWeb(Component):
         raise YamlCheckError('web', 'component_network is mandatory')
     if not isinstance(self.plateform['component_web'], list):
         raise YamlCheckError('web', 'component_web should be a list')
-    pass
