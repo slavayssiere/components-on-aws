@@ -96,7 +96,8 @@ class ComponentObservability(Component):
       'max-node-count': 1,
       'ips_whitelist': self.plateform['component_observability']['ips_whitelist'],
       'enable_cognito': False,
-      'enable_private_alb': True
+      'enable_private_alb': True,
+      'enable_public_alb': False
     }
     prometheus.compute_var(web, func)
 

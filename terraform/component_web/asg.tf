@@ -81,6 +81,12 @@ resource "aws_autoscaling_group" "web-asg" {
   launch_configuration = "${aws_launch_configuration.web-lc.id}"
   max_size             = var.max-node-count
   min_size             = var.min-node-count
+  enabled_metrics = [
+    "GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity",
+    "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances",
+    "GroupTerminatingInstances", "GroupTotalInstance"
+  ]
+
   vpc_zone_identifier = [
     "${data.terraform_remote_state.component_network.outputs.sn_private_a_id}",
     "${data.terraform_remote_state.component_network.outputs.sn_private_b_id}",
@@ -91,7 +97,6 @@ resource "aws_autoscaling_group" "web-asg" {
     "${aws_lb_target_group.web-tg.arn}",
     "${aws_lb_target_group.priv-web-tg.arn}"
   ]
-
 
   tag {
     key                 = "Name"

@@ -45,6 +45,9 @@ class ComponentWeb(Component):
     if 'enable_private_alb' not in web:
       web['enable_private_alb'] = False
 
+    if 'enable_public_alb' not in web:
+      web['enable_public_alb'] = True
+
     if 'ips_whitelist' not in web:
       web['ips_whitelist'] = ["0.0.0.0/0"]
 
@@ -72,7 +75,8 @@ class ComponentWeb(Component):
       'attach_ec2_ro': web['attach_ec2_ro'],
       'ips_whitelist': web['ips_whitelist'],
       'cognito_list': web['cognito_list'],
-      'enable_private_alb': web['enable_private_alb']
+      'enable_private_alb': web['enable_private_alb'],
+      'enable_public_alb': web['enable_public_alb']
     }
     func(
       working_dir='../terraform/component_web', 

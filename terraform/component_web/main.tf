@@ -127,3 +127,8 @@ variable "enable_private_alb" {
   type = bool
   default = false
 }
+
+variable "enable_public_alb" {
+  type = bool
+  default = true
+}
