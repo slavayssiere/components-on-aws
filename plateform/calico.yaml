@@ -11,7 +11,7 @@ component_network:
   enabled: true
 component_rds:
   - name: app-cal-1
-    username: 'admin'
+    username: 'appcal'
     engine: 'postgres'
     engine_version: '9.6'
 component_eks:

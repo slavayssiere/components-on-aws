@@ -14,10 +14,16 @@ def generate_secret():
   return response['RandomPassword']
 
 def get_secret_value(rds_name):
+
+  secret_name = get_parameter_value("rds-admin-secret-path-" + rds_name)
+
+  if len(secret_name) == 0:
+    return generate_secret()
+
   client = boto3.client('secretsmanager')
   try:
     response = client.describe_secret(
-      SecretId='rds-admin-secret-'+rds_name
+      SecretId=secret_name
     )
   except client.exceptions.ResourceNotFoundException:
     print('Generate new secret')

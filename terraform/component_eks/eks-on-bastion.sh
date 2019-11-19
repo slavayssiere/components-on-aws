@@ -32,9 +32,11 @@ else
         rm -f cilium.tar.gz
     fi
 
-    helm install \
+    helm upgrade \
+        -i \
         --namespace kube-system \
         --values ./helm_values/cilium.yaml \
+        --wait \
         cilium cilium-v1.6.3/install/kubernetes/cilium
 
     # la création des SM dans cilium est désactivé

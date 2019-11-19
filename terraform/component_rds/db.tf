@@ -48,6 +48,7 @@ resource "aws_db_instance" "rds-instance" {
 }
 
 resource "aws_ssm_parameter" "snap-param" {
+  count = var.snapshot_name == "" ? 0 : 1
   name  = var.snapshot_rds_paramater_name
   type  = "String"
   value = var.snapshot_name
