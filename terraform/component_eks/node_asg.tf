@@ -22,7 +22,7 @@ USERDATA
 }
 
 resource "aws_launch_configuration" "demo" {
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   iam_instance_profile        = "${aws_iam_instance_profile.demo-node.name}"
   image_id                    = "${data.aws_ami.eks-worker.id}"
   instance_type               = "m4.large"
