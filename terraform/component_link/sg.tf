@@ -1,5 +1,5 @@
 
-resource "aws_security_group_rule" "allow_all" {
+resource "aws_security_group_rule" "allow_web" {
   count = var.is_web ? 1 : 0
   type            = "ingress"
   from_port       = data.terraform_remote_state.component_rds.outputs.rds-port
@@ -11,7 +11,7 @@ resource "aws_security_group_rule" "allow_all" {
 }
 
 
-resource "aws_security_group_rule" "allow_all" {
+resource "aws_security_group_rule" "allow_eks" {
   count = var.is_eks ? 1 : 0
   type            = "ingress"
   from_port       = data.terraform_remote_state.component_rds.outputs.rds-port

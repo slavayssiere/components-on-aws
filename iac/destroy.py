@@ -42,13 +42,21 @@ with open(name_file, 'r') as stream:
 
     print("Will delete plateform: " + plateform['name'] + " in account:" + plateform['account'])
 
+    print("link destroy")
     link.destroy()
+    print("obs destroy")
     obs.destroy()
+    print("rds destroy")
     rds.destroy()
+    print("web destroy")
     web.destroy()
+    print("bastion destroy")
     bastion.destroy()
+    print("eks destroy")
     eks.destroy()
+    print("network destroy")
     network.destroy()
+    print("base destroy")
     base.destroy()
 
   except yaml.YAMLError as exc:
