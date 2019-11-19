@@ -5,10 +5,10 @@
     "source_ami_filter": {
       "filters": {
         "virtualization-type": "hvm",
-        "name": "CentOS Linux 7 x86_64 HVM*",
+        "name": "amzn2-ami-hvm-*-gp2",
         "root-device-type": "ebs"
       },
-      "owners": ["aws-marketplace"],
+      "owners": ["amazon"],
       "most_recent": true
     },
     "vpc_filter": {
@@ -25,24 +25,18 @@
     },
    "associate_public_ip_address": true,
     "instance_type": "t2.micro",
-    "ssh_username": "centos",
-    "ami_name": "easyconsulting-{{timestamp}}"
+    "ssh_username": "ec2-user",
+    "ami_name": "prometheus-{{timestamp}}"
   }],
-  
   "provisioners": [
     {
       "type": "shell",
-      "inline": ["sudo yum -y install epel-release && sudo yum install -y install ansible"]
-    },
-    {
-      "type": "file",
-      "source": "test.txt",
-      "destination": "/tmp/test.txt"
+      "inline": ["sudo amazon-linux-extras install ansible2"]
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./easyconsulting/local.yml",
-      "galaxy_file": "./easyconsulting/requirements.yml"
+      "playbook_file": "./prometheus/local.yml",
+      "galaxy_file": "./prometheus/requirements.yml"
     }
   ]
 }

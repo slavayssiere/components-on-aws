@@ -1,3 +1,2 @@
-- src: cloudalchemy.grafana
 - src: dhoeric.aws-ssm
 - src: undergreen.prometheus-node-exporter

@@ -31,5 +31,6 @@ scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $WORKDIR/../t
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $WORKDIR/../terraform/component_eks/helm_values ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $WORKDIR/../terraform/component_eks/ingress ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $WORKDIR/../terraform/component_eks/eks-on-bastion.sh ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $WORKDIR/../terraform/component_eks/templates/node-exporter-nodeport.yaml ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC ./eks-on-bastion.sh $PLATEFORM_NAME $NETWORK_TYPE $DNS_PUBLIC

@@ -43,49 +43,18 @@ source ./connect.sh (Ecrire le MFA ici)
 Pour lancer la création d'une plateforme :
 
 ```language-bash
-./apply.sh
-```
-
-Il est possible de lancer la création de plusieurs plateformes en spécifiant un nom de plateforme :
-
-```language-bash
-./apply.sh PLATEFORM_NAME
+./apply.py PLATEFORM_YAML_PATH
 ```
 
 Pour supprimer une plateforme :
 
 ```language-bash
-./destroy.sh PLATEFORM_NAME
+./destroy.sh PLATEFORM_YAML_PATH
 ```
 
-### Bastion éphémère
+## Documentation
 
-Pour supprimer le bastion éphémère :
-
-```language-bash
-cd terraform/component_bastion
-terraform workspace select PLATEFORM_NAME
-terraform destroy
-```
-
-## Test CNI
-
-Il est possible de modifier le CNI utilisé, (par défaut Calico). Pour le moment soit "calico" soit "cilium" sont possible.
-
-```language-bash
-./apply.sh PLATEFORM_NAME CNI_NAME
-```
-
-Des dashboard Grafana sont disponibles pour les CNI.
-
-## Installation de Jenkins
-
-Pour lancer la création d'un Jenkins,
-
-- creation du bastion
-- copie du script "install_jenkins.sh" et de "helm_values/jenkins.yaml" sur le bastio,
-- se connecter sur le bastion et lancer le script
-- supprimer le bastion
+All docs on [slavayssiere.github.io/components-on-aws](https://slavayssiere.github.io/components-on-aws/)
 
 ## To do
 

@@ -4,9 +4,16 @@ resource "aws_security_group" "web-asg-sg" {
   vpc_id      = "${data.terraform_remote_state.component_network.outputs.vpc_id}"
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -14,8 +21,39 @@ resource "aws_security_group" "web-asg-sg" {
     from_port   = var.port
     to_port     = var.port
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [data.terraform_remote_state.component_network.outputs.vpc_cidr]
   }
+
+  # for node exporter
+  ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = [data.terraform_remote_state.component_network.outputs.vpc_cidr]
+  }
+
+  egress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = [data.terraform_remote_state.component_network.outputs.vpc_cidr]
+  }
+
+  egress {
+    from_port   = 31900
+    to_port     = 31900
+    protocol    = "tcp"
+    cidr_blocks = [data.terraform_remote_state.component_network.outputs.vpc_cidr]
+  }
+
+  egress {
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = [data.terraform_remote_state.component_network.outputs.vpc_cidr]
+  }
+
+
 
   tags = "${
     map(

@@ -61,7 +61,7 @@ resource "aws_lb_target_group" "eks-nodes-private-ingress" {
 resource "aws_autoscaling_group" "demo" {
   desired_capacity     = 3
   launch_configuration = "${aws_launch_configuration.demo.id}"
-  max_size             = 6
+  max_size             = 12
   min_size             = 3
   name                 = "terraform-eks-demo-${terraform.workspace}"
   vpc_zone_identifier = [
@@ -93,4 +93,27 @@ resource "aws_autoscaling_group" "demo" {
     value               = "owned"
     propagate_at_launch = true
   }
+
+  tag {
+    key                 = "Monitoring"
+    value               = "31900"
+    propagate_at_launch = true
+  }
+}
+
+
+resource "aws_autoscaling_policy" "demo-asg-policy" {
+  name                   = "demo-asg-policy-${terraform.workspace}"
+  autoscaling_group_name = "${aws_autoscaling_group.demo.name}"
+  adjustment_type        = "ChangeInCapacity"
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+
+    target_value = 60.0
+  }
+
 }

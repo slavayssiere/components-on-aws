@@ -14,7 +14,18 @@ terraform {
 
 data "terraform_remote_state" "component_web" {
   backend   = "s3"
-  workspace = "${var.workspace-web}"
+  workspace = "${var.workspace}"
+
+  config = {
+    bucket = var.bucket_component_state
+    region = "eu-west-1"
+    key    = "eks-test/component_web"
+  }
+}
+
+data "terraform_remote_state" "component_eks" {
+  backend   = "s3"
+  workspace = "${var.workspace}"
 
   config = {
     bucket = var.bucket_component_state
@@ -35,5 +46,13 @@ data "terraform_remote_state" "component_rds" {
 }
 
 variable "bucket_component_state" {}
-variable "workspace-web" {}
+variable "workspace" {}
 variable "workspace-rds" {}
+
+variable "is_web" {
+  type = bool
+}
+
+variable "is_eks" {
+  type = bool
+}

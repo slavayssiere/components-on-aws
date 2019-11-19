@@ -30,10 +30,14 @@ def get_secret_value(rds_name):
     return generate_secret()
   else:
     print('Get secret from SecretManager')
-    response = client.get_secret_value(
-      SecretId='rds-admin-secret-'+rds_name
-    )
-    return response['SecretString']
+    try:
+      response = client.get_secret_value(
+        SecretId='rds-admin-secret-'+rds_name
+      )
+      return response['SecretString']
+    except client.exceptions.InvalidRequestException:
+      print('Generate new secret')
+      return generate_secret()
 
 def get_parameter_value(parameter_name):
   client = boto3.client('ssm')

@@ -25,6 +25,9 @@ class ComponentObservability(Component):
     if 'tracing' in self.plateform['component_observability']:
       self.tracing(self.create)
 
+    if 'prometheus' in self.plateform['component_observability']:
+      self.prometheus(self.create)
+
   def destroy(self):
     if self.blocname not in self.plateform:
       return
@@ -37,6 +40,9 @@ class ComponentObservability(Component):
 
     if 'tracing' in self.plateform['component_observability']:
       self.tracing(self.delete)
+
+    if 'prometheus' in self.plateform['component_observability']:
+      self.prometheus(self.delete)
 
   def grafana(self, func):
     grafana = ComponentWeb(self.plateform)
@@ -74,6 +80,25 @@ class ComponentObservability(Component):
     }
     tracing.compute_var(web, func)
 
+
+  def prometheus(self, func):
+    prometheus = ComponentWeb(self.plateform)
+    web={
+      'name': 'prometheus',
+      'ami-name': 'prometheus-*',
+      'port': '9090',
+      'health-check': '/-/ready',
+      'attach_cw_ro': False,
+      'attach_ec2_ro': True,
+      'efs-enable': False,
+      'node-count': 1,
+      'min-node-count': 1,
+      'max-node-count': 1,
+      'ips_whitelist': self.plateform['component_observability']['ips_whitelist'],
+      'enable_cognito': False,
+      'enable_private_alb': True
+    }
+    prometheus.compute_var(web, func)
 
         # 'user-data': '''
         #   echo "[auth.generic_oauth]" >> /etc/grafana/grafana.ini

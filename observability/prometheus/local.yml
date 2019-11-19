@@ -1,0 +1,51 @@
+---
+- hosts: all
+  roles:
+    - dhoeric.aws-ssm
+- hosts: all
+  become: yes
+  roles:
+    - role: undergreen.prometheus-node-exporter
+      prometheus_node_exporter_version: 0.18.1
+      prometheus_node_exporter_enabled_collectors:
+        - conntrack
+        - cpu
+        - diskstats
+        - entropy
+        - filefd
+        - filesystem
+        - loadavg
+        - mdadm
+        - meminfo
+        - netdev
+        - netstat
+        - stat
+        - textfile
+        - time
+        - vmstat
+      prometheus_node_exporter_config_flags:
+        'web.listen-address': '0.0.0.0:9100'
+        'log.level': 'info'
+- hosts: all
+  roles:
+    - cloudalchemy.prometheus
+  vars:
+    prometheus_version: 2.14.0
+    prometheus_scrape_configs: 
+      - job_name: "prometheus"    # Custom scrape job, here using `static_config`
+        metrics_path: "/metrics"
+        static_configs:
+          - targets:
+            - "localhost:9090"
+      - job_name: "ec2-discovery"
+        ec2_sd_configs:
+          - refresh_interval: 30s
+            port: 9100
+            filters:
+              - name: tag:Monitoring
+                values: ['9100']
+          - refresh_interval: 30s
+            port: 31900
+            filters:
+              - name: tag:Monitoring
+                values: ['31900']

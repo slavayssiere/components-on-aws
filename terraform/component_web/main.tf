@@ -117,3 +117,13 @@ variable "cognito_list" {
   type = list(number)
   default = []
 }
+
+variable "attach_ec2_ro" {
+  type = bool
+  default = false
+}
+
+variable "enable_private_alb" {
+  type = bool
+  default = false
+}

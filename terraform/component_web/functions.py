@@ -39,6 +39,12 @@ class ComponentWeb(Component):
     if 'attach_cw_ro' not in web:
       web['attach_cw_ro'] = False
 
+    if 'attach_ec2_ro' not in web:
+      web['attach_ec2_ro'] = False
+
+    if 'enable_private_alb' not in web:
+      web['enable_private_alb'] = False
+
     if 'ips_whitelist' not in web:
       web['ips_whitelist'] = ["0.0.0.0/0"]
 
@@ -63,8 +69,10 @@ class ComponentWeb(Component):
       'max-node-count': web['max-node-count'],
       'bastion_enable': bastion_enable,
       'attach_cw_ro': web['attach_cw_ro'],
+      'attach_ec2_ro': web['attach_ec2_ro'],
       'ips_whitelist': web['ips_whitelist'],
-      'cognito_list': web['cognito_list']
+      'cognito_list': web['cognito_list'],
+      'enable_private_alb': web['enable_private_alb']
     }
     func(
       working_dir='../terraform/component_web', 

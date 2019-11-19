@@ -1,17 +1,11 @@
-resource "random_string" "random-secret" {
-  length = 16
-  special = true
-  override_special = "/@£$"
-}
-
 resource "aws_secretsmanager_secret" "rds-admin-secret" {
-  name = "rds-admin-secret-${terraform.workspace}-${random_string.random-secret.result}"
+  name = "rds-admin-secret-${terraform.workspace}-${formatdate("hh-mm-DD-MMM-YYYY", timestamp())}"
 }
 
 resource "aws_ssm_parameter" "rds-admin-secret-path" {
   name  = "rds-admin-secret-path-${terraform.workspace}"
   type  = "String"
-  value = "rds-admin-secret-${terraform.workspace}-${random_string.random-secret.result}"
+  value = "rds-admin-secret-${terraform.workspace}-${formatdate("hh-mm-DD-MMM-YYYY", timestamp())}"
 }
 
 resource "aws_secretsmanager_secret_version" "rds-admin-secret" {

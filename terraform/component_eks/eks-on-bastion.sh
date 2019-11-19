@@ -80,3 +80,4 @@ kubectl apply -f ./ingress/traefik-private.yaml
 kubectl apply -f ./ingress/traefik-public.yaml
 kubectl apply -f ./ingress/grafana.yaml
 kubectl apply -f ./ingress/prometheus-k8s.yaml
+kubectl apply -f ./templates/node-exporter-nodeport.yaml

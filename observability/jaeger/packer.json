@@ -37,6 +37,11 @@
       "type": "ansible-local",
       "playbook_file": "./jaeger/local.yml",
       "role_paths": ["./jaeger/roles/jaeger"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "./jaeger/local-galaxy.yml",
+      "galaxy_file": "./jaeger/requirements.yml"
     }
   ]
 }

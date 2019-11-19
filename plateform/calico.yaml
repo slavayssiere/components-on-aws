@@ -17,10 +17,12 @@ component_rds:
 component_eks:
   enabled: true
   network-type: calico
+  link-rds: app-cal-1
 component_bastion:
   enabled: true
 component_observability:
   tracing: enabled
   grafana: enabled
+  prometheus: enabled
   ips_whitelist:
-    - '37.173.55.207/32'
+    - '195.137.181.15/32'

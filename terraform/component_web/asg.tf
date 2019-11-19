@@ -63,6 +63,18 @@ resource "aws_lb_target_group" "web-tg" {
   }
 }
 
+resource "aws_lb_target_group" "priv-web-tg" {
+  name     = "priv-web-tg-${terraform.workspace}"
+  port     = "${var.port}"
+  protocol = "HTTP"
+  vpc_id   = "${data.terraform_remote_state.component_network.outputs.vpc_id}"
+
+  health_check {
+    path = "${var.health_check}"
+    port = "${var.health_check_port}"
+  }
+}
+
 resource "aws_autoscaling_group" "web-asg" {
   name                 = "web-asg-${terraform.workspace}"
   desired_capacity     = var.node-count
@@ -76,7 +88,8 @@ resource "aws_autoscaling_group" "web-asg" {
   ]
 
   target_group_arns = [
-    "${aws_lb_target_group.web-tg.arn}"
+    "${aws_lb_target_group.web-tg.arn}",
+    "${aws_lb_target_group.priv-web-tg.arn}"
   ]
 
 
@@ -91,4 +104,18 @@ resource "aws_autoscaling_group" "web-asg" {
     value               = "${terraform.workspace}"
     propagate_at_launch = true
   }
+
+  tag {
+    key                 = "Monitoring"
+    value               = "9100"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_policy" "web-asg-policy" {
+  name                   = "web-asg-policy-${terraform.workspace}"
+  scaling_adjustment     = 4
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = "${aws_autoscaling_group.web-asg.name}"
 }
