@@ -50,14 +50,11 @@ class ComponentLink(Component):
     self.var = {
       'bucket_component_state': self.plateform['bucket-component-state'],
       'workspace-web': web_component.get_workspace(web['name']),
-      'workspace-eks': '',
-      'workspace-rds': rds_component.get_workspace(web['link-rds']),
-      'is_eks': False,
-      'is_web': True
+      'workspace-rds': rds_component.get_workspace(web['link-rds'])
     }
 
     func( 
-      working_dir='../terraform/component_link', 
+      working_dir='../terraform/component_link/link_web', 
       plateform_name=self.get_workspace_web(web['name'], web['link-rds']), 
       var_component=self.var
     )
@@ -71,17 +68,19 @@ class ComponentLink(Component):
     eks_component = ComponentEKS(self.plateform)
     rds_component = ComponentRDS(self.plateform)
 
+    print("for EKS, use workspace: " + eks_component.get_workspace())
+    print("for RDS, use workspace: " + rds_component.get_workspace(self.plateform['component_eks']['link-rds']))
+
     self.var = {
       'bucket_component_state': self.plateform['bucket-component-state'],
       'workspace-eks': eks_component.get_workspace(),
-      'workspace-web': '',
-      'workspace-rds': rds_component.get_workspace(self.plateform['component_eks']['link-rds']),
-      'is_eks': True,
-      'is_web': False
+      'workspace-rds': rds_component.get_workspace(self.plateform['component_eks']['link-rds'])
     }
 
+    print(self.var)
+
     func( 
-      working_dir='../terraform/component_link', 
+      working_dir='../terraform/component_link/link_eks', 
       plateform_name=self.get_workspace_eks(self.plateform['component_eks']['link-rds']), 
       var_component=self.var
     )

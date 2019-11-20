@@ -8,18 +8,7 @@ terraform {
   backend "s3" {
     bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
-    key    = "eks-test/component_link"
-  }
-}
-
-data "terraform_remote_state" "component_web" {
-  backend   = "s3"
-  workspace = "${var.workspace-web}"
-
-  config = {
-    bucket = var.bucket_component_state
-    region = "eu-west-1"
-    key    = "eks-test/component_web"
+    key    = "eks-test/component_link_eks"
   }
 }
 
@@ -30,7 +19,7 @@ data "terraform_remote_state" "component_eks" {
   config = {
     bucket = var.bucket_component_state
     region = "eu-west-1"
-    key    = "eks-test/component_web"
+    key    = "eks-test/component_eks"
   }
 }
 
@@ -46,14 +35,5 @@ data "terraform_remote_state" "component_rds" {
 }
 
 variable "bucket_component_state" {}
-variable "workspace-web" {}
 variable "workspace-eks" {}
 variable "workspace-rds" {}
-
-variable "is_web" {
-  type = bool
-}
-
-variable "is_eks" {
-  type = bool
-}

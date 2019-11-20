@@ -16,6 +16,7 @@ def generate_secret():
 def get_secret_value(rds_name):
 
   secret_name = get_parameter_value("rds-admin-secret-path-" + rds_name)
+  print("RDS Secret is in secret: " + secret_name)
 
   if len(secret_name) == 0:
     return generate_secret()
@@ -32,7 +33,7 @@ def get_secret_value(rds_name):
     print('Get secret from SecretManager')
     try:
       response = client.get_secret_value(
-        SecretId='rds-admin-secret-'+rds_name
+        SecretId=secret_name
       )
       return response['SecretString']
     except client.exceptions.InvalidRequestException:

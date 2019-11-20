@@ -19,9 +19,18 @@ resource "aws_key_pair" "sandbox-key" {
   public_key = "${file("~/.ssh/id_rsa.pub")}"
 }
 
+data "aws_ami" "ami-amz" {
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm*"]
+  }
+
+  most_recent = true
+  owners      = ["amazon"]
+}
+
 resource "aws_instance" "bastion" {
-  # old: "ami-0bdb1d6c15a40392c"
-  ami                         = "ami-0ce71448843cb18a1"
+  ami                         = data.aws_ami.ami-amz.id
   instance_type               = "t2.micro"
   vpc_security_group_ids      = ["${aws_security_group.allow_ssh.id}"]
   subnet_id                   = "${data.terraform_remote_state.component_network.outputs.sn_public_a_id}"

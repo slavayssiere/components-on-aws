@@ -18,6 +18,17 @@ component_eks:
   enabled: true
   network-type: calico
   link-rds: app-cal-1
+component_web:
+  - name: backend
+    ami-name: 'amzn2-ami-hvm*'
+    ami-account: 'amazon'
+    node-count: 1
+    min-node-count: 1
+    max-node-count: 3
+    port: 8080
+    health-check: '/'
+    efs-enable: true
+    link-rds: db
 component_bastion:
   enabled: true
 component_observability:
