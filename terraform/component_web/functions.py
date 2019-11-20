@@ -6,6 +6,7 @@ sys.path.insert(1, '../..')
 
 from iac.def_component import Component
 from iac.yaml_check_error import YamlCheckError
+from terraform.component_network.functions import ComponentNetwork
 
 class ComponentWeb(Component):
 
@@ -15,8 +16,12 @@ class ComponentWeb(Component):
   def define_var(self):
     pass
   
+  def get_workspace(self, web_name):
+    return self.plateform_name + "-web-" + web_name
+
   def compute_var(self, web, func):
-    web_plateform_name = self.plateform_name + "-" + web['name']
+
+    network = ComponentNetwork(self.plateform)
 
     bastion_enable = False
     if 'component_bastion' in self.plateform_name:
@@ -58,7 +63,7 @@ class ComponentWeb(Component):
 
     var={
       'bucket_component_state': self.bucket_component_state,
-      'workspace-network': self.plateform_name,
+      'workspace-network': network.get_workspace(),
       'dns-name': web['name'],
       'ami-name': web['ami-name'],
       'ami-account': ami_account,
@@ -80,7 +85,7 @@ class ComponentWeb(Component):
     }
     func(
       working_dir='../terraform/component_web', 
-      plateform_name=web_plateform_name, 
+      plateform_name=self.get_workspace(web['name']), 
       var_component=var
     )
 

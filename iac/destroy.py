@@ -40,6 +40,10 @@ with open(name_file, 'r') as stream:
     obs = ComponentObservability(plateform)
     rds = ComponentRDS(plateform)
 
+    # check if credential is always available
+    print("check is always connected...")
+    is_always_connected()
+
     print("Will delete plateform: " + plateform['name'] + " in account:" + plateform['account'])
 
     print("link destroy")
@@ -64,4 +68,4 @@ with open(name_file, 'r') as stream:
   except Exception as inst:
     print(inst)
   else:
-    print(plateform['name'] + "is destroy")
+    print(plateform['name'] + " is destroy")

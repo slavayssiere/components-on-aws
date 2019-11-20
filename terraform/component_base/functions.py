@@ -30,7 +30,6 @@ class ComponentBase(Component):
   def apply(self):
     self.create(
       working_dir='../terraform/component_base',
-      plateform_name=self.plateform_name,
       var_component=self.var, 
       skip_plan=True
     )
@@ -38,7 +37,6 @@ class ComponentBase(Component):
   def destroy(self):
     self.delete(
       working_dir='../terraform/component_base',
-      plateform_name=self.plateform_name,
       var_component=self.var
     )
 

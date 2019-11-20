@@ -22,8 +22,7 @@ class ComponentNetwork(Component):
       return
 
     self.create(
-      working_dir='../terraform/component_network', 
-      plateform_name=self.plateform_name, 
+      working_dir='../terraform/component_network',
       var_component=self.var
     )
 
@@ -32,8 +31,7 @@ class ComponentNetwork(Component):
       return
     
     self.delete(
-      working_dir='../terraform/component_network', 
-      plateform_name=self.plateform_name, 
+      working_dir='../terraform/component_network',
       var_component=self.var
     )
 

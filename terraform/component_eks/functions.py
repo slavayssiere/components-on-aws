@@ -25,7 +25,6 @@ class ComponentEKS(Component):
 
     self.create(
       working_dir='../terraform/component_eks', 
-      plateform_name=self.plateform['name'], 
       var_component=self.var
     )
 
@@ -45,7 +44,6 @@ class ComponentEKS(Component):
     
     self.create(
       working_dir='../terraform/component_eks/component-alb', 
-      plateform_name=self.plateform_name, 
       var_component=self.var
     )
 
@@ -61,14 +59,12 @@ class ComponentEKS(Component):
 
     print("delete alb")
     self.delete(
-      working_dir='../terraform/component_eks/component-alb', 
-      plateform_name=self.plateform_name, 
+      working_dir='../terraform/component_eks/component-alb',
       var_component=self.var
     )
     print("delete eks")
     self.delete(
-      working_dir='../terraform/component_eks', 
-      plateform_name=self.plateform_name, 
+      working_dir='../terraform/component_eks',
       var_component=self.var
     )
           

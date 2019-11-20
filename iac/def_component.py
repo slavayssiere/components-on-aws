@@ -7,6 +7,7 @@ class Component:
 
   blocname = ""
   component_name = ""
+  workspace = ""
   
   def __init__(self, plateform):
     self.plateform = plateform
@@ -18,11 +19,14 @@ class Component:
       print("component " + self.component_name + " in plateform : " + self.plateform['name'])
     self.check()
     self.define_var()
-
+    self.workspace = self.plateform_name
 
   def get_constantes(self):
     self.bucket_component_state = self.plateform['bucket-component-state']
     self.plateform_name = self.plateform['name']
+
+  def get_workspace(self):
+    return self.workspace
 
   def define_var(self):
     self.var = {}
@@ -36,7 +40,7 @@ class Component:
   def check(self):
     pass
 
-  def create(self, working_dir, plateform_name, var_component, skip_plan=True):
+  def create(self, working_dir, var_component, skip_plan=True, plateform_name=workspace):
     if os.path.exists(working_dir+"/.terraform/environment"):
       os.remove(working_dir+"/.terraform/environment")
     else:
@@ -61,7 +65,7 @@ class Component:
     if code != 0:
       raise Exception("error in Terraform layer-base")
 
-  def delete(self, working_dir, plateform_name, var_component):
+  def delete(self, working_dir, var_component, skip_plan=True, plateform_name=workspace):
     if os.path.exists(working_dir+"/.terraform/environment"):
       os.remove(working_dir+"/.terraform/environment")
     else:

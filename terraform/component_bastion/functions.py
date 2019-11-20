@@ -28,8 +28,7 @@ class ComponentBastion(Component):
       return
     
     self.create(
-      working_dir='../terraform/component_bastion', 
-      plateform_name=self.plateform_name, 
+      working_dir='../terraform/component_bastion',
       var_component=self.var
     )
 
@@ -38,8 +37,7 @@ class ComponentBastion(Component):
       return
 
     self.delete(
-      working_dir='../terraform/component_bastion', 
-      plateform_name=self.plateform_name,
+      working_dir='../terraform/component_bastion',
       var_component=self.var
     )
 
