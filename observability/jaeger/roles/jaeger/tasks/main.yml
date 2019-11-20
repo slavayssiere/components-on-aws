@@ -4,6 +4,11 @@
     name: python2-pip
     state: present
 
+- name: Install dependencies
+  package:
+    name: polkit
+    state: present
+    
 - name: Get Github PIP module
   pip: 
     name: github3.py

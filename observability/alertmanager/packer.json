@@ -26,7 +26,7 @@
    "associate_public_ip_address": true,
     "instance_type": "t2.micro",
     "ssh_username": "ec2-user",
-    "ami_name": "grafana-{{timestamp}}"
+    "ami_name": "alertmanager-{{timestamp}}"
   }],
   "provisioners": [
     {
@@ -35,13 +35,13 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./grafana/local-galaxy.yml",
-      "galaxy_file": "./grafana/requirements.yml"
+      "playbook_file": "./alertmanager/local-galaxy.yml",
+      "galaxy_file": "./alertmanager/requirements.yml"
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./grafana/local.yml",
-      "role_paths": ["./grafana/roles/polkit"]
+      "playbook_file": "./alertmanager/local.yml",
+      "role_paths": ["./alertmanager/roles/alertmanager-sns-forwarder"]
     }
   ]
 }

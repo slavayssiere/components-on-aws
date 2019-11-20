@@ -1,0 +1,45 @@
+---
+- hosts: all
+  roles:
+    - cloudalchemy.alertmanager
+  vars:
+    alertmanager_receivers:
+      - name: 'sns-forwarder'
+        webhook_configs:
+          - send_resolved: true
+            url: http://localhost:9087/alert/alertmanager-sns-to-email
+    alertmanager_route:
+      receiver: 'sns-forwarder'
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+      group_by: [cluster, alertname]
+    alertmanager_child_routes: []
+- hosts: all
+  roles:
+    - dhoeric.aws-ssm
+- hosts: all
+  become: yes
+  roles:
+    - role: undergreen.prometheus-node-exporter
+      prometheus_node_exporter_version: 0.18.1
+      prometheus_node_exporter_enabled_collectors:
+        - conntrack
+        - cpu
+        - diskstats
+        - entropy
+        - filefd
+        - filesystem
+        - loadavg
+        - mdadm
+        - meminfo
+        - netdev
+        - netstat
+        - stat
+        - textfile
+        - time
+        - vmstat
+      prometheus_node_exporter_config_flags:
+        'web.listen-address': '0.0.0.0:9100'
+        'log.level': 'info'
+

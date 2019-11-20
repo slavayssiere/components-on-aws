@@ -123,6 +123,11 @@ variable "attach_ec2_ro" {
   default = false
 }
 
+variable "attach_sns_pub" {
+  type = bool
+  default = false
+}
+
 variable "enable_private_alb" {
   type = bool
   default = false

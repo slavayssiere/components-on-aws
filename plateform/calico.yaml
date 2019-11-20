@@ -28,13 +28,17 @@ component_web:
     port: 8080
     health-check: '/'
     efs-enable: true
-    link-rds: db
+    link-rds: app-cal-1
 component_bastion:
   enabled: true
 component_observability:
   tracing: enabled
   grafana: enabled
   prometheus: enabled
+  alertmanager:
+    list_emails:
+      - sebastien.lavayssiere@wescale.fr
+      - sebastien.lavayssiere@gmail.com
   ips_whitelist:
     - '195.137.181.15/32'
     - '195.137.181.130/32'

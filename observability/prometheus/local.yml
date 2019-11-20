@@ -7,6 +7,11 @@
     - cloudalchemy.prometheus
   vars:
     prometheus_version: 2.14.0
+    prometheus_alertmanager_config:
+      - scheme: http
+        path_prefix: /
+        static_configs:
+          - targets: ["alertmanager.slavayssiere.accor"]
     prometheus_scrape_configs: 
       - job_name: "prometheus"    # Custom scrape job, here using `static_config`
         metrics_path: "/metrics"

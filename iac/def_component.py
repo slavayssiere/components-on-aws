@@ -95,3 +95,18 @@ class Component:
         auto_approve=True)
       if code != 0:
         raise Exception("error in Terraform layer-kubernetes")
+
+
+  def output(self, var_name, working_dir, skip_plan=True, plateform_name=""):
+
+    if len(plateform_name) == 0:
+      plateform_name = self.get_workspace()
+
+    print("search output : " + var_name)
+    tf = Terraform(working_dir)
+    code, out, _ = tf.cmd(
+      "output " + var_name,
+      no_color=IsNotFlagged)
+    if code != 0:
+      raise Exception("error in Terraform layer-base")
+    return out

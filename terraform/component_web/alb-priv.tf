@@ -66,7 +66,7 @@ resource "aws_lb" "priv-alb" {
 resource "aws_route53_record" "priv-alb-dns" {
   count = var.enable_private_alb ? 1 : 0
   zone_id = "${data.terraform_remote_state.component_network.outputs.private_dns_zone_id}"
-  name    = "prometheus.${data.terraform_remote_state.component_network.outputs.private_dns_zone}"
+  name    = "${var.dns-name}.${data.terraform_remote_state.component_network.outputs.private_dns_zone}"
   type    = "CNAME"
   ttl     = "300"
   records = ["${aws_lb.priv-alb.0.dns_name}"]

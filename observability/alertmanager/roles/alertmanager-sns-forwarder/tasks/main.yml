@@ -1,0 +1,68 @@
+---
+- name: Install dependencies
+  package:
+    name: python2-pip
+    state: present
+
+- name: Install dependencies
+  package:
+    name: polkit
+    state: present
+
+- name: Get Github PIP module
+  pip: 
+    name: github3.py
+    state: present
+
+- name: Get Last version of alertmanager-sns-forwarder
+  github_release:
+      repo: alertmanager-sns-forwarder
+      user: DataReply
+      action: latest_release
+  register: alertmanager_sns_forwarder_version
+
+- name: Downloading alertmanager-sns-forwarder
+  get_url:
+      dest: /tmp
+      url: "https://github.com/DataReply/alertmanager-sns-forwarder/releases/download/v{{ alertmanager_sns_forwarder_version['tag'] | regex_replace('^v', '') }}/alertmanager-sns-forwarder-linux_amd64.tar.gz"
+      use_proxy: yes
+
+- name: Deploy alertmanager-sns-forwarder
+  unarchive:
+      src: "/tmp/alertmanager-sns-forwarder-linux_amd64.tar.gz"
+      dest: /tmp
+      owner: root
+
+- name: Linking alertmanager-sns-forwarder to /usr/local/bin
+  file:
+      path: "{{ item.dest }}"
+      src: "{{ item.src }}"
+      state: link
+  loop:
+    - { src: "/tmp/bin/linux/alertmanager-sns-forwarder", dest: /usr/local/bin/alertmanager-sns-forwarder }
+
+- name: Install Systemd files
+  template:
+      dest: "{{ item.dest }}"
+      src: "{{ item.src }}"
+      force: yes
+      remote_src: no
+      group: root
+      mode: 0644
+      owner: root
+  loop:
+    - { src: alertmanager-sns-forwarder.service.j2, dest: /etc/systemd/system/alertmanager-sns-forwarder.service }
+
+- name: Enable and start services
+  systemd:      
+      name: "{{ item }}"
+      enabled: yes
+      daemon_reload: yes
+      state: started
+  loop:
+    - alertmanager-sns-forwarder.service
+      
+      
+
+
+      

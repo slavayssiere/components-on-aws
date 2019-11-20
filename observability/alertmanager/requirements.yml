@@ -1,0 +1,3 @@
+- src: cloudalchemy.alertmanager
+- src: dhoeric.aws-ssm
+- src: undergreen.prometheus-node-exporter

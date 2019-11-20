@@ -18,7 +18,7 @@ class ComponentLink(Component):
     pass
 
   def apply(self):
-    if 'component_web' in self.plateform_name:
+    if 'component_web' in self.plateform:
       for web in self.plateform['component_web']:
         if 'link-rds' in web:
           print("create SG between " + web['name'] + " and web: " + web['link-rds'])
@@ -30,7 +30,7 @@ class ComponentLink(Component):
         self.compute_var_eks(self.create)
 
   def destroy(self):
-    if 'component_web' in self.plateform_name:
+    if 'component_web' in self.plateform:
       for web in self.plateform['component_web']:
         if 'link-rds' in web:
           self.compute_var_web(web, self.delete)

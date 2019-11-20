@@ -47,14 +47,14 @@ with open(name_file, 'r') as stream:
     is_always_connected()
 
     print("Will create plateform: " + plateform['name'] + " in account:" + plateform['account'])
-    base.apply()
-    network.apply()
-    eks.apply()
-    bastion.apply()
-    web.apply()
+    # base.apply()
+    # network.apply()
+    # eks.apply()
+    # bastion.apply()
+    # web.apply()
     obs.apply()
-    rds.apply()
-    link.apply()
+    # rds.apply()
+    # link.apply()
           
   except yaml.YAMLError as exc:
     print(exc)
