@@ -19,6 +19,7 @@ class Component:
       print("component " + self.component_name + " in plateform : " + self.plateform['name'])
     self.check()
     self.define_var()
+    print("set workspace as " + self.plateform_name)
     self.workspace = self.plateform_name
 
   def get_constantes(self):
@@ -40,7 +41,11 @@ class Component:
   def check(self):
     pass
 
-  def create(self, working_dir, var_component, skip_plan=True, plateform_name=workspace):
+  def create(self, working_dir, var_component, skip_plan=True, plateform_name=""):
+
+    if len(plateform_name) == 0:
+      plateform_name = self.get_workspace()
+
     if os.path.exists(working_dir+"/.terraform/environment"):
       os.remove(working_dir+"/.terraform/environment")
     else:
