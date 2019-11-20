@@ -50,7 +50,7 @@ class ComponentLink(Component):
     self.var = {
       'bucket_component_state': self.plateform['bucket-component-state'],
       'workspace-web': web_component.get_workspace(web['name']),
-      'workspace-eks': 'default',
+      'workspace-eks': '',
       'workspace-rds': rds_component.get_workspace(web['link-rds']),
       'is_eks': False,
       'is_web': True
@@ -74,7 +74,7 @@ class ComponentLink(Component):
     self.var = {
       'bucket_component_state': self.plateform['bucket-component-state'],
       'workspace-eks': eks_component.get_workspace(),
-      'workspace-web': 'default',
+      'workspace-web': '',
       'workspace-rds': rds_component.get_workspace(self.plateform['component_eks']['link-rds']),
       'is_eks': True,
       'is_web': False

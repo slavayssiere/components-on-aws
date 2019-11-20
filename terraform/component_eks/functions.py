@@ -38,7 +38,7 @@ class ComponentEKS(Component):
       self.plateform_name,
       self.plateform['component_eks']['network-type'], 
       self.plateform['account'], 
-      self.plateform['public-dns'], 
+      self.plateform['public-dns'][:-1], 
       self.plateform['component_network']['private-dns']
     ])
     

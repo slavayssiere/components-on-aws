@@ -44,9 +44,9 @@ resource "aws_security_group_rule" "allow_priv-alb_web" {
   security_group_id = aws_security_group.priv-alb-sg.0.id
 }
 
-resource "aws_lb" "priv-web-alb" {
+resource "aws_lb" "priv-alb" {
   count = var.enable_private_alb ? 1 : 0
-  name               = "priv-web-alb-${terraform.workspace}"
+  name               = "priv-alb-${terraform.workspace}"
   internal           = true
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.priv-alb-sg.0.id}"]
@@ -63,23 +63,23 @@ resource "aws_lb" "priv-web-alb" {
   }
 }
 
-resource "aws_route53_record" "priv-web-alb-dns" {
+resource "aws_route53_record" "priv-alb-dns" {
   count = var.enable_private_alb ? 1 : 0
   zone_id = "${data.terraform_remote_state.component_network.outputs.private_dns_zone_id}"
   name    = "prometheus.${data.terraform_remote_state.component_network.outputs.private_dns_zone}"
   type    = "CNAME"
   ttl     = "300"
-  records = ["${aws_lb.priv-web-alb.0.dns_name}"]
+  records = ["${aws_lb.priv-alb.0.dns_name}"]
 }
 
-resource "aws_lb_listener" "priv-web-alb" {
+resource "aws_lb_listener" "priv-alb" {
   count = var.enable_private_alb ? 1 : 0
-  load_balancer_arn = "${aws_lb.priv-web-alb.0.arn}"
+  load_balancer_arn = "${aws_lb.priv-alb.0.arn}"
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.priv-web-tg.id}"
+    target_group_arn = "${aws_lb_target_group.priv-tg.id}"
   }
 }

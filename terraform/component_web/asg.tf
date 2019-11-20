@@ -63,8 +63,8 @@ resource "aws_lb_target_group" "web-tg" {
   }
 }
 
-resource "aws_lb_target_group" "priv-web-tg" {
-  name     = "priv-web-tg-${terraform.workspace}"
+resource "aws_lb_target_group" "priv-tg" {
+  name     = "priv-tg-${terraform.workspace}"
   port     = "${var.port}"
   protocol = "HTTP"
   vpc_id   = "${data.terraform_remote_state.component_network.outputs.vpc_id}"
@@ -84,7 +84,9 @@ resource "aws_autoscaling_group" "web-asg" {
   enabled_metrics = [
     "GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity",
     "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances",
-    "GroupTerminatingInstances", "GroupTotalInstance"
+    "GroupTerminatingInstances", "GroupTotalInstances", "GroupInServiceCapacity",
+    "GroupPendingCapacity", "GroupTerminatingCapacity", "GroupStandbyCapacity",
+    "GroupTotalCapacity"
   ]
 
   vpc_zone_identifier = [
@@ -95,7 +97,7 @@ resource "aws_autoscaling_group" "web-asg" {
 
   target_group_arns = [
     "${aws_lb_target_group.web-tg.arn}",
-    "${aws_lb_target_group.priv-web-tg.arn}"
+    "${aws_lb_target_group.priv-tg.arn}"
   ]
 
   tag {
