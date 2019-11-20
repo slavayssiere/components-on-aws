@@ -38,7 +38,8 @@ class ComponentBastion(Component):
 
     self.delete(
       working_dir='../terraform/component_bastion',
-      var_component=self.var
+      var_component=self.var,
+      plateform_name=self.plateform_name
     )
 
   def check(self):
