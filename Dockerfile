@@ -13,6 +13,10 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
   && chmod +x ./kubectl \
   && mv ./kubectl /usr/local/bin/kubectl
 
+RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator \
+  && chmod +x ./aws-iam-authenticator \
+  && mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
+
 RUN echo "127.0.0.1	kubernetes" >> /etc/hosts && mkdir -p /app/iac
 
 COPY iac/requirements.txt /app/iac/requirements.txt
