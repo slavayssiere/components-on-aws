@@ -29,7 +29,19 @@ class ComponentObservability(Component):
       self.prometheus(self.create)
 
     if 'alertmanager' in self.plateform[self.blocname]:
-      self.alertmanager(self.create)
+      var = {
+        'bucket_component_state': self.bucket_component_state,
+        'email_address': self.plateform[self.blocname]['alertmanager']['list_emails']
+      }
+      self.create(
+        working_dir='../terraform/component_observability',
+        var_component=var
+      )
+      sns_arn = self.output('sns_arn', working_dir='../terraform/component_observability')
+      print("SNS ARN: " + sns_arn)
+      sns_arn=sns_arn.split(':')[5]
+      print("SNS Name: " + sns_arn)
+      self.alertmanager(self.create, sns_arn)
 
   def destroy(self):
     if self.blocname not in self.plateform:
@@ -48,7 +60,15 @@ class ComponentObservability(Component):
       self.prometheus(self.delete)
 
     if 'alertmanager' in self.plateform[self.blocname]:
-      self.alertmanager(self.delete)
+      var = {
+        'bucket_component_state': self.bucket_component_state,
+        'email_address': self.plateform[self.blocname]['alertmanager']['list_emails']
+      }
+      self.delete(
+        working_dir='../terraform/component_observability',
+        var_component=var
+      )
+      self.alertmanager(self.delete, 'sns-arn')
 
   def grafana(self, func):
     grafana = ComponentWeb(self.plateform)
@@ -112,19 +132,7 @@ class ComponentObservability(Component):
     prometheus.compute_var(web, func)
 
 
-  def alertmanager(self, func):
-    var = {
-      'bucket_component_state': self.bucket_component_state,
-      'email_address': self.plateform[self.blocname]['alertmanager']['list_emails']
-    }
-    func(
-      working_dir='../terraform/component_observability',
-      var_component=var
-    )
-    sns_arn = self.output('sns_arn', working_dir='../terraform/component_observability')
-    print("SNS ARN: " + sns_arn)
-    sns_arn=sns_arn.split(':')[5]
-    print("SNS Name: " + sns_arn)
+  def alertmanager(self, func, sns_arn):
     alertmanager = ComponentWeb(self.plateform)
     web={
       'name': 'alertmanager',
@@ -147,6 +155,8 @@ class ComponentObservability(Component):
       '''.format(sns_arn=sns_arn)
     }
     alertmanager.compute_var(web, func)
+
+# sudo journalctl -o verbose --unit=alertmanager.service
 
         # 'user-data': '''
         #   echo "[auth.generic_oauth]" >> /etc/grafana/grafana.ini

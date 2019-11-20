@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User={{ service_user }}
-ExecStart=/usr/local/bin/alertmanager-sns-forwarder
+ExecStart=/usr/local/bin/alertmanager-sns-forwarder --template-path /etc/alertmanager-sns-forwarder/template.tpl
 
 [Install]
 WantedBy=multi-user.target

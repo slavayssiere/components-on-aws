@@ -1,0 +1,11 @@
+{{.CommonAnnotations}}
+{{.CommonLabels}}
+{{.GroupLabels}}
+{{.Receiver}}
+{{.Status}}
+
+<b>Active Alert List:</b>
+{{ range $val := .Alerts -}}
+  {{$val}}
+{{ end}}
+Version:{{.Version}}

@@ -10,7 +10,7 @@ resource "aws_iam_policy" "ec2-to-sns-policy" {
         {
             "Effect": "Allow",
             "Action": "sns:Publish",
-            "Resource": "<topic_arn>"
+            "Resource": "*"
         }
     ]
 }

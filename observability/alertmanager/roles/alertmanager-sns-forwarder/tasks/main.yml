@@ -52,6 +52,7 @@
       owner: root
   loop:
     - { src: alertmanager-sns-forwarder.service.j2, dest: /etc/systemd/system/alertmanager-sns-forwarder.service }
+    - { src: alertmanager-sns-forwarder.template.j2, dest: /etc/alertmanager-sns-forwarder/template.tpl}
 
 - name: Enable and start services
   systemd:      
