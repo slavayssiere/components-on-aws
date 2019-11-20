@@ -24,7 +24,7 @@ class ComponentWeb(Component):
     network = ComponentNetwork(self.plateform)
 
     bastion_enable = False
-    if 'component_bastion' in self.plateform_name:
+    if 'component_bastion' in self.plateform:
       bastion_enable = True
 
     if 'health-check-port' not in web:
@@ -38,7 +38,6 @@ class ComponentWeb(Component):
 
     user_data = ''
     if 'user-data' in web:
-      print("install with: " + web['user-data'])
       user_data = web['user-data']
 
     if 'attach_cw_ro' not in web:
@@ -89,7 +88,7 @@ class ComponentWeb(Component):
     }
     func(
       working_dir='../terraform/component_web', 
-      plateform_name=self.get_workspace(web['name']), 
+      workspace_name=self.get_workspace(web['name']), 
       var_component=var
     )
 

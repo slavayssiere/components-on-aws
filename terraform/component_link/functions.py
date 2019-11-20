@@ -55,7 +55,7 @@ class ComponentLink(Component):
 
     func( 
       working_dir='../terraform/component_link/link_web', 
-      plateform_name=self.get_workspace_web(web['name'], web['link-rds']), 
+      workspace_name=self.get_workspace_web(web['name'], web['link-rds']), 
       var_component=self.var
     )
 
@@ -81,7 +81,7 @@ class ComponentLink(Component):
 
     func( 
       working_dir='../terraform/component_link/link_eks', 
-      plateform_name=self.get_workspace_eks(self.plateform['component_eks']['link-rds']), 
+      workspace_name=self.get_workspace_eks(self.plateform['component_eks']['link-rds']), 
       var_component=self.var
     )
 

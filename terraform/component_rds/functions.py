@@ -70,7 +70,7 @@ class ComponentRDS(Component):
     }
     func(
       working_dir='../terraform/component_rds', 
-      plateform_name=self.get_workspace(rds['name']), 
+      workspace_name=self.get_workspace(rds['name']), 
       var_component=var
     )
 

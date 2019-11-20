@@ -13,13 +13,9 @@ class Component:
     self.plateform = plateform
     self.get_constantes()
     if self.blocname not in plateform:
-      print("component " + self.component_name + " not in plateform : " + self.plateform['name'])
       return
-    else:
-      print("component " + self.component_name + " in plateform : " + self.plateform['name'])
     self.check()
     self.define_var()
-    print("set workspace as " + self.plateform_name)
     self.workspace = self.plateform_name
 
   def get_constantes(self):
@@ -41,10 +37,10 @@ class Component:
   def check(self):
     pass
 
-  def create(self, working_dir, var_component, skip_plan=True, plateform_name=""):
+  def create(self, working_dir, var_component, skip_plan=True, workspace_name=""):
 
-    if len(plateform_name) == 0:
-      plateform_name = self.get_workspace()
+    if len(workspace_name) == 0:
+      workspace_name = self.get_workspace()
 
     if os.path.exists(working_dir+"/.terraform/environment"):
       os.remove(working_dir+"/.terraform/environment")
@@ -57,10 +53,10 @@ class Component:
       print("File terraform.tfstate not exist")
     
     tf = Terraform(working_dir)
-    tf.init(backend_config='bucket='+self.bucket_component_state, capture_output=False, no_color=IsNotFlagged)
-    code, _, _ = tf.cmd("workspace select " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+    tf.init(backend_config='bucket='+self.bucket_component_state, capture_output=True, no_color=IsNotFlagged)
+    code, _, _ = tf.cmd("workspace select " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
     if code == 1:
-      tf.cmd("workspace new " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+      tf.cmd("workspace new " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
     code, _, _ = tf.apply(
       var=var_component, 
       capture_output=False, 
@@ -70,7 +66,10 @@ class Component:
     if code != 0:
       raise Exception("error in Terraform layer-base")
 
-  def delete(self, working_dir, var_component, skip_plan=True, plateform_name=workspace):
+  def delete(self, working_dir, var_component, skip_plan=True, workspace_name=""):
+    if len(workspace_name) == 0:
+      workspace_name = self.get_workspace()
+
     if os.path.exists(working_dir+"/.terraform/environment"):
       os.remove(working_dir+"/.terraform/environment")
     else:
@@ -82,8 +81,8 @@ class Component:
       print("File terraform.tfstate not exist")
 
     tf = Terraform(working_dir=working_dir)
-    tf.init(backend_config='bucket='+self.bucket_component_state, capture_output=False, no_color=IsNotFlagged)
-    code, _, _ = tf.cmd("workspace select " + plateform_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+    tf.init(backend_config='bucket='+self.bucket_component_state, capture_output=True, no_color=IsNotFlagged)
+    code, _, _ = tf.cmd("workspace select " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
     if code == 1:
       print("workspace does not exist")
     else:
@@ -97,10 +96,10 @@ class Component:
         raise Exception("error in Terraform layer-kubernetes")
 
 
-  def output(self, var_name, working_dir, skip_plan=True, plateform_name=""):
+  def output(self, var_name, working_dir, skip_plan=True, workspace_name=""):
 
-    if len(plateform_name) == 0:
-      plateform_name = self.get_workspace()
+    if len(workspace_name) == 0:
+      workspace_name = self.get_workspace()
 
     print("search output : " + var_name)
     tf = Terraform(working_dir)

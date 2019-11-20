@@ -60,14 +60,12 @@ class ComponentEKS(Component):
     print("delete alb")
     self.delete(
       working_dir='../terraform/component_eks/component-alb',
-      var_component=self.var,
-      plateform_name=self.plateform_name
+      var_component=self.var
     )
     print("delete eks")
     self.delete(
       working_dir='../terraform/component_eks',
-      var_component=self.var,
-      plateform_name=self.plateform_name
+      var_component=self.var
     )
           
   def check(self):

@@ -51,15 +51,19 @@ class ComponentObservability(Component):
       self.plateform[self.blocname]['ips_whitelist'] = ["0.0.0.0/0"]
 
     if 'grafana' in self.plateform[self.blocname]:
+      print("destroy grafana")
       self.grafana(self.delete)
 
     if 'tracing' in self.plateform[self.blocname]:
+      print("destroy tracing")
       self.tracing(self.delete)
 
     if 'prometheus' in self.plateform[self.blocname]:
+      print("destroy prometheus")
       self.prometheus(self.delete)
 
     if 'alertmanager' in self.plateform[self.blocname]:
+      print("destroy alertmanager")
       var = {
         'bucket_component_state': self.bucket_component_state,
         'email_address': self.plateform[self.blocname]['alertmanager']['list_emails']
