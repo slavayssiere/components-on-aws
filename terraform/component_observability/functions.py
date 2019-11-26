@@ -75,10 +75,15 @@ class ComponentObservability(Component):
       self.alertmanager(self.delete, 'sns-arn')
 
   def grafana(self, func):
+    ami_account = self.plateform['account']
+    if 'ami-account' in self.plateform[self.blocname]:
+      ami_account = self.plateform[self.blocname]['ami-account']
+
     grafana = ComponentWeb(self.plateform)
     web={
       'name': 'grafana',
       'ami-name': 'grafana-*',
+      'ami-account': ami_account,
       'port': '3000',
       'health-check': '/api/health',
       'health-check-port': '3000',
@@ -97,10 +102,15 @@ class ComponentObservability(Component):
     grafana.compute_var(web, func)
 
   def tracing(self, func):
+    ami_account = self.plateform['account']
+    if 'ami-account' in self.plateform[self.blocname]:
+      ami_account = self.plateform[self.blocname]['ami-account']
+
     tracing = ComponentWeb(self.plateform)
     web={
       'name': 'tracing',
       'ami-name': 'jaeger-*',
+      'ami-account': ami_account,
       'port': '16686',
       'health-check': '/',
       'health-check-port': '16687',
@@ -116,10 +126,15 @@ class ComponentObservability(Component):
 
 
   def prometheus(self, func):
+    ami_account = self.plateform['account']
+    if 'ami-account' in self.plateform[self.blocname]:
+      ami_account = self.plateform[self.blocname]['ami-account']
+
     prometheus = ComponentWeb(self.plateform)
     web={
       'name': 'prometheus',
       'ami-name': 'prometheus-*',
+      'ami-account': ami_account,
       'port': '9090',
       'health-check': '/-/ready',
       'attach_cw_ro': False,
@@ -137,10 +152,15 @@ class ComponentObservability(Component):
 
 
   def alertmanager(self, func, sns_arn):
+    ami_account = self.plateform['account']
+    if 'ami-account' in self.plateform[self.blocname]:
+      ami_account = self.plateform[self.blocname]['ami-account']
+
     alertmanager = ComponentWeb(self.plateform)
     web={
       'name': 'alertmanager',
       'ami-name': 'alertmanager-*',
+      'ami-account': ami_account,
       'port': '9093',
       'health-check': '/-/ready',
       'attach_sns_pub': True,
