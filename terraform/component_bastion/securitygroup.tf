@@ -7,7 +7,7 @@ resource "aws_security_group" "allow_ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.ips_whitelist]
+    cidr_blocks = var.ips_whitelist
   }
 
   # allow https for kops/kubectl/helm install

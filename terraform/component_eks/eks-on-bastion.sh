@@ -9,11 +9,17 @@ sleep 30
 
 # création des CRD de prometheus-operator
 kubectl create ns observability
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/alertmanager.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheus.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/prometheusrule.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/servicemonitor.crd.yaml
-kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/master/example/prometheus-operator-crd/podmonitor.crd.yaml
+
+tar -xf terraform/component_eks/prometheus-operator-8.2.4.tar
+
+# installation du prometheus operator
+helm upgrade \
+    -i \
+    --namespace observability \
+    --version 8.2.4
+    --values ./helm_values/prometheus-operator.yaml \
+    --wait \
+    prometheus-operator ./prometheus-operator
 
 kubectl apply -f ./mon-network/prometheus.yaml
 kubectl apply -f ./mon-network/grafana-datasource.yaml
@@ -48,14 +54,6 @@ fi
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo update
 
-# installation du prometheus operator
-helm upgrade \
-    -i \
-    --namespace observability \
-    --values ./helm_values/prometheus-operator.yaml \
-    --version 6.21.0 \
-    --wait \
-    prometheus-operator stable/prometheus-operator
 
 # installation des IngressController
 helm upgrade \
