@@ -14,6 +14,7 @@ terraform output kubeconfig > $WORKDIR/tmp/.kubeconfig_$PLATEFORM_NAME
 terraform output config_map_aws_auth > $WORKDIR/tmp/cm_auth_$PLATEFORM_NAME.yaml
 cd -
 
+echo "connexion to ssh"
 ssh -M -S my-ctrl-socket -fnNT -L 8443:k8s-master.$DNS_PRIVATE:443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC
 
 export KUBECONFIG="$WORKDIR/tmp/.kubeconfig_$PLATEFORM_NAME"
@@ -32,5 +33,6 @@ scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $WORKDIR/../t
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $WORKDIR/../terraform/component_eks/ingress ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $WORKDIR/../terraform/component_eks/templates ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $WORKDIR/../terraform/component_eks/eks-on-bastion.sh ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $WORKDIR/../terraform/component_eks/prometheus-operator-8.2.4.tar ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC:
 
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC ./eks-on-bastion.sh $PLATEFORM_NAME $NETWORK_TYPE $DNS_PUBLIC

@@ -10,13 +10,12 @@ sleep 30
 # création des CRD de prometheus-operator
 kubectl create ns observability
 
-tar -xf terraform/component_eks/prometheus-operator-8.2.4.tar
+tar -xf prometheus-operator-8.2.4.tar
 
 # installation du prometheus operator
 helm upgrade \
     -i \
     --namespace observability \
-    --version 8.2.4
     --values ./helm_values/prometheus-operator.yaml \
     --wait \
     prometheus-operator ./prometheus-operator
