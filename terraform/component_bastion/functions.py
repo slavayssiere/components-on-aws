@@ -18,9 +18,13 @@ class ComponentBastion(Component):
     if 'component_eks' in self.plateform:
       enable_eks = True
 
+    if 'ips_whitelist' not in self.plateform[self.blocname]:
+      self.plateform[self.blocname]['ips_whitelist'] = ["0.0.0.0/0"]
+
     self.var = {
       'enable_eks': enable_eks,
-      'bucket_component_state': self.bucket_component_state
+      'bucket_component_state': self.bucket_component_state,
+      'ips_whitelist': self.plateform[self.blocname]['ips_whitelist']
     }
 
   def apply(self):

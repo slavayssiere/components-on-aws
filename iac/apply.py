@@ -3,6 +3,7 @@
 import sys
 import subprocess
 import yaml
+import time
 
 sys.path.append("..")
 
@@ -32,6 +33,8 @@ with open(name_file, 'r') as stream:
   try:
     plateform=yaml.load(stream, Loader=Loader)
     
+    start_time = time.time()
+
     print("Load components...")
     base = ComponentBase(plateform)
     bastion = ComponentBastion(plateform)
@@ -42,19 +45,38 @@ with open(name_file, 'r') as stream:
     obs = ComponentObservability(plateform)
     rds = ComponentRDS(plateform)
 
+    load_finish_time = time.time()
+
     # check if credential is always available
     print("check is always connected...")
     is_always_connected()
 
     print("Will create plateform: " + plateform['name'] + " in account:" + plateform['account'])
     base.apply()
+    base_finish_time = time.time()
     network.apply()
+    network_finish_time = time.time()
     eks.apply()
+    eks_finish_time = time.time()
     bastion.apply()
+    bastion_finish_time = time.time()
     web.apply()
+    web_finish_time = time.time()
     obs.apply()
+    obs_finish_time = time.time()
     rds.apply()
+    rds_finish_time = time.time()
     link.apply()
+    link_finish_time = time.time()
+
+    print("Total time: " + (time.time() - start_time))
+    print("Base time: " + (base_finish_time - start_time))
+    print("Network time: " + (network_finish_time - start_time))
+    print("EKS time: " + (eks_finish_time - start_time))
+    print("Web time: " + (web_finish_time - start_time))
+    print("Observability time: " + (obs_finish_time - start_time))
+    print("RDS time: " + (rds_finish_time - start_time))
+    print("Link time: " + (link_finish_time - start_time))
           
   except yaml.YAMLError as exc:
     print(exc)

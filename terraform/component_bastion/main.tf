@@ -45,8 +45,9 @@ data "terraform_remote_state" "component_eks" {
   }
 }
 
-variable "bucket_component_state" {
-}
+variable "bucket_component_state" {}
+
+variable "ips_whitelist" {}
 
 variable "enable_eks" {
   type = bool

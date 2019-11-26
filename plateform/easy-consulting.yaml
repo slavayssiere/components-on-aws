@@ -27,9 +27,7 @@ component_web:
     efs-enable: true
     link-rds: db
     user-data: |
-      yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_386/amazon-ssm-agent.rpm
-      systemctl enable amazon-ssm-agent
-      systemctl start amazon-ssm-agent
+      #!/bin/bash
       yum install -y nfs-utils
       mkdir -p /tmp/efs
       mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport nfs.easyconsulting.accor:/ /tmp/efs

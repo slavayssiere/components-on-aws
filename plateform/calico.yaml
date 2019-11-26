@@ -31,6 +31,9 @@ component_web:
     link-rds: app-cal-1
 component_bastion:
   enabled: true
+  ips_whitelist:
+    - '195.137.181.15/32'
+    - '195.137.181.130/32'
 component_observability:
   tracing: enabled
   grafana: enabled
