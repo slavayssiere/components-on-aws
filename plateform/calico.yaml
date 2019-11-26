@@ -45,3 +45,4 @@ component_observability:
   ips_whitelist:
     - '195.137.181.15/32'
     - '195.137.181.130/32'
+  ami-account: 549637939820

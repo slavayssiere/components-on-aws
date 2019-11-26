@@ -57,8 +57,8 @@
   file:
     path: "/etc/alertmanager-sns-forwarder"
     state: directory
-    owner: root
-    group: root
+    owner: ec2-user
+    group: ec2-user
     mode: "0644"
 
 - name: Install Template
@@ -67,9 +67,9 @@
       src: "{{ item.src }}"
       force: yes
       remote_src: no
-      group: root
+      group: ec2-user
       mode: "0644"
-      owner: root
+      owner: ec2-user
   loop:
     - { src: alertmanager-sns-forwarder.template, dest: /etc/alertmanager-sns-forwarder/template.tpl }
 

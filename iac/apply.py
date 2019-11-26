@@ -69,14 +69,14 @@ with open(name_file, 'r') as stream:
     link.apply()
     link_finish_time = time.time()
 
-    print("Total time: " + (time.time() - start_time))
-    print("Base time: " + (base_finish_time - start_time))
-    print("Network time: " + (network_finish_time - start_time))
-    print("EKS time: " + (eks_finish_time - start_time))
-    print("Web time: " + (web_finish_time - start_time))
-    print("Observability time: " + (obs_finish_time - start_time))
-    print("RDS time: " + (rds_finish_time - start_time))
-    print("Link time: " + (link_finish_time - start_time))
+    print("Total time: " + str(time.time() - start_time))
+    print("Base time: " + str(base_finish_time - start_time))
+    print("Network time: " + str(network_finish_time - start_time))
+    print("EKS time: " + str(eks_finish_time - start_time))
+    print("Web time: " + str(web_finish_time - start_time))
+    print("Observability time: " + str(obs_finish_time - start_time))
+    print("RDS time: " + str(rds_finish_time - start_time))
+    print("Link time: " + str(link_finish_time - start_time))
           
   except yaml.YAMLError as exc:
     print(exc)
