@@ -95,7 +95,8 @@ class ComponentObservability(Component):
       'ips_whitelist': self.plateform[self.blocname]['ips_whitelist'],
       'enable_cognito': True,
       'user-data': '''
-        #!/bin/bash
+        #!/bin/bash -x
+        exec > /tmp/userdata-grafana.log 2>&1
         grafana-cli admin reset-admin-password {password}
       '''.format(password='new-password')
     }
@@ -173,8 +174,9 @@ class ComponentObservability(Component):
       'enable_private_alb': True,
       'enable_public_alb': True,
       'user-data': '''
-        #!/bin/bash
-        sed -i.bak 's/alertmanager-sns-to-email/{sns_arn}/g' /etc/alertmanager/alertmanager.yml
+        #!/bin/bash -x
+        exec > /tmp/userdata-alertmanager.log 2>&1
+        sudo sed -i.bak 's/alertmanager-sns-to-email/{sns_arn}/g' /etc/alertmanager/alertmanager.yml
         systemctl restart alertmanager.service
       '''.format(sns_arn=sns_arn)
     }

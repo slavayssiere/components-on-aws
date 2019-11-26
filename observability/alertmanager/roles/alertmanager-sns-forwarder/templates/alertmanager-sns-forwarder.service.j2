@@ -5,6 +5,7 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
+Environment=AWS_REGION=eu-west-1
 Restart=always
 RestartSec=1
 User={{ service_user }}
