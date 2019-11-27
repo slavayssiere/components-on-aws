@@ -14,6 +14,9 @@ resource "aws_cloudwatch_metric_alarm" "billing" {
   }
 }
 
+# TODO: implement plateform dimension
+
+
 resource "aws_sns_topic" "billing-topic" {
   name = "billing-topic-${terraform.workspace}"
 }

@@ -6,7 +6,6 @@ provider "aws" {
 terraform {
   required_version = ">= 0.12.0"
   backend "s3" {
-    bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
     key    = "eks-test/component_web"
   }
@@ -46,11 +45,9 @@ data "terraform_remote_state" "component_bastion" {
   }
 }
 
-variable "bucket_component_state" {
-}
+variable "bucket_component_state" {}
 
-variable "workspace-network" {
-}
+variable "workspace-network" {}
 
 variable "ami-name" {
   type = string

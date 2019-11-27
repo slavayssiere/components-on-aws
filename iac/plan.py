@@ -55,28 +55,28 @@ with open(name_file, 'r') as stream:
     is_always_connected()
 
     print("Will create plateform: " + plateform['name'] + " in account:" + plateform['account'])
-    base.apply()
+    base.plan()
     base_finish_time = time.time()
 
-    network.apply()
+    network.plan()
     network_finish_time = time.time()
 
-    eks.apply()
+    eks.plan()
     eks_finish_time = time.time()
 
-    bastion.apply()
+    bastion.plan()
     bastion_finish_time = time.time()
 
-    web.apply()
+    web.plan()
     web_finish_time = time.time()
 
-    obs.apply()
+    obs.plan()
     obs_finish_time = time.time()
 
-    rds.apply()
+    rds.plan()
     rds_finish_time = time.time()
     
-    link.apply()
+    link.plan()
     link_finish_time = time.time()
 
     print("Total time: " + str(time.time() - start_time))

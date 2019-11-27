@@ -30,8 +30,16 @@ output "sn_private_array" {
   ]
 }
 
+output "sn_public_array" {
+  value = [
+    aws_subnet.demo_sn_public_a.id,
+    aws_subnet.demo_sn_public_b.id,
+    aws_subnet.demo_sn_public_c.id
+  ]
+}
+
 output "vpc_id" {
-  value = aws_vpc.demo_vpc.id
+  value = aws_vpc.pf_vpc.id
 }
 
 output "vpc_cidr" {
@@ -43,5 +51,5 @@ output "private_dns_zone" {
 }
 
 output "private_dns_zone_id" {
-  value = aws_route53_zone.demo_private_zone.zone_id
+  value = aws_route53_zone.private_zone.zone_id
 }

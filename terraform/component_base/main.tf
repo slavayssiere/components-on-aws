@@ -5,23 +5,22 @@ provider "aws" {
 
 terraform {
   required_version = ">= 0.12.0"
+  # can be changed in def_component in "init" 
   backend "s3" {
-    bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
     key    = "eks-test/component_base"
   }
 }
 
 variable "account_id" {
+  type = string
 }
 
 variable "region" {
   default = "eu-west-1"
 }
 
-variable "public_dns" {
-  default = "aws-wescale.slavayssiere.fr."
-}
+variable "public_dns" {}
 
 variable "enable_public_dns" {
   default = true

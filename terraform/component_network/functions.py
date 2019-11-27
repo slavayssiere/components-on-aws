@@ -14,8 +14,10 @@ class ComponentNetwork(Component):
 
   def define_var(self):
     self.var = {
-      'private_dns_zone': self.plateform['component_network']['private-dns']
+      'private_dns_zone': self.plateform[self.blocname]['private-dns']
     }
+    if 'nat' in self.plateform[self.blocname]:
+      self.var['enable_nat_gateway']= self.plateform[self.blocname]['nat-gateway']
 
   def apply(self):
     if self.blocname not in self.plateform:
@@ -36,4 +38,5 @@ class ComponentNetwork(Component):
     )
 
   def check(self):
-    pass
+    if 'private-dns' not in self.plateform[self.blocname]:
+      raise YamlCheckError(self.component_name, 'please add private-dns of plateform')

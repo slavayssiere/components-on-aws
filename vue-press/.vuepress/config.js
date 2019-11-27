@@ -20,6 +20,7 @@ module.exports = {
       '/',
       ['/how-to', 'Guide'],
       ['/list', 'Composants'],
+      ['/tmp/base.md', 'Composant Base'],
       ['/apps', 'Composants applicatifs'],
       ['/exemples', 'Examples']
     ],

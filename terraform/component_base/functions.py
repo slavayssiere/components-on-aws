@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-# insert at 1, 0 is the script path (or '' in REPL)
+
 sys.path.insert(1, '../..')
 
 from iac.def_component import Component
@@ -20,18 +20,19 @@ class ComponentBase(Component):
 
     self.var = {
       'account_id': self.plateform['account'],
-      'region': self.plateform['region'],
       'public_dns': self.plateform['public-dns'],
       'enable_public_dns': enable_public_dns,
       'monthly_billing_threshold': self.plateform['billing-alert'],
       'email_address': self.plateform['billing-email']
     }
+    # i use the default TF var
+    if 'region' in self.plateform:
+      self.var['region']=self.plateform['region']
     
   def apply(self):
     self.create(
       working_dir='../terraform/component_base',
-      var_component=self.var, 
-      skip_plan=True
+      var_component=self.var
     )
 
   def destroy(self):
@@ -42,12 +43,12 @@ class ComponentBase(Component):
 
   def check(self):
     if 'name' not in self.plateform:
-        raise YamlCheckError('base', 'please add name of plateform')
+        raise YamlCheckError(self.component_name, 'please add name of plateform')
     if 'type' not in self.plateform:
-        raise YamlCheckError('base', 'please add type of plateform')
+        raise YamlCheckError(self.component_name, 'please add type of plateform')
     if 'account' not in self.plateform:
-        raise YamlCheckError('base', 'please add aws account of plateform')
-    if 'region' not in self.plateform:
-        raise YamlCheckError('base', 'please add aws region of plateform')
-    if 'public-dns' not in self.plateform:
-        raise YamlCheckError('base', 'please add public-dns SOA of plateform')
+        raise YamlCheckError(self.component_name, 'please add aws account of plateform')
+    if 'billing-alert' not in self.plateform:
+        raise YamlCheckError(self.component_name, 'please add billing-alert of plateform')
+    if 'billing-email' not in self.plateform:
+        raise YamlCheckError(self.component_name, 'please add billing-email of plateform')

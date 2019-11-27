@@ -37,6 +37,7 @@ resource "aws_acm_certificate" "wildcard-acme" {
 
   tags = {
     Environment = "test"
+    Plateform = terraform.workspace
   }
 }
 

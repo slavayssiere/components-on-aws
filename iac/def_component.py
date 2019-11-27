@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+
 from python_terraform import Terraform, IsNotFlagged, IsFlagged    
 
 class Component:
@@ -22,6 +23,11 @@ class Component:
     self.bucket_component_state = self.plateform['bucket-component-state']
     self.plateform_name = self.plateform['name']
 
+    if 'region' not in self.plateform:
+      self.plateform['region']='eu-west-1'
+
+    self.region = self.plateform['region']
+
   def get_workspace(self):
     return self.workspace
 
@@ -34,8 +40,19 @@ class Component:
   def destroy(self):
     pass
 
+  # to check:
+  # - dependancies (exemple: rds need network)
+  # - yaml validation for component
   def check(self):
     pass
+
+  def init(self, working_dir):
+    self.tf = Terraform(working_dir)
+    self.tf.cmd(
+      "init -backend-config=bucket=" + self.bucket_component_state + " -backend-config=region=" + self.region,
+      capture_output=True,
+      no_color=IsNotFlagged
+    )
 
   def create(self, working_dir, var_component, skip_plan=True, workspace_name=""):
 
@@ -52,11 +69,14 @@ class Component:
     else:
       print("File terraform.tfstate not exist")
     
-    tf = Terraform(working_dir)
-    tf.init(backend_config='bucket='+self.bucket_component_state, capture_output=True, no_color=IsNotFlagged)
-    code, _, _ = tf.cmd("workspace select " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+    self.init(working_dir=working_dir)
+    
+    # select workspace
+    code, _, _ = self.tf.cmd("workspace select " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
     if code == 1:
-      tf.cmd("workspace new " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+      self.tf.cmd("workspace new " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+    
+    # terraform apply
     code, _, _ = tf.apply(
       var=var_component, 
       capture_output=False, 
@@ -64,7 +84,7 @@ class Component:
       skip_plan=skip_plan,
       auto_approve=True)
     if code != 0:
-      raise Exception("error in Terraform layer-base")
+      raise Exception("error in component: " + self.component_name)
 
   def delete(self, working_dir, var_component, skip_plan=True, workspace_name=""):
     if len(workspace_name) == 0:
@@ -79,22 +99,21 @@ class Component:
       os.remove(working_dir+"/.terraform/terraform.tfstate")
     else:
       print("File terraform.tfstate not exist")
-
-    tf = Terraform(working_dir=working_dir)
-    tf.init(backend_config='bucket='+self.bucket_component_state, capture_output=True, no_color=IsNotFlagged)
-    code, _, _ = tf.cmd("workspace select " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+    
+    self.init(working_dir=working_dir)
+    
+    code, _, _ = self.tf.cmd("workspace select " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
     if code == 1:
       print("workspace does not exist")
     else:
-      code, _, _ = tf.destroy(
+      code, _, _ = self.tf.destroy(
         var=var_component,
         capture_output=False, 
         no_color=IsNotFlagged, 
         skip_plan=IsNotFlagged,
         auto_approve=True)
       if code != 0:
-        raise Exception("error in Terraform layer-kubernetes")
-
+        raise Exception("error in component: " + self.component_name)
 
   def output(self, var_name, working_dir, skip_plan=True, workspace_name=""):
 
@@ -102,10 +121,19 @@ class Component:
       workspace_name = self.get_workspace()
 
     print("search output : " + var_name)
-    tf = Terraform(working_dir)
-    code, out, _ = tf.cmd(
-      "output " + var_name,
-      no_color=IsNotFlagged)
-    if code != 0:
-      raise Exception("error in Terraform layer-base")
+
+    self.tf = Terraform(working_dir)
+
+    out = ''
+
+    code, _, _ = self.tf.cmd("workspace select " + workspace_name, capture_output=False, no_color=IsNotFlagged, skip_plan=IsNotFlagged)
+    if code == 1:
+      print("workspace does not exist")
+    else:
+      code, out, _ = self.tf.cmd(
+        "output " + var_name,
+        no_color=IsNotFlagged)
+      if code != 0:
+        raise Exception("error in component: " + self.component_name)
+
     return out

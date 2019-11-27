@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+
 import sys
+import subprocess
+import yaml
+import sys 
+
 sys.path.append("..")
 
 from aws_object import get_secret_value, is_always_connected
@@ -12,9 +17,6 @@ from terraform.component_web.functions import ComponentWeb
 from terraform.component_observability.functions import ComponentObservability
 from terraform.component_link.functions import ComponentLink
 from yaml_check_error import YamlCheckError
-import subprocess
-import yaml
-import sys 
 
 if len(sys.argv) > 1:
   name_file = sys.argv[1]
@@ -60,6 +62,8 @@ with open(name_file, 'r') as stream:
     eks.destroy()
     print("network destroy")
     network.destroy()
+
+    # TODO : i need to destroy base each day ?
     print("base destroy")
     base.destroy()
 

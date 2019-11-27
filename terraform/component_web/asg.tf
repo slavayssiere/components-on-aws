@@ -75,12 +75,14 @@ resource "aws_lb_target_group" "priv-tg" {
   }
 }
 
+# uncomment when AWS do is taff : https://github.com/terraform-providers/terraform-provider-aws/issues/5361
+
 resource "aws_autoscaling_group" "web-asg" {
-  name                 = "web-asg-${terraform.workspace}"
-  desired_capacity     = var.node-count
-  launch_configuration = "${aws_launch_configuration.web-lc.id}"
-  max_size             = var.max-node-count
-  min_size             = var.min-node-count
+ name                 = "web-asg-${terraform.workspace}"
+ desired_capacity     = var.node-count
+ launch_configuration = "${aws_launch_configuration.web-lc.id}"
+ max_size             = var.max-node-count
+ min_size             = var.min-node-count
   enabled_metrics = [
     "GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity",
     "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances",
@@ -126,3 +128,70 @@ resource "aws_autoscaling_policy" "web-asg-policy" {
   cooldown               = 300
   autoscaling_group_name = "${aws_autoscaling_group.web-asg.name}"
 }
+
+// resource "aws_cloudformation_stack" "autoscaling_group" {
+//   name = "web-asg-${terraform.workspace}"
+ 
+//   template_body = <<EOF
+// Description: "web-asg-${terraform.workspace}"
+// Resources:
+//   ASG:
+//     Type: AWS::AutoScaling::AutoScalingGroup
+//     Properties:
+//       VPCZoneIdentifier: ["${data.terraform_remote_state.component_network.outputs.sn_private_a_id}", "${data.terraform_remote_state.component_network.outputs.sn_private_b_id}","${data.terraform_remote_state.component_network.outputs.sn_private_c_id}"]
+//       LaunchConfigurationName: "${aws_launch_configuration.web-lc.id}"
+//       MinSize: "${var.min-node-count}"
+//       MaxSize: "${var.max-node-count}"
+//       DesiredCapacity: "${var.node-count}"
+//       HealthCheckType: EC2
+//       TargetGroupARNs:
+//         - "${aws_lb_target_group.web-tg.arn}"
+//         - "${aws_lb_target_group.priv-tg.arn}"
+//       MetricsCollection:
+//         - Granularity: "1Minute"
+//           Metrics: 
+//             - "GroupMinSize"
+//             - "GroupMaxSize"
+//             - "GroupDesiredCapacity"
+//             - "GroupInServiceInstances"
+//             - "GroupPendingInstances"
+//             - "GroupStandbyInstances"
+//             - "GroupTerminatingInstances"
+//             - "GroupTotalInstances"
+//             - "GroupInServiceCapacity"
+//             - "GroupPendingCapacity"
+//             - "GroupTerminatingCapacity"
+//             - "GroupStandbyCapacity"
+//             - "GroupTotalCapacity"
+//       Tags:
+//         - Key: Monitoring
+//           Value: 9100
+//           PropagateAtLaunch: "true"
+//         - Key: Plateform
+//           Value: "${terraform.workspace}"
+ 
+//     CreationPolicy:
+//       AutoScalingCreationPolicy:
+//         MinSuccessfulInstancesPercent: 80
+//       ResourceSignal:
+//         Count: "5"
+//         Timeout: PT10M
+//     UpdatePolicy:
+//     # Ignore differences in group size properties caused by scheduled actions
+//       AutoScalingScheduledAction:
+//         IgnoreUnmodifiedGroupSizeProperties: true
+//       AutoScalingRollingUpdate:
+//         MaxBatchSize: "${var.max-node-count}"
+//         MinInstancesInService: "${var.min-node-count}"
+//         MinSuccessfulInstancesPercent: 80
+//         PauseTime: PT10M
+//         SuspendProcesses:
+//           - HealthCheck
+//           - ReplaceUnhealthy
+//           - AZRebalance
+//           - AlarmNotification
+//           - ScheduledActions
+//         WaitOnResourceSignals: true
+//     DeletionPolicy: Retain
+//   EOF
+// }

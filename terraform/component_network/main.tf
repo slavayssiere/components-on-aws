@@ -6,7 +6,6 @@ provider "aws" {
 terraform {
   required_version = ">= 0.12.0"
   backend "s3" {
-    bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
     key    = "eks-test/component_network"
   }
@@ -16,8 +15,7 @@ variable "region" {
   default = "eu-west-1"
 }
 
-variable "private_dns_zone" {
-}
+variable "private_dns_zone" {}
 
 variable "vpc_cidr" {
   description = "CIDR for the whole VPC"

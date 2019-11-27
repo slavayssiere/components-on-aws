@@ -8,7 +8,7 @@ billing-alert: 100
 billing-email: sebastien.lavayssiere@wescale.fr
 component_network:
   private-dns: 'slavayssiere.accor.'
-  enabled: true
+  nat-gateway: true
 component_rds:
   - name: app-cal-1
     username: 'appcal'

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+
 # insert at 1, 0 is the script path (or '' in REPL)
 sys.path.insert(1, '../..')
 
@@ -61,7 +62,6 @@ class ComponentLink(Component):
 
   def get_workspace_eks(self, link_rds):
     return self.plateform['name'] + "-link-eks-" + link_rds
-
 
   def compute_var_eks(self, func):
 

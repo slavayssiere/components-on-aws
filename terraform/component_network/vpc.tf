@@ -1,4 +1,4 @@
-resource "aws_vpc" "demo_vpc" {
+resource "aws_vpc" "pf_vpc" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -11,15 +11,15 @@ resource "aws_vpc" "demo_vpc" {
   }"
 }
 
-resource "aws_internet_gateway" "demo_vpc_igtw" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+resource "aws_internet_gateway" "pf_vpc_igtw" {
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 }
 
 /*
   Public Subnet
 */
 resource "aws_subnet" "demo_sn_public_a" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   cidr_block        = "${var.public_subnet_a_cidr}"
   availability_zone = "${var.region}a"
@@ -33,7 +33,7 @@ resource "aws_subnet" "demo_sn_public_a" {
 }
 
 resource "aws_subnet" "demo_sn_public_b" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   cidr_block        = "${var.public_subnet_b_cidr}"
   availability_zone = "${var.region}b"
@@ -47,7 +47,7 @@ resource "aws_subnet" "demo_sn_public_b" {
 }
 
 resource "aws_subnet" "demo_sn_public_c" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   cidr_block        = "${var.public_subnet_c_cidr}"
   availability_zone = "${var.region}c"
@@ -64,7 +64,7 @@ resource "aws_subnet" "demo_sn_public_c" {
   Private Subnet
 */
 resource "aws_subnet" "demo_sn_private_a" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   cidr_block        = "${var.private_subnet_a_cidr}"
   availability_zone = "${var.region}a"
@@ -78,7 +78,7 @@ resource "aws_subnet" "demo_sn_private_a" {
 }
 
 resource "aws_subnet" "demo_sn_private_b" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   cidr_block        = "${var.private_subnet_b_cidr}"
   availability_zone = "${var.region}b"
@@ -92,7 +92,7 @@ resource "aws_subnet" "demo_sn_private_b" {
 }
 
 resource "aws_subnet" "demo_sn_private_c" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   cidr_block        = "${var.private_subnet_c_cidr}"
   availability_zone = "${var.region}c"
@@ -109,64 +109,35 @@ resource "aws_subnet" "demo_sn_private_c" {
 
 /* ici on autorise le réseau "public" à accéder à la Gateway internet */
 
-resource "aws_route_table" "demo_vpc_rt_public" {
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+resource "aws_route_table" "pf_vpc_rt_public" {
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.demo_vpc_igtw.id}"
+    gateway_id = "${aws_internet_gateway.pf_vpc_igtw.id}"
   }
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_public-${terraform.workspace}",
+      "Name", "pf_vpc_rt_public-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
 }
 
-resource "aws_route_table_association" "demo_vpc_rta_public_a" {
+resource "aws_route_table_association" "pf_vpc_rta_public_a" {
   subnet_id      = "${aws_subnet.demo_sn_public_a.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_public.id}"
+  route_table_id = "${aws_route_table.pf_vpc_rt_public.id}"
 }
 
-resource "aws_route_table_association" "demo_vpc_rta_public_b" {
+resource "aws_route_table_association" "pf_vpc_rta_public_b" {
   subnet_id      = "${aws_subnet.demo_sn_public_b.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_public.id}"
+  route_table_id = "${aws_route_table.pf_vpc_rt_public.id}"
 }
 
-resource "aws_route_table_association" "demo_vpc_rta_public_c" {
+resource "aws_route_table_association" "pf_vpc_rta_public_c" {
   subnet_id      = "${aws_subnet.demo_sn_public_c.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_public.id}"
-}
-
-/* ici la SG générique pour les instances dans le réseau public */
-
-resource "aws_security_group" "demo_sg_public" {
-  description = "Allow incoming HTTP connections."
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = "${
-    map(
-      "Name", "demo_sg_public",
-      "Plateform", "${terraform.workspace}"
-    )
-  }"
-
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  route_table_id = "${aws_route_table.pf_vpc_rt_public.id}"
 }
 
 /* nat gateway eu-west-1a */
@@ -178,7 +149,7 @@ resource "aws_eip" "demo_nat_a_gw_eip" {
 
 resource "aws_nat_gateway" "demo_nat_a_gw" {
   count      = var.enable_nat_gateway ? 1 : 0
-  depends_on = ["aws_internet_gateway.demo_vpc_igtw"]
+  depends_on = ["aws_internet_gateway.pf_vpc_igtw"]
 
   allocation_id = "${aws_eip.demo_nat_a_gw_eip[count.index].id}"
   subnet_id     = "${aws_subnet.demo_sn_public_a.id}"
@@ -193,7 +164,7 @@ resource "aws_eip" "demo_nat_b_gw_eip" {
 
 resource "aws_nat_gateway" "demo_nat_b_gw" {
   count      = var.enable_nat_gateway ? 1 : 0
-  depends_on = ["aws_internet_gateway.demo_vpc_igtw"]
+  depends_on = ["aws_internet_gateway.pf_vpc_igtw"]
 
   allocation_id = "${aws_eip.demo_nat_b_gw_eip[count.index].id}"
   subnet_id     = "${aws_subnet.demo_sn_public_b.id}"
@@ -208,7 +179,7 @@ resource "aws_eip" "demo_nat_c_gw_eip" {
 
 resource "aws_nat_gateway" "demo_nat_c_gw" {
   count      = var.enable_nat_gateway ? 1 : 0
-  depends_on = ["aws_internet_gateway.demo_vpc_igtw"]
+  depends_on = ["aws_internet_gateway.pf_vpc_igtw"]
 
   allocation_id = "${aws_eip.demo_nat_c_gw_eip[count.index].id}"
   subnet_id     = "${aws_subnet.demo_sn_public_c.id}"
@@ -216,9 +187,9 @@ resource "aws_nat_gateway" "demo_nat_c_gw" {
 
 /* ici on autorise le réseau "privé" à accéder à la NAT Gateway */
 
-resource "aws_route_table" "demo_vpc_rt_a_private" {
+resource "aws_route_table" "pf_vpc_rt_a_private" {
   count  = var.enable_nat_gateway ? 1 : 0
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   route {
     cidr_block     = "0.0.0.0/0"
@@ -227,21 +198,21 @@ resource "aws_route_table" "demo_vpc_rt_a_private" {
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_private_a-${terraform.workspace}",
+      "Name", "pf_vpc_rt_private_a-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
 }
 
-resource "aws_route_table_association" "demo_vpc_rta_private_a" {
+resource "aws_route_table_association" "pf_vpc_rta_private_a" {
   count          = var.enable_nat_gateway ? 1 : 0
   subnet_id      = "${aws_subnet.demo_sn_private_a.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_a_private[count.index].id}"
+  route_table_id = "${aws_route_table.pf_vpc_rt_a_private[count.index].id}"
 }
 
-resource "aws_route_table" "demo_vpc_rt_b_private" {
+resource "aws_route_table" "pf_vpc_rt_b_private" {
   count  = var.enable_nat_gateway ? 1 : 0
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   route {
     cidr_block     = "0.0.0.0/0"
@@ -250,21 +221,21 @@ resource "aws_route_table" "demo_vpc_rt_b_private" {
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_private_b-${terraform.workspace}",
+      "Name", "pf_vpc_rt_private_b-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
 }
 
-resource "aws_route_table_association" "demo_vpc_rta_private_b" {
+resource "aws_route_table_association" "pf_vpc_rta_private_b" {
   count          = var.enable_nat_gateway ? 1 : 0
   subnet_id      = "${aws_subnet.demo_sn_private_b.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_b_private[count.index].id}"
+  route_table_id = "${aws_route_table.pf_vpc_rt_b_private[count.index].id}"
 }
 
-resource "aws_route_table" "demo_vpc_rt_c_private" {
+resource "aws_route_table" "pf_vpc_rt_c_private" {
   count  = var.enable_nat_gateway ? 1 : 0
-  vpc_id = "${aws_vpc.demo_vpc.id}"
+  vpc_id = "${aws_vpc.pf_vpc.id}"
 
   route {
     cidr_block     = "0.0.0.0/0"
@@ -273,14 +244,14 @@ resource "aws_route_table" "demo_vpc_rt_c_private" {
 
   tags = "${
     map(
-      "Name", "demo_vpc_rt_private_c-${terraform.workspace}",
+      "Name", "pf_vpc_rt_private_c-${terraform.workspace}",
       "Plateform", "${terraform.workspace}"
     )
   }"
 }
 
-resource "aws_route_table_association" "demo_vpc_rta_private_c" {
+resource "aws_route_table_association" "pf_vpc_rta_private_c" {
   count          = var.enable_nat_gateway ? 1 : 0
   subnet_id      = "${aws_subnet.demo_sn_private_c.id}"
-  route_table_id = "${aws_route_table.demo_vpc_rt_c_private[count.index].id}"
+  route_table_id = "${aws_route_table.pf_vpc_rt_c_private[count.index].id}"
 }

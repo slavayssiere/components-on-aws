@@ -6,7 +6,6 @@ provider "aws" {
 terraform {
   required_version = ">= 0.12.0"
   backend "s3" {
-    bucket = "wescale-slavayssiere-terraform"
     region = "eu-west-1"
     key    = "eks-test/component_eks"
   }
@@ -17,7 +16,7 @@ data "terraform_remote_state" "component_base" {
   workspace = "${terraform.workspace}"
 
   config = {
-    bucket = "${var.bucket_component_state}"
+    bucket = var.bucket_component_state
     region = "eu-west-1"
     key    = "eks-test/component_base"
   }
@@ -28,14 +27,13 @@ data "terraform_remote_state" "component_network" {
   workspace = "${terraform.workspace}"
 
   config = {
-    bucket = "${var.bucket_component_state}"
+    bucket = var.bucket_component_state
     region = "eu-west-1"
     key    = "eks-test/component_network"
   }
 }
 
-variable "bucket_component_state" {
-}
+variable "bucket_component_state" {}
 
 variable "cluster-name" {
   default = "eks-test"

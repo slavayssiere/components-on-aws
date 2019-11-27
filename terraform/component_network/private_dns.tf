@@ -1,9 +1,9 @@
 
-resource "aws_route53_zone" "demo_private_zone" {
+resource "aws_route53_zone" "private_zone" {
   name = "${var.private_dns_zone}"
 
   vpc {
-    vpc_id = "${aws_vpc.demo_vpc.id}"
+    vpc_id = "${aws_vpc.pf_vpc.id}"
   }
 
   tags = {
