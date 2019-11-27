@@ -1,19 +1,16 @@
-<h1>{{.CommonLabels.alertname}}</h1>
-<br />
-<h2>Description de l'alerte</h2>
+{{.CommonLabels.alertname}}
+
+Description de l'alerte:
 {{.CommonAnnotations.description}}
-<br />
-<h3>Receive from</h3>
-{{.Receiver}}
-<br />
-<h3>Status</h3>
-{{.Status}}
-<br />
-<b>Active Alert List:</b>
-{{ range $val := .Alerts -}}
-  Description: {{$val.description}}
-  Summary: {{$val.summary}}
+
+Receive from: {{.Receiver}}
+Status: {{.Status}}
+
+Active Alert List:
+{{ range .Alerts -}}
+  Description: {{ .Annotations.description }}
+  Summary: {{ .Annotations.summary }}
   -----
-{{ end}}
-<br />
-<b>Version:</b>{{.Version}}
+{{ end }}
+
+Version:{{.Version}}

@@ -178,7 +178,7 @@ class ComponentObservability(Component):
         exec > /tmp/userdata-alertmanager.log 2>&1
         sudo sed -i.bak 's/alertmanager-sns-to-email/{sns_arn}/g' /etc/alertmanager/alertmanager.yml
         systemctl restart alertmanager.service
-      '''.format(sns_arn=sns_arn)
+      '''.format(sns_arn=sns_arn.replace('\n', ''))
     }
     alertmanager.compute_var(web, func)
 
