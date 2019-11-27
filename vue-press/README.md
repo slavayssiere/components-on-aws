@@ -10,7 +10,15 @@ Voici une liste des composants principaux:
 - component-network
 - component-kubernetes
 - component-observability
-- component-bastion
+- component-bastion (to be changed)
 - component-link
 - component-web
 - component-rds
+
+## TODO: Components
+
+- component-database: permet la creation de users et database dans une instance RDS
+- composant-batch: pour aws batch
+- composant-dynamo: pour dynamoDB
+- composant-serverless: api gateway and other tools
+- component-bastion

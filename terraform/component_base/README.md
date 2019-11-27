@@ -10,6 +10,10 @@ Ce composent est necessaire pour créer une plateforme
 - enable alerting for billing
 - initialize ses
 
+TODO:
+
+- AWS tagging policy
+
 ## struct
 
 mandatory:
