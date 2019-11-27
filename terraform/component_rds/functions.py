@@ -62,7 +62,7 @@ class ComponentRDS(Component):
       'deletion_protection': is_prod,
       'multi_az': is_prod,
       'username': rds['username'],
-      'password': get_secret_value(self.get_workspace(rds['name'])),
+      'password': get_secret_value("rds-admin-secret-path-" + self.get_workspace(rds['name'])),
       'snapshot_enable': snapshot_enable,
       'snapshot_name': snapshot_name,
       'engine': rds['engine'],

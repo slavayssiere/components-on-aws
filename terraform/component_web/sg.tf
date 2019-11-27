@@ -25,6 +25,7 @@ resource "aws_security_group" "web-asg-sg" {
   }
 
   # for node exporter
+  # TODO: do this in link component
   ingress {
     from_port   = 9100
     to_port     = 9100
@@ -52,8 +53,7 @@ resource "aws_security_group" "web-asg-sg" {
     protocol    = "tcp"
     cidr_blocks = [data.terraform_remote_state.component_network.outputs.vpc_cidr]
   }
-
-
+  # TODO: /do this in link component
 
   tags = "${
     map(

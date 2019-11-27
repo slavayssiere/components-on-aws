@@ -1,0 +1,3 @@
+- src: cvi.thanos
+- src: dhoeric.aws-ssm
+- src: undergreen.prometheus-node-exporter

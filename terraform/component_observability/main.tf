@@ -37,3 +37,11 @@ variable "email_address" {
   type = list(string)
   default = []
 }
+
+variable "grafana_password" {
+  type = string
+}
+
+variable "plateform_name" {
+  type = string
+} 

@@ -16,7 +16,7 @@ data "terraform_remote_state" "component_base" {
 
   config = {
     bucket = var.bucket_component_state
-    region = "eu-west-1"
+    region = var.region
     key    = "eks-test/component_base"
   }
 }
@@ -27,7 +27,7 @@ data "terraform_remote_state" "component_network" {
 
   config = {
     bucket = var.bucket_component_state
-    region = "eu-west-1"
+    region = var.region
     key    = "eks-test/component_network"
   }
 }
@@ -39,9 +39,14 @@ data "terraform_remote_state" "component_bastion" {
 
   config = {
     bucket = var.bucket_component_state
-    region = "eu-west-1"
+    region = var.region
     key    = "eks-test/component_bastion"
   }
+}
+
+variable "region" {
+  type = string
+  default = "eu-west-1"
 }
 
 variable "bucket_component_state" {}

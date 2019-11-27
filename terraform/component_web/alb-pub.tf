@@ -65,13 +65,13 @@ resource "aws_route53_record" "web-alb-dns" {
   records = ["${aws_lb.web-alb.0.dns_name}"]
 }
 
+# TODO: enable OIDC if needed
 resource "aws_lb_listener" "web-alb" {
   count = var.enable_public_alb ? 1 : 0
   load_balancer_arn = "${aws_lb.web-alb.0.arn}"
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  // certificate_arn   = "${aws_acm_certificate_validation.web-alb-cert-validation.certificate_arn}"
   certificate_arn   = "${data.terraform_remote_state.component_base.outputs.wildcard-acme}"
 
   // dynamic "default_action" {

@@ -78,11 +78,11 @@ resource "aws_lb_target_group" "priv-tg" {
 # uncomment when AWS do is taff : https://github.com/terraform-providers/terraform-provider-aws/issues/5361
 
 resource "aws_autoscaling_group" "web-asg" {
- name                 = "web-asg-${terraform.workspace}"
- desired_capacity     = var.node-count
- launch_configuration = "${aws_launch_configuration.web-lc.id}"
- max_size             = var.max-node-count
- min_size             = var.min-node-count
+  name                 = "web-asg-${terraform.workspace}"
+  desired_capacity     = var.node-count
+  launch_configuration = "${aws_launch_configuration.web-lc.id}"
+  max_size             = var.max-node-count
+  min_size             = var.min-node-count
   enabled_metrics = [
     "GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity",
     "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances",

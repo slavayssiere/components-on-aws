@@ -13,9 +13,9 @@ def generate_secret():
   )
   return response['RandomPassword']
 
-def get_secret_value(rds_name):
+def get_secret_value(name):
 
-  secret_name = get_parameter_value("rds-admin-secret-path-" + rds_name)
+  secret_name = get_parameter_value(name)
   print("RDS Secret is in secret: " + secret_name)
 
   if len(secret_name) == 0:

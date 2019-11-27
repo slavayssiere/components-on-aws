@@ -40,6 +40,7 @@ class ComponentWeb(Component):
     if 'user-data' in web:
       user_data = web['user-data']
 
+    # TODO: refacto
     if 'attach_cw_ro' not in web:
       web['attach_cw_ro'] = False
 
@@ -48,6 +49,7 @@ class ComponentWeb(Component):
 
     if 'attach_sns_pub' not in web:
       web['attach_sns_pub'] = False
+    # TODO: /refacto
 
     if 'enable_private_alb' not in web:
       web['enable_private_alb'] = False
@@ -92,12 +94,11 @@ class ComponentWeb(Component):
       var_component=var
     )
 
-
   def apply(self):
     if self.blocname not in self.plateform:
       return
 
-    for web in self.plateform['component_web']:
+    for web in self.plateform[self.blocname]:
       print("Create web component: " + web['name'])
       self.compute_var(web, self.create)
       
@@ -109,6 +110,7 @@ class ComponentWeb(Component):
       print("Create web component: " + web['name'])
       self.compute_var(web, self.delete)
 
+  # TODO: add some tests
   def check(self):
     if 'component_network' not in self.plateform:
         raise YamlCheckError('web', 'component_network is mandatory')

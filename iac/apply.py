@@ -9,7 +9,7 @@ sys.path.append("..")
 
 # import objects
 from iac.yaml_check_error import YamlCheckError
-from iac.aws_object import get_secret_value, is_always_connected
+from iac.aws_object import is_always_connected
 from terraform.component_base.functions import ComponentBase
 from terraform.component_network.functions import ComponentNetwork
 from terraform.component_bastion.functions import ComponentBastion

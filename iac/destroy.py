@@ -7,7 +7,7 @@ import sys
 
 sys.path.append("..")
 
-from aws_object import get_secret_value, is_always_connected
+from aws_object import is_always_connected
 from terraform.component_base.functions import ComponentBase
 from terraform.component_network.functions import ComponentNetwork
 from terraform.component_bastion.functions import ComponentBastion

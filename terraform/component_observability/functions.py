@@ -5,6 +5,7 @@ import sys
 sys.path.insert(1, '../..')
 
 from iac.def_component import Component
+from iac.aws_object import get_secret_value
 from terraform.component_web.functions import ComponentWeb
 
 class ComponentObservability(Component):
@@ -19,8 +20,23 @@ class ComponentObservability(Component):
     if 'ips_whitelist' not in self.plateform[self.blocname]:
       self.plateform[self.blocname]['ips_whitelist'] = ["0.0.0.0/0"]
 
+
+    grafana_password = get_secret_value("grafana-password-"+self.plateform_name)
+    var = {
+      'bucket_component_state': self.bucket_component_state,
+      'email_address': self.plateform[self.blocname]['alertmanager']['list_emails'],
+      'grafana_password': grafana_password,
+      'plateform_name': self.plateform_name
+    }
+    self.create(
+      working_dir='../terraform/component_observability',
+      var_component=var
+    )
+    sns_arn = self.output('sns_arn', working_dir='../terraform/component_observability')
+    sns_arn=sns_arn.split(':')[5]
+
     if 'grafana' in self.plateform[self.blocname]:
-      self.grafana(self.create)
+      self.grafana(self.create, grafana_password)
 
     if 'tracing' in self.plateform[self.blocname]:
       self.tracing(self.create)
@@ -29,17 +45,6 @@ class ComponentObservability(Component):
       self.prometheus(self.create)
 
     if 'alertmanager' in self.plateform[self.blocname]:
-      var = {
-        'bucket_component_state': self.bucket_component_state,
-        'email_address': self.plateform[self.blocname]['alertmanager']['list_emails']
-      }
-      self.create(
-        working_dir='../terraform/component_observability',
-        var_component=var
-      )
-      sns_arn = self.output('sns_arn', working_dir='../terraform/component_observability')
-      print("SNS ARN: " + sns_arn)
-      sns_arn=sns_arn.split(':')[5]
       print("SNS Name: " + sns_arn)
       self.alertmanager(self.create, sns_arn)
 
@@ -74,7 +79,7 @@ class ComponentObservability(Component):
       )
       self.alertmanager(self.delete, 'sns-arn')
 
-  def grafana(self, func):
+  def grafana(self, func, grafana_password):
     ami_account = self.plateform['account']
     if 'ami-account' in self.plateform[self.blocname]:
       ami_account = self.plateform[self.blocname]['ami-account']
@@ -98,7 +103,7 @@ class ComponentObservability(Component):
         #!/bin/bash -x
         exec > /tmp/userdata-grafana.log 2>&1
         grafana-cli admin reset-admin-password {password}
-      '''.format(password='new-password')
+      '''.format(password=grafana_password)
     }
     grafana.compute_var(web, func)
 
@@ -125,7 +130,6 @@ class ComponentObservability(Component):
     }
     tracing.compute_var(web, func)
 
-
   def prometheus(self, func):
     ami_account = self.plateform['account']
     if 'ami-account' in self.plateform[self.blocname]:
@@ -150,7 +154,6 @@ class ComponentObservability(Component):
       'enable_public_alb': True
     }
     prometheus.compute_var(web, func)
-
 
   def alertmanager(self, func, sns_arn):
     ami_account = self.plateform['account']
@@ -177,22 +180,7 @@ class ComponentObservability(Component):
         #!/bin/bash -x
         exec > /tmp/userdata-alertmanager.log 2>&1
         sudo sed -i.bak 's/alertmanager-sns-to-email/{sns_arn}/g' /etc/alertmanager/alertmanager.yml
-        systemctl restart alertmanager.service
+        sudo systemctl restart alertmanager.service
       '''.format(sns_arn=sns_arn.replace('\n', ''))
     }
     alertmanager.compute_var(web, func)
-
-# sudo journalctl -o verbose --unit=alertmanager.service
-
-        # 'user-data': '''
-        #   echo "[auth.generic_oauth]" >> /etc/grafana/grafana.ini
-        #   echo "  enabled = true" >> /etc/grafana/grafana.ini
-        #   echo "  client_id = {client_id}" >> /etc/grafana/grafana.ini
-        #   echo "  client_secret = {client_secret}" >> /etc/grafana/grafana.ini
-        #   echo "  scopes = openid" >> /etc/grafana/grafana.ini
-        #   echo "  auth_url = https://grafana.{plateform_url}/oauth2/authorize" >> /etc/grafana/grafana.ini
-        #   echo "  token_url = https://grafana.{plateform_url}/oauth2/token" >> /etc/grafana/grafana.ini
-        #   echo "  api_url = https://grafana.{plateform_url}/oauth2/userInfo" >> /etc/grafana/grafana.ini
-        #   echo "  allowed_domains = lzdev.cloud" >> /etc/grafana/grafana.ini
-        #   echo "  allow_sign_up = true" >> /etc/grafana/grafana.ini
-        #   '''.format(client_id='123', client_secret='123',plateform_url=plateform['name']+"."+plateform['public-dns'])

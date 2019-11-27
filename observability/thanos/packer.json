@@ -1,0 +1,47 @@
+{
+  "builders": [{
+    "type": "amazon-ebs",
+    "region": "eu-west-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "amzn2-ami-hvm-*-gp2",
+        "root-device-type": "ebs"
+      },
+      "owners": ["amazon"],
+      "most_recent": true
+    },
+    "vpc_filter": {
+      "filters": {
+        "tag:Soffy": "lz",
+        "isDefault": "false"
+      }
+    },
+    "subnet_filter": {
+      "filters": {
+        "tag:Soffy": "lz"
+      },
+      "random": true
+    },
+   "associate_public_ip_address": true,
+    "instance_type": "t2.micro",
+    "ssh_username": "ec2-user",
+    "ami_name": "thanos-{{timestamp}}"
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["sudo amazon-linux-extras install ansible2"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "./thanos/local-galaxy.yml",
+      "galaxy_file": "./thanos/requirements.yml"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "./thanos/local.yml",
+      "role_paths": ["./thanos/roles/polkit"]
+    }
+  ]
+}
