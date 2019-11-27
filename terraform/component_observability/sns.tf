@@ -14,6 +14,18 @@ resource "aws_cloudformation_stack" "sns_topic" {
   )}"
 }
 
+// resource "aws_sns_topic" "billing-topic" {
+//   name = "billing-topic-${terraform.workspace}"
+// }
+
+// resource "aws_ses_identity_notification_topic" "test" {
+//   topic_arn                = "${aws_sns_topic.billing-topic.arn}"
+//   notification_type        = "Bounce"
+//   identity                 = "${aws_ses_domain_identity.public-ses.domain}"
+//   include_original_headers = true
+// }
+
+
 output "sns_arn" {
   value = "${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"
 }
