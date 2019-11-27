@@ -17,6 +17,10 @@ RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/
   && chmod +x ./aws-iam-authenticator \
   && mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 
+# set up nsswitch.conf for Go's "netgo" implementation
+# - https://github.com/golang/go/blob/go1.9.1/src/net/conf.go#L194-L275
+# - docker run --rm debian:stretch grep '^hosts:' /etc/nsswitch.conf
+RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 RUN echo "127.0.0.1	kubernetes" >> /etc/hosts && mkdir -p /app/iac
 
 COPY iac/requirements.txt /app/iac/requirements.txt

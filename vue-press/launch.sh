@@ -11,6 +11,4 @@ cp ../terraform/component_observability/README.md tmp/observability.md
 cp ../terraform/component_rds/README.md tmp/rds.md
 cp ../terraform/component_web/README.md tmp/web.md
 
-vuepress build . --dest ../docs
-
-rm -f tmp/*.md
+vuepress dev

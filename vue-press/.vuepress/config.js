@@ -19,8 +19,15 @@ module.exports = {
     sidebar: [
       '/',
       ['/how-to', 'Guide'],
-      ['/list', 'Composants'],
+      ['/list', 'Ownership'],
       ['/tmp/base.md', 'Composant Base'],
+      ['/tmp/bastion.md', 'Composant Bastion'],
+      ['/tmp/eks.md', 'Composant EKS'],
+      ['/tmp/network.md', 'Composant Network'],
+      ['/tmp/link.md', 'Composant Link'],
+      ['/tmp/rds.md', 'Composant RDS'],
+      ['/tmp/web.md', 'Composant Web'],
+      ['/tmp/observability.md', 'Composant Observability'],
       ['/apps', 'Composants applicatifs'],
       ['/exemples', 'Examples']
     ],

@@ -6,7 +6,7 @@ Lors de la création d'une plateforme l'utilisateur créera un fichier permettan
 
 Un document exemple de ce manifest de création de plateform.
 
-```language-yaml
+```yaml
 name: $plateform
 type: (prd || oat || dev)
 component-base:
