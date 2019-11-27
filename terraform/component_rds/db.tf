@@ -1,7 +1,7 @@
 resource "aws_db_instance" "rds-instance" {
 
   identifier                = "rds-instance-${terraform.workspace}"
-  final_snapshot_identifier = "rds-instance-${terraform.workspace}-final"
+  final_snapshot_identifier = "rds-instance-${terraform.workspace}-${formatdate("YYYY-MMM-DD-hh-mm",timestamp())}-final"
 
   storage_type   = "gp2"
   engine         = var.engine
