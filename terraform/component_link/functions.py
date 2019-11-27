@@ -27,8 +27,14 @@ class ComponentLink(Component):
 
     if 'component_eks' in self.plateform:
       if 'link-rds' in self.plateform['component_eks']:
-        print("create SG between EKS and RDS: " + self.plateform['component_eks']['link-rds'])
-        self.compute_var_eks(self.create)
+        for rds in self.plateform['component_eks']['link-rds']:
+          print("create SG between EKS and RDS: " + rds)
+          self.compute_var_eks(rds, self.create)
+    
+    if 'component_observability':
+      print("open sg for observability for web")
+      print("open sg for observability for eks")
+      print("open sg for observability for bastion")
 
   def destroy(self):
     if 'component_web' in self.plateform:
@@ -38,7 +44,13 @@ class ComponentLink(Component):
 
     if 'component_eks' in self.plateform:
       if 'link-rds' in self.plateform['component_eks']:
-        self.compute_var_eks(self.delete)
+        for rds in self.plateform['component_eks']['link-rds']:
+          self.compute_var_eks(rds, self.delete)
+
+    if 'component_observability':
+      print("open sg for observability for web")
+      print("open sg for observability for eks")
+      print("open sg for observability for bastion")
 
   def get_workspace_web(self, web_name, link_rds):
     return self.plateform['name'] + "-link-" + web_name + "-" + link_rds    
@@ -63,25 +75,22 @@ class ComponentLink(Component):
   def get_workspace_eks(self, link_rds):
     return self.plateform['name'] + "-link-eks-" + link_rds
 
-  def compute_var_eks(self, func):
+  def compute_var_eks(self, rds, func):
 
     eks_component = ComponentEKS(self.plateform)
     rds_component = ComponentRDS(self.plateform)
 
     print("for EKS, use workspace: " + eks_component.get_workspace())
-    print("for RDS, use workspace: " + rds_component.get_workspace(self.plateform['component_eks']['link-rds']))
+    print("for RDS, use workspace: " + rds_component.get_workspace(rds))
 
     self.var = {
       'bucket_component_state': self.plateform['bucket-component-state'],
       'workspace-eks': eks_component.get_workspace(),
-      'workspace-rds': rds_component.get_workspace(self.plateform['component_eks']['link-rds'])
+      'workspace-rds': rds_component.get_workspace(rds)
     }
-
-    print(self.var)
 
     func( 
       working_dir='../terraform/component_link/link_eks', 
-      workspace_name=self.get_workspace_eks(self.plateform['component_eks']['link-rds']), 
+      workspace_name=self.get_workspace_eks(rds),
       var_component=self.var
     )
-

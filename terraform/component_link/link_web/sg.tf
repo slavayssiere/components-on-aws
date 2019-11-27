@@ -1,4 +1,3 @@
-
 resource "aws_security_group_rule" "allow_web" {
   type            = "ingress"
   from_port       = data.terraform_remote_state.component_rds.outputs.rds-port

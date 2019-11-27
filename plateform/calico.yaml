@@ -17,7 +17,8 @@ component_rds:
 component_eks:
   enabled: true
   network-type: calico
-  link-rds: app-cal-1
+  link-rds: 
+    - app-cal-1
 component_web:
   - name: backend
     ami-name: 'amzn2-ami-hvm*'
