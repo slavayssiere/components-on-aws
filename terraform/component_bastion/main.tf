@@ -6,8 +6,6 @@ provider "aws" {
 terraform {
   required_version = ">= 0.12.0"
   backend "s3" {
-    bucket = "wescale-slavayssiere-terraform"
-    region = "eu-west-1"
     key    = "eks-test/component_bastion"
   }
 }
