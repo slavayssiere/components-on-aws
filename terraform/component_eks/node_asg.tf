@@ -25,7 +25,7 @@ resource "aws_launch_configuration" "demo" {
   associate_public_ip_address = false
   iam_instance_profile        = "${aws_iam_instance_profile.demo-node.name}"
   image_id                    = "${data.aws_ami.eks-worker.id}"
-  instance_type               = "m4.large"
+  instance_type               = var.instance_type_node
   name_prefix                 = "terraform-eks-demo-${terraform.workspace}"
   security_groups             = ["${aws_security_group.demo-node.id}"]
   user_data_base64            = "${base64encode(local.demo-node-userdata)}"
@@ -57,6 +57,8 @@ resource "aws_lb_target_group" "eks-nodes-private-ingress" {
     path = "/ping"
   }
 }
+
+# TODO: variablized max, min, size
 
 resource "aws_autoscaling_group" "demo" {
   desired_capacity     = 3
@@ -101,6 +103,7 @@ resource "aws_autoscaling_group" "demo" {
   }
 }
 
+# TODO: variablized cpu limit
 
 resource "aws_autoscaling_policy" "demo-asg-policy" {
   name                   = "demo-asg-policy-${terraform.workspace}"

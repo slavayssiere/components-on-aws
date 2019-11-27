@@ -2,6 +2,10 @@ resource "aws_eks_cluster" "demo" {
   name     = "${var.cluster-name}-${terraform.workspace}"
   role_arn = "${aws_iam_role.demo-cluster.arn}"
 
+  # TODO: add version
+  # TODO: rename "demo" var name
+  # TODO: add CW logs
+
   enabled_cluster_log_types = ["authenticator", "api"]
 
   vpc_config {

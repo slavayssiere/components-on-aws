@@ -6,11 +6,12 @@ resource "aws_db_instance" "rds-instance" {
   storage_type   = "gp2"
   engine         = var.engine
   engine_version = var.engine_version
-  instance_class = "db.t2.micro"
+  instance_class = var.instance_type_rds
 
   snapshot_identifier = var.snapshot_enable ? var.snapshot_name : ""
 
   # to be changed
+  # TODO: create lamnda for password rotation
   username = "${var.username}"
   password = "${var.password}"
 
@@ -33,6 +34,7 @@ resource "aws_db_instance" "rds-instance" {
   enabled_cloudwatch_logs_exports = var.engine == "mysql" ? ["audit", "error", "general", "slowquery"] : ["postgresql"]
 
   # autoscaling enabled
+  # TODO: variablize this
   allocated_storage     = 50
   max_allocated_storage = 100
 

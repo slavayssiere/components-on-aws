@@ -20,6 +20,8 @@ resource "aws_security_group" "demo-node" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # TODO: add this in component link
+
   # for node exporter
   ingress {
     from_port   = 31900

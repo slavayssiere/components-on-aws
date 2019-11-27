@@ -47,4 +47,7 @@ class ComponentBastion(Component):
 
   def check(self):
     if 'component_network' not in self.plateform:
-        raise YamlCheckError('bastion', 'component_network is mandatory')
+      raise YamlCheckError(self.component_name, 'component_network is mandatory')
+    if 'ips_whitelist' in self.plateform[self.blocname]:
+        if not isinstance(self.plateform[self.blocname]['ips_whitelist'], list):
+          raise YamlCheckError(self.component_name, 'ips_whitelist should be a list')

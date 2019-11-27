@@ -21,7 +21,8 @@ class ComponentRDS(Component):
     if self.blocname not in self.plateform:
       return
 
-    for rds in self.plateform['component_rds']:
+    # TODO: define max ?
+    for rds in self.plateform[self.blocname]:
       self.compute_var(rds, self.create)
 
   def destroy(self):
@@ -38,19 +39,19 @@ class ComponentRDS(Component):
 
     network = ComponentNetwork(self.plateform)
 
-    snapshot_parameter_name = 'snapshot-rds-' + self.plateform_name + "-" + rds['name']
-    snapshot_enable = False
-    snapshot_name = ''
-
     is_prod = False
     if self.plateform['type'] == 'prod':
       is_prod = True
+
+    # TODO : import form s3 ?
+    snapshot_parameter_name = 'snapshot-rds-' + self.plateform_name + "-" + rds['name']
+    snapshot_enable = False
+    snapshot_name = ''
 
     if 'snapshot_name' in rds:
       snapshot_enable = True
       snapshot_name = rds['snapshot_name']
       snapshot_id = get_parameter_value(snapshot_parameter_name)
-
       print("current snapshot_id: " + snapshot_id)
 
     print("Create " + self.get_workspace(rds['name']) + " rds")
@@ -74,8 +75,10 @@ class ComponentRDS(Component):
       var_component=var
     )
 
+  # TODO: some tests to add
   def check(self):
     if 'component_network' not in self.plateform:
       raise YamlCheckError('rds', 'component_network is mandatory')
     if not isinstance(self.plateform['component_rds'], list):
       raise YamlCheckError('rds', 'component_rds should be a list')
+    

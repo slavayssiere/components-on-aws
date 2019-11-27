@@ -71,3 +71,7 @@ variable "engine_version" {
 
 variable "snapshot_rds_paramater_name" {}
 
+variable "instance_type_rds" {
+  default = "db.t2.micro"
+  type = string
+}

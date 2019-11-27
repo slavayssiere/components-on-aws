@@ -14,7 +14,7 @@ terraform output kubeconfig > $WORKDIR/tmp/.kubeconfig_$PLATEFORM_NAME
 terraform output config_map_aws_auth > $WORKDIR/tmp/cm_auth_$PLATEFORM_NAME.yaml
 cd -
 
-echo "connexion to ssh"
+echo "connexion to ssh, create tunnel"
 ssh -M -S my-ctrl-socket -fnNT -L 8443:k8s-master.$DNS_PRIVATE:443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC
 
 export KUBECONFIG="$WORKDIR/tmp/.kubeconfig_$PLATEFORM_NAME"
@@ -22,6 +22,7 @@ export KUBECONFIG="$WORKDIR/tmp/.kubeconfig_$PLATEFORM_NAME"
 # creation des identitées IAM dans EKS
 kubectl apply -f $WORKDIR/tmp/cm_auth_$PLATEFORM_NAME.yaml
 
+echo "delete tunnel"
 ssh -S my-ctrl-socket -O exit ec2-user@bastion.$PLATEFORM_NAME.$DNS_PUBLIC
 #lsof -nP -i4TCP:8443 | grep LISTEN
 

@@ -14,6 +14,7 @@ resource "aws_iam_instance_profile" "bastion_profile" {
   role = "${aws_iam_role.bastion_role.name}"
 }
 
+# TODO: define rule for keypair to use
 resource "aws_key_pair" "sandbox-key" {
   key_name   = "sandbox-key-${terraform.workspace}"
   public_key = "${file("~/.ssh/id_rsa.pub")}"
@@ -29,6 +30,7 @@ data "aws_ami" "ami-amz" {
   owners      = ["amazon"]
 }
 
+# TODO: use spot instance
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.ami-amz.id
   instance_type               = "t2.micro"
