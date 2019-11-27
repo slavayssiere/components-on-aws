@@ -6,18 +6,20 @@ Permet d'avoir un kubernetes utilisable
 
 ## dependances
 
-est dépendant de component-network
+- network
+- bastion (éphémère à la création)
 
 ## elements
 
 - EKS avec
   - les masters managés
   - un node pool de compute
-  - un node pool de ...
-  - installation / confirguration de Calico (ou cilium)
+  - installation / configuration de Calico (ou cilium)
 - deux ingress controllers "traefik"
   - un pour les flux public
   - un pour les flux d'aministration
+- deux alb pour accéder aux IC
+- prometheus operator
 
 à rajouter:
 
@@ -32,10 +34,13 @@ mandatory:
 
 ```yaml
 component_eks:
+  network-type: calico
 ```
 
 optionnal:
 
 ```yaml
 component_eks:
+  link-rds:
+    - app-cal-1
 ```

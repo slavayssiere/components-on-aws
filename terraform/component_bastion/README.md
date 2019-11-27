@@ -2,7 +2,15 @@
 
 ## definition
 
+## dependencies
+
+- network
+
 ## elements
+
+- EC2 instance (instance profile)
+- route53 dns name
+- SG with white list ips
 
 ## struct
 

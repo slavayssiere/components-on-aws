@@ -12,3 +12,5 @@ iac/tmp/.kubeconfig_*
 iac/tmp/cm_auth_*.yaml
 
 **/*.pyc
+
+vue-press/tmp/*.md

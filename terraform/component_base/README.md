@@ -6,11 +6,9 @@ Ce composent est necessaire pour créer une plateforme
 
 ## elements
 
-- public route53 SOA "$plateform.accor.net" (to be defined)
-- activate CWL for api gateway
-- aws cognito pour la gestion des utilisateurs "admin" (sauf si ping identity)
-  - la liste des utilisateurs est fournis au component via le manifest
-- initie le chatops
+- public route53 SOA
+- enable alerting for billing
+- initialize ses
 
 ## struct
 
