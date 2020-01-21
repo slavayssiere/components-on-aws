@@ -1,21 +1,15 @@
-image:
-  name: hashicorp/packer
-  entrypoint:
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+image: node:9.11.1
 
+pages:
+  cache:
+    paths:
+    - node_modules/
 
-before_script:
-  - cd observability
-
-stages:
-  - build
-
-build:
-  stage: build
   script:
-    - packer validate grafana/packer.json
-    - packer build grafana/packer.json
+  - yarn install # npm install
+  - yarn docs:build # npm run docs:build
+  artifacts:
+    paths:
+    - public
   only:
-    - master
-
+  - master

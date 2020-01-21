@@ -1,6 +1,6 @@
 module.exports = {
-  base: '/components-on-aws/',
-  dest: 'dist',
+  base: 'https://metanext.gitlab.io/devops-cloudday',
+  dest: 'public',
   title: 'AWS Components',
   description: 'Some AWS Components orchestration',
   themeConfig: {
